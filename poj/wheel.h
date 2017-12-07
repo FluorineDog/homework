@@ -1,0 +1,139 @@
+#include <stdarg.h>
+#include <stdio.h>
+
+namespace dog_util {
+class InputStream {
+public:
+  void redirect(const char *filename) {
+#ifdef DOG_DEBUG
+    freopen(filename, "r", stdin);
+#endif
+  }
+
+  // easy to make mistake
+  // if insist, use getchar() instead
+  /* InputStream &operator<<(char &k) { scanf("%c", k); } */
+
+  // better
+  InputStream &operator<<(char &k) {
+    char buf[2];
+    scanf("%s", buf);
+    k = buf[0];
+    return *this;
+  }
+
+  InputStream &operator>>(int &k) {
+    scanf("%d", &k);
+    return *this;
+  }
+  InputStream &operator>>(long long &k) {
+    scanf("%lld", &k);
+    return *this;
+  }
+  InputStream &operator>>(unsigned &k) {
+    scanf("%u", &k);
+    return *this;
+  }
+  InputStream &operator>>(unsigned long long &k) {
+    scanf("%llu", &k);
+    return *this;
+  }
+  InputStream &operator>>(char *str) {
+    scanf("%s", str);
+    return *this;
+  }
+  InputStream &operator>>(double &k) {
+    scanf("%f", k);
+    return *this;
+  }
+} cin;
+
+class OutputStream {
+public:
+  OutputStream &operator<<(char k) {
+    printf("%c", k);
+    return *this;
+  }
+  OutputStream &operator<<(int k) {
+    printf("%d", k);
+    return *this;
+  }
+  OutputStream &operator<<(long long k) {
+    printf("%lld", k);
+    return *this;
+  }
+  OutputStream &operator<<(unsigned k) {
+    printf("%u", k);
+    return *this;
+  }
+  OutputStream &operator<<(unsigned long long k) {
+    printf("%llu", k);
+    return *this;
+  }
+  OutputStream &operator<<(const char *str) {
+    printf("%s", str);
+    return *this;
+  }
+  OutputStream &operator<<(double k) {
+    printf("%f", k);
+    return *this;
+  }
+} cout;
+
+class DebugStream {
+public:
+  int errprintf(const char *str, ...) {
+#ifdef DOG_DEBUG
+    va_list argptr;
+    va_start(argptr, str);
+    fprintf(stderr, str, argptr);
+    va_end(argptr);
+#endif
+  }
+  DebugStream &operator<<(char k) {
+    errprintf("%c", k);
+    return *this;
+  }
+  DebugStream &operator<<(int k) {
+    errprintf("%d", k);
+    return *this;
+  }
+  DebugStream &operator<<(long long k) {
+    errprintf("%lld", k);
+    return *this;
+  }
+  DebugStream &operator<<(unsigned k) {
+    errprintf("%u", k);
+    return *this;
+  }
+  DebugStream &operator<<(unsigned long long k) {
+    errprintf("%llu", k);
+    return *this;
+  }
+  DebugStream &operator<<(const char *str) {
+    errprintf("%s", str);
+    return *this;
+  }
+  DebugStream &operator<<(double k) {
+    errprintf("%f", k);
+    return *this;
+  }
+} cerr;
+const char *endl = "\n";
+}
+using dog_util::cin;
+using dog_util::cout;
+using dog_util::cerr;
+using dog_util::endl;
+typedef long long ll;
+typedef long long ull;
+
+#include <map>
+#include <set>
+#include <stdio.h>
+#include <vector>
+using std::vector;
+using std::pair;
+using std::set;
+using std::map;
+using std::make_pair;

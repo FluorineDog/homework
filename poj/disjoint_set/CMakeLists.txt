@@ -1,0 +1,7 @@
+project(disjoint_set)
+# add_executable(1182 1182.cpp)
+# set(CMAKE_CXX_STANDARD 98)
+# set(CMAKE_CXX_EXTENSIONS off)
+# add_compile_options(-std=c++98)
+# add_definitions(-DDOG_DEBUG)
+add_executable(1417 1417.cpp)
