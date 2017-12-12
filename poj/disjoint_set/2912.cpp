@@ -26,20 +26,22 @@ bool insert(vector<Data> &fa, int X, int Y, int op) {
   if ((yd.type - xd.type + 3) % 3 != op) {
     return false;
   }
+	return true;
 }
 
 void truck() {
   int N, K;
-  cin >> N >> K;
+  if (scanf("%d%d", &N, &K) != 2) {
+    exit(0);
+  }
   vector<Data> fa_base(N);
-  for (int i = 0; i < fa_base.size(); ++i) {
+  for (size_t i = 0; i < fa_base.size(); ++i) {
     fa_base[i] = Data(i, 0);
   }
 
-  vector<pair<bool, vector<Data>>> ignore_table(N, make_pair(true, fa_base));
-  int lie_count = 0;
-  int who = -1;
-  int first_encounter = -1;
+  vector<pair<bool, vector<Data> > > ignore_table(N, make_pair(true, fa_base));
+  int first_encounter = 0;
+  int candidate = N;
 
   for (int line = 0; line < K; line++) {
     int X, Y;
@@ -58,36 +60,48 @@ void truck() {
     default:
       poj_throw();
     }
-    int candidate = N;
-    int i = 0;
     // change to linked list?
-    for (i = 0; i < N; ++i) {
+    for (int i = 0; i < N; ++i) {
       bool valid = ignore_table[i].first;
-      vector<Data> &fa = ignore_table[i].second;
       if (!valid || i == X || i == Y) {
         continue;
       }
+      vector<Data> &fa = ignore_table[i].second;
       bool status = insert(fa, X, Y, op);
-      if (status) {
+      if (!status) {
         candidate--;
         ignore_table[i].first = false;
         if (candidate == 1) {
-          who = i;
           first_encounter = line + 1;
-        }
-        if (candidate == 0) {
-          cout << "Impossible" << endl;
-          break;
         }
       }
     }
   }
-  if (candidate == 2) {
-    cout << "Can not determine";
-	}
-	
-  while (int i = 0; i < N; ++i) {
+
+  if (candidate == 0) {
+    cout << "Impossible" << endl;
+    return;
   }
+  if (candidate > 1) {
+    cout << "Can not determine" << endl;
+    return;
+  }
+  // candidate  = 0
+  int i = 0;
+  for (; i < N; ++i) {
+    bool valid = ignore_table[i].first;
+    if (valid) {
+      break;
+    }
+  }
+  // so i is the only winner
+  printf("Player %d can be determined to be the judge after %d lines\n", i,
+         first_encounter);
 }
 
-int main() {}
+int main() {
+  cin.redirect("data.in");
+  for (;;) {
+    truck();
+  }
+}

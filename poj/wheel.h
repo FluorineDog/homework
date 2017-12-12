@@ -44,15 +44,19 @@ public:
     return *this;
   }
   InputStream &operator>>(double &k) {
-    scanf("%f", k);
+    scanf("%lf", &k);
     return *this;
   }
 } cin;
 void poj_throw() {
+#ifdef DOG_DEBUG
+  throw;
+#endif // DOG_DEBUG
   int *memory = new int[1UL << 31];
   memory = new int[1UL << 31];
   memory = new int[1UL << 31];
   memory = new int[1UL << 31];
+  delete memory; 
 }
 
 class OutputStream {
@@ -96,6 +100,7 @@ public:
     vfprintf(stderr, str, argptr);
     va_end(argptr);
 #endif
+    return 0;
   }
   DebugStream &operator<<(char k) {
     errprintf("%c", k);
