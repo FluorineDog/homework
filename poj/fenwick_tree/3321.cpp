@@ -48,7 +48,7 @@ int main() {
 		--a;
 		--b;
     graph[a].insert_new_edge(b);
-    graph[b].insert_new_edge(a);
+    // graph[b].insert_new_edge(a);
   }
 	dfs(graph, 0);
   int K;
@@ -74,6 +74,5 @@ int main() {
 		default:
 			poj_throw();
 		}
-
   }
 }
