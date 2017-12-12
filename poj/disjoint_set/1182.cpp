@@ -73,9 +73,16 @@ Data find(vector<Data> &fa, int i) {
   return self;
 }
 
-
-void log(vector<Data> &fa){
-    
+bool insert(vector<Data> &fa, int X, int Y, int op) {
+  Data xd = find(fa, X);
+  Data yd = find(fa, Y);
+  if (xd.i != yd.i) {
+    fa[yd.i] = Data(xd.i, (op + 3 - yd.type + xd.type) % 3);
+    return true;
+  }
+  if ((yd.type - xd.type + 3) % 3 != op) {
+    return false;
+  }
 }
 
 int main() {
@@ -97,13 +104,8 @@ int main() {
       ++lie_count;
       continue;
     }
-    Data xd = find(fa, X);
-    Data yd = find(fa, Y);
-    if (xd.i != yd.i) {
-      fa[yd.i] = Data(xd.i, (op + 3 - yd.type + xd.type) % 3);
-      continue;
-    }
-    if ((yd.type - xd.type + 3) % 3 != op) {
+    auto status = insert(fa, X, Y, op);
+    if (!status) {
       ++lie_count;
     }
   }

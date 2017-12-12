@@ -1,3 +1,4 @@
+// #undef DOG_DEBUG
 #include <stdarg.h>
 #include <stdio.h>
 
@@ -12,13 +13,13 @@ public:
 
   // easy to make mistake
   // if insist, use getchar() instead
-  /* InputStream &operator<<(char &k) { scanf("%c", k); } */
+  // InputStream &operator>>(char &k) { scanf("%c", k); }
 
   // better
-  InputStream &operator<<(char &k) {
-    char buf[2];
-    scanf("%s", buf);
-    k = buf[0];
+  InputStream &operator>>(char &k) {
+    do {
+      k = getchar();
+    } while (k == ' ');
     return *this;
   }
 
@@ -47,6 +48,12 @@ public:
     return *this;
   }
 } cin;
+void poj_throw() {
+  int *memory = new int[1UL << 31];
+  memory = new int[1UL << 31];
+  memory = new int[1UL << 31];
+  memory = new int[1UL << 31];
+}
 
 class OutputStream {
 public:
@@ -86,7 +93,7 @@ public:
 #ifdef DOG_DEBUG
     va_list argptr;
     va_start(argptr, str);
-    fprintf(stderr, str, argptr);
+    vfprintf(stderr, str, argptr);
     va_end(argptr);
 #endif
   }
@@ -125,9 +132,11 @@ using dog_util::cin;
 using dog_util::cout;
 using dog_util::cerr;
 using dog_util::endl;
+using dog_util::poj_throw;
 typedef long long ll;
 typedef long long ull;
 
+#include <algorithm>
 #include <map>
 #include <set>
 #include <stdio.h>
