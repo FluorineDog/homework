@@ -19,7 +19,7 @@ public:
   InputStream &operator>>(char &k) {
     do {
       k = getchar();
-    } while (k == ' ');
+    } while (k == ' ' || k == '\n');
     return *this;
   }
 

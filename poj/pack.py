@@ -1,8 +1,8 @@
-#!/bin/python2
-import pyperclip 
+#!/usr/bin/python2
 import re
 import sys
 import os
+import pyperclip
 
 def pack(filename):
 	abspath = os.path.abspath(filename)
@@ -22,8 +22,11 @@ def pack(filename):
 			data += '// end of ' + include_filename + '\n'
 		
 	return data
-				
+
 
 root_filename = sys.argv[1]
 pyperclip.copy(pack(root_filename))
+paste = pyperclip.paste()
+print(paste)
+
 
