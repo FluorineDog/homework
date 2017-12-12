@@ -1,0 +1,1 @@
+st_mode st_nlink uid gid st_size date time name
