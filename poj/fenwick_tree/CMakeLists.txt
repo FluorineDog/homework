@@ -4,4 +4,6 @@ project(fenwick_tree)
 
 # add_executable(3321 3321.cpp)
 # add_executable(1990 1990.cpp)
-add_executable(2892 2892.cpp)
+# add_executable(2892 2892.cpp)
+add_executable(2481 2481.cpp)
+
