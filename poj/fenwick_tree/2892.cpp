@@ -5,27 +5,50 @@ int inf = std::numeric_limits<int>::max() / 4;
 #define T pair<int, int>
 #define INIT make_pair(inf, -inf)
 #define NIL make_pair(inf, -inf)
-#define FUNC(a, b) make_pair(std::min(a.first, b.first), std::max(a.second, b.second))
+#define FUNC(a, b)                                                             \
+  make_pair(std::min(a.first, b.first), std::max(a.second, b.second)) 
+
 #include "fenwick.h"
 #include <stack>
 using std::stack;
 int main() {
+  cin.redirect("data.in");
   int N, K;
-  cin >> N, K;
-  Fenwick village_record(20000 + 1);
-  ll sum = 0;
-  for (int i = 0; i < N; ++i) {
-    pair<int, int> left_data = village_record.reduce(0, x);
-    int left_count = left_data.first;
-    int left_sum = left_data.second;
-    sum += vol * (left_count * x - left_sum);
+  cin >> N >> K;
+  Fenwick village_record(N + 2);
+  village_record.update(0, make_pair(0, 0));
+  village_record.update(N + 1, make_pair(N + 1, N + 1));
 
-    pair<int, int> left_data = village_record.reduce(0, x);
-    int right_count = right_data.first;
-    int right_sum = right_data.second;
-    sum += vol * (right_sum - right_count * x);
+  stack<int> destroyed_village;
+  while (K-- > 0) {
+    char op;
+    cin >> op;
+    switch (op) {
+    case 'R': {
+      int x = destroyed_village.top();
+      destroyed_village.pop();
+      village_record.update(x, NIL);
+    } break;
+    case 'D': {
+      int x;
+      cin >> x;
+      destroyed_village.push(x);
+      village_record.update(x, make_pair(x, x));
+    } break;
+    case 'Q': {
+      int x;
+      cin >> x;
+      pair<int, int> left_data = village_record.reduce(0, x + 1);
+      int left_destroyed = left_data.second;
 
-    x_record.update(x, make_pair(1, x));
-	}
-	cout << sum << endl;
+      pair<int, int> right_data = village_record.reduce(x, N + 2);
+      int right_destroyed = right_data.first;
+      int count = right_destroyed - left_destroyed - 1;
+      if (count < 0) {
+        count = 0;
+      }
+      cout << count << endl;
+    } break;
+    }
+  }
 }
