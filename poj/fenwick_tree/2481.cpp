@@ -6,50 +6,59 @@
 #define FUNC(a, b) (a + b)
 #include "fenwick.h"
 
-const int RANGE = 100000+1;
-void truck(){	
-	int N;
-	cin >> N;
-	if(N == 0){
-		exit(0);
-	}
-	vector<pair<int, pair<int, int> > > raw_data;
-	raw_data.reserve(N);
-	for(int i = 0; i < N; ++i){
-		int beg, end;
-		cin >> beg >> end;	
-		raw_data.push_back(make_pair(beg, make_pair(end, i)));
-	}
-	std::sort(raw_data.begin(), raw_data.end());
-	int last_beg = -1;
-	int last_end = -1;
-	int last_result = 0;
-	Fenwick	table(RANGE);
-	vector<int> results(N);
-	for(int i = 0; i < N; ++i){
-		int beg = raw_data[i].first;
-		int end = raw_data[i].second.first;
-		int index = raw_data[i].second.second;
-		if(beg == last_beg && end == last_end){
-			results[index] = last_result;
-			table.update(end, table[end] + 1);
-			continue;
-		}
-		last_beg = beg;
-		last_end = end;
-		last_result = table.reduce(end + 1, RANGE);
-		results[index] = last_result;
-		table.update(end, table[end] + 1);
-	}
-	for(int i = 0; i < N; ++i){
-		cout << results[i] << " ";
-	}
-	cout << endl;
+vector<pair<int, pair<int, int> > > raw_data;
+const int RANGE = 100000 + 1;
+vector<int> results;
+bool truck() {
+  int N;
+  int status = scanf("%d", &N);
+  if (status != 1) {
+    poj_throw();
+  }
+  if (N == 0) {
+    return false;
+  }
+  raw_data.resize(N);
+  for (int i = 0; i < N; ++i) {
+    int beg, end;
+    // cin >> beg >> end;
+    status = scanf("%d%d", &beg, &end);
+    if (status != 2) {
+      poj_throw();
+    }
+    raw_data[i] = make_pair(beg, make_pair(-end, i));
+  }
+  std::sort(raw_data.begin(), raw_data.end());
+  int last_beg = -1;
+  int last_end = -1;
+  int last_result = 0;
+  Fenwick table(RANGE);
+  results.resize(N);
+  for (int i = 0; i < N; ++i) {
+    int beg = raw_data[i].first;
+    int end = -raw_data[i].second.first;
+    int index = raw_data[i].second.second;
+    if (end == last_end && beg == last_beg) {
+    	table.update(end, table[end] + 1);
+      results[index] = last_result;
+      continue;
+    }
+    last_beg = beg;
+    last_end = end;
+    last_result = table.reduce(end, RANGE);
+   	table.update(end, table[end] + 1);
+    results[index] = last_result;
+  }
+  for (int i = 0; i < N; ++i) {
+    cout << results[i] << " ";
+  }
+  cout << endl;
+  return true;
 }
 
-int main(){
-	cin.redirect("data.in");
-	while(true){
-		truck();
-	}
+int main() {
+  raw_data.reserve(RANGE);
+  cin.redirect("data.in");
+  while (truck()) {
+  }
 }

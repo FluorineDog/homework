@@ -1,4 +1,4 @@
-// #undef DOG_DEBUG
+#undef DOG_DEBUG
 #include <stdarg.h>
 #include <stdio.h>
 
@@ -49,14 +49,8 @@ public:
   }
 } cin;
 void poj_throw() {
-#ifdef DOG_DEBUG
-  throw;
-#endif // DOG_DEBUG
-  int *memory = new int[1UL << 31];
-  memory = new int[1UL << 31];
-  memory = new int[1UL << 31];
-  memory = new int[1UL << 31];
-  delete memory; 
+  int* fuck = NULL;
+  scanf("%d", fuck);
 }
 
 class OutputStream {

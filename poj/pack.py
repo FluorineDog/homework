@@ -20,6 +20,7 @@ def pack(filename):
 			data += '// begin of ' + include_filename + '\n'
 			data += pack(include_filename)
 			data += '// end of ' + include_filename + '\n'
+			os.chdir(dirname)
 		
 	return data
 
