@@ -10,22 +10,15 @@ vector<pair<int, pair<int, int> > > raw_data;
 const int RANGE = 100000 + 1;
 vector<int> results;
 bool truck() {
-  int N;
-  int status = scanf("%d", &N);
-  if (status != 1) {
-    poj_throw();
-  }
+	int N;
+	cin >> N;
   if (N == 0) {
     return false;
   }
   raw_data.resize(N);
   for (int i = 0; i < N; ++i) {
     int beg, end;
-    // cin >> beg >> end;
-    status = scanf("%d%d", &beg, &end);
-    if (status != 2) {
-      poj_throw();
-    }
+		cin >> beg >> end;
     raw_data[i] = make_pair(beg, make_pair(-end, i));
   }
   std::sort(raw_data.begin(), raw_data.end());
