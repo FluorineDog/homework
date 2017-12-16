@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <iostream>
 // x_count && x_sum
 #define T int
 #define INIT 0
@@ -11,14 +12,16 @@ const int RANGE = 100000 + 1;
 vector<int> results;
 bool truck() {
 	int N;
-	cin >> N;
+	// cin >> N;
+  scanf("%d", &N);
   if (N == 0) {
     return false;
   }
   raw_data.resize(N);
   for (int i = 0; i < N; ++i) {
     int beg, end;
-		cin >> beg >> end;
+		// cin >> beg >> end;
+    scanf("%d%d", &beg, &end);
     raw_data[i] = make_pair(beg, make_pair(-end, i));
   }
   std::sort(raw_data.begin(), raw_data.end());
@@ -43,14 +46,16 @@ bool truck() {
     results[index] = last_result;
   }
   for (int i = 0; i < N; ++i) {
-    cout << results[i] << " ";
+    // cout << results[i] << " ";
+    printf("%d ", results[i]);
   }
-  cout << endl;
+  printf("\n");
   return true;
 }
 
 int main() {
   raw_data.reserve(RANGE);
+  std::ios::sync_with_stdio(false);
   cin.redirect("data.in");
   while (truck()) {
   }
