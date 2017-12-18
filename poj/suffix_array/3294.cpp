@@ -1,4 +1,5 @@
 #include <algorithm>
+#define private public
 #undef min
 #undef max
 #define T int
@@ -28,6 +29,7 @@ void height_helper(Fenwick &tree, const vector<char_t> &raw_str,
           break;
         }
         ++height;
+        ++offset;
       }
     }
     tree.raw_update(sa_i, height);
@@ -41,25 +43,21 @@ void height_helper(Fenwick &tree, const vector<char_t> &raw_str,
 void workload() {
   int string_count;
   cin >> string_count;
+  if (string_count <= 0) {
+    exit(0);
+  }
 
-  // char buffer[1001];
+  char buffer[1001];
   vector<int> raw_str;
   raw_str.reserve(1001 * 100);
   char_t seperator = 27;
   vector<int> str_ids;
   // s_index => string_id
   str_ids.reserve(1001 * 100);
-  bool flag_first = true;
   for (int i = 0; i < string_count; ++i) {
-    while (true) {
-      char ch = getchar();
-      if (!ch || ch == '\n') {
-        if (!flag_first) {
-          break;
-        }
-        flag_first = false;
-      }
-      raw_str.push_back(ch - 'a');
+    cin >> buffer;
+    for (char *ptr = buffer; *ptr; ptr++) {
+      raw_str.push_back(*ptr - 'a');
       str_ids.push_back(i);
     }
     raw_str.push_back(seperator++);
@@ -72,16 +70,26 @@ void workload() {
   for (int i = 0; i < N; ++i) {
     rank[sa[i]] = i;
   }
+
+  show_id(raw_str.size());
+  show(raw_str);
+  show(sa);
+  show(rank);
   height_helper(tree, raw_str, sa, rank);
   // map<int, int> known_strings;
-  vector<int> known_strings(100);
+  vector<int> known_strings(string_count);
   int known_id_count = 0;
   // range [sa_i - 1, sa_end)
   int sa_end = 1;
-  vector<int> max_s_ids;
-  int max_height;
-  for (int sa_i = 1; sa_i < N;) {
-    while (known_id_count < (N + 1) / 2) {
+  vector<int> max_sa_ids;
+  int max_height = -1;
+  {
+    int current_str_id = str_ids[sa[0]];
+    known_strings[current_str_id]++;
+    known_id_count++;
+  }
+  for (int sa_i = 0; sa_i < N;) {
+    while (sa_end < N && known_id_count < (string_count + 1) / 2) {
       int s_index = sa[sa_end];
       int current_str_id = str_ids[s_index];
       int tmp = ++known_strings[current_str_id];
@@ -90,30 +98,40 @@ void workload() {
       }
       ++sa_end;
     }
-    int height = tree.reduce(sa_i, sa_end);
-    if (max_height <= height) {
-      if (max_height < height) {
-        max_s_ids.clear();
-        max_height = height;
-      }
-      // guarantee to be not the same
-      if (tree.reduce(max_s_ids.back(), sa_i) < height) {
-        max_s_ids.push_back(sa[sa_i]);
-      }
-    }
 
     if (sa_end >= N) {
       break;
+    }
+
+    int height = tree.reduce(sa_i, sa_end);
+    if (max_height <= height) {
+      if (max_height < height) {
+        max_sa_ids.clear();
+        max_height = height;
+      }
+      // guarantee to be not the same
+      if (max_sa_ids.empty() || tree.reduce(max_sa_ids.back(), sa_i) < height) {
+        max_sa_ids.push_back(sa_i);
+      }
+    }
+    {
+      int s_index = sa[sa_i + 1];
+      int current_str_id = str_ids[s_index];
+      int tmp = --known_strings[current_str_id];
+      if (tmp == 0) {
+        --known_id_count;
+      }
+      ++sa_i;
     }
   }
   if (max_height == 0) {
     cout << "?" << endl;
     return;
   }
-  for (int i = 0; i < (int)max_s_ids.size(); ++i) {
-    int beg = max_s_ids[i]; 
-    for(int k = 0; k < max_height; ++k){
-      cout << raw_str[beg + k];      
+  for (int i = 0; i < (int)max_sa_ids.size(); ++i) {
+    int beg = sa[max_sa_ids[i]];
+    for (int k = 0; k < max_height; ++k) {
+      cout << raw_str[beg + k] + 'a';
     }
     cout << endl;
   }

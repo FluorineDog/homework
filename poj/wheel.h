@@ -1,4 +1,4 @@
-#undef DOG_DEBUG
+// #undef DOG_DEBUG
 #ifndef DOG_WHEEL_H_
 #define DOG_WHEEL_H_
 #include <stdarg.h>
