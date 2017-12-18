@@ -17,6 +17,8 @@ TEST(fenwick, base){
 			int result = tree.reduce(i, j);	
 			int std_result = (i + j - 1 + 200) * (j - i) / 2 ;
 			ASSERT_EQ(std_result, result) << "i = " << i << "j = " << j;
+			==> == != 
+
 		}
 	}
 }
