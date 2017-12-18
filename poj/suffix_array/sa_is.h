@@ -12,8 +12,15 @@ void show(vector<int> res) {
 typedef int char_t;
 vector<int> suffix_array_construct_helper(const vector<char_t> &raw_str,
                                           int alphabet_size) {
-
   const int N = raw_str.size();
+  show(raw_str);
+  {
+    vector<int> ids;
+    for (int i = 0; i < N; ++i) {
+      ids.push_back(i);
+    }
+    show(ids);
+  }
   vector<bool> is_s_types(N);
   vector<int> alphabet_offsets(alphabet_size + 1, 0);
   // section 0: calculate s/l types
@@ -42,8 +49,8 @@ vector<int> suffix_array_construct_helper(const vector<char_t> &raw_str,
   }
 
   vector<int> sas[2];
-  sas[0].resize(N, -1);
-  sas[1].resize(N, -1);
+  sas[0].resize(N + 1, -1);
+  sas[1].resize(N + 1, -1);
   // charter one: contruct pesudo-sorted suffix
   for (int instance = 0; instance < 2; ++instance) {
     vector<int> &sa = sas[instance];
@@ -65,7 +72,7 @@ vector<int> suffix_array_construct_helper(const vector<char_t> &raw_str,
       }
     } else {
       for (int i = (int)raw_str.size(); i-- > 1;) {
-        // insert them to bucket unordered
+        // insert them to bucket unordered, assuming inverse order
         if (!(is_s_types[i] && !is_s_types[i - 1])) {
           continue;
         }
@@ -109,20 +116,33 @@ vector<int> suffix_array_construct_helper(const vector<char_t> &raw_str,
   }
   show(sas[0]);
   show(sas[1]);
-  show(raw_str);
-  {
-    vector<int> ids;
-    for (int i = 0; i < N; ++i) {
-      ids.push_back(i);
+
+  // charter two: recursive sort
+  // section 4: construct new string
+
+  vector<char_t> new_str;
+  vector<int> mapping;
+  char_t new_ch = 0;
+  bool flag = false; 
+  int end_cond = sas[1][0];
+  for (int i = 0; i < N; ++i) {
+    int s_index = sas[0][i];
+    if (s_index > 0 && is_s_types[s_index] && !is_s_types[s_index - 1]) {
+      // LMS character
+      mapping.push_back(s_index);
+      new_str.push_back(new_ch);
+      flag = true;
     }
-    show(ids);
+    if (s_index == end_cond) {
+      if(flag)new_ch++;
+      flag = false;
+      end_cond = sas[1][i + 1];
+    }
   }
-  return sas[0];
-  // // charter two: recursive sort
-  // // section 4: construct new string
+  show(new_str);
+  show(mapping);
+  return {};
   // for (int i = 1; i < raw_str.size(); ++i) {
-  //   if (!(is_s_types[i] && !is_s_types[i - 1])) {
-  //     continue;
   //   }
   //   char_t ch = raw_str[i];
   // }
