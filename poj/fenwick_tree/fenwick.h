@@ -1,10 +1,9 @@
 #include "../wheel.h"
 
+// NIL should be identity of moniod
 #ifndef T
 #define T int
 #define FUNC(a, b) ((a) + (b))
-// NIL should be identity of moniod
-// to be honest, it doesn't matter...
 #define NIL 0
 #define INIT 1
 #endif
@@ -16,11 +15,17 @@ public:
 
     for (bsize = 1; bsize < length; bsize <<= 1) {
     }
-    this->length_ = length;
-    this->bsize_ = bsize;
     data.reserve(bsize * 2);
     data.resize(bsize, NIL);
     data.resize(bsize + length, INIT);
+    this->length_ = length;
+    this->bsize_ = bsize;
+    fast_init();
+  }
+
+  void fast_init(){
+    int bsize = this->bsize_;
+    int length = this->length_;
     while (bsize >>= 1) {
       length >>= 1;
       for (int i = 0; i < length; ++i) {
@@ -28,6 +33,11 @@ public:
         data[base] = FUNC(data[2 * base], data[2 * base + 1]);
       }
     }
+  }
+
+  void raw_update(int i, T value) {
+    int bsize = this->bsize_;
+    data[bsize + i] = value;
   }
 
   void update(int i, T value) {

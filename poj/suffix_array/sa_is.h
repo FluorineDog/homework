@@ -1,5 +1,5 @@
 #include "../wheel.h"
-#include <cstdint>
+#include <stdint.h>
 #include <iostream>
 #include <string>
 
@@ -28,7 +28,7 @@ inline void induction(int N, const vector<char_t> &raw_str,
     int index = bucket_begins[ch]++;
     sa[index] = old_offset - 1;
   }
-  auto bucket_ends = alphabet_offsets;
+  vector<int> bucket_ends = alphabet_offsets;
   for (int i = N; i-- > 0;) {
     int old_offset = sa[i];
     if (old_offset <= 0 || !is_s_types[old_offset - 1]) {
