@@ -16,13 +16,10 @@ void show_f(vector<int> res, const char *str) {
 typedef int char_t;
 
 inline void induction(int N, const vector<char_t> &raw_str,
-                     const vector<int> &is_s_types,
-                     const vector<int> &alphabet_offsets,
-                     vector<int> &sa) {
+                      const vector<bool> &is_s_types,
+                      const vector<int> &alphabet_offsets, vector<int> &sa) {
   // section 2: sort LCM substrings
-
   auto bucket_begins = alphabet_offsets;
-  auto bucket_ends = alphabet_offsets;
   {
     // overkill
     // since we kill $
@@ -32,7 +29,6 @@ inline void induction(int N, const vector<char_t> &raw_str,
     int index = bucket_begins[ch]++;
     sa[index] = old_offset - 1;
   }
-  // show(sa);
   for (int i = 0; i < N; ++i) {
     int old_offset = sa[i];
     if (old_offset <= 0 || is_s_types[old_offset - 1]) {
@@ -42,8 +38,7 @@ inline void induction(int N, const vector<char_t> &raw_str,
     int index = bucket_begins[ch]++;
     sa[index] = old_offset - 1;
   }
-  // show(sa);
-  bucket_ends = alphabet_offsets;
+  auto bucket_ends = alphabet_offsets;
   for (int i = N; i-- > 0;) {
     int old_offset = sa[i];
     if (old_offset <= 0 || !is_s_types[old_offset - 1]) {
@@ -58,20 +53,12 @@ inline void induction(int N, const vector<char_t> &raw_str,
 vector<int> suffix_array_construct_helper(const vector<char_t> &raw_str,
                                           int alphabet_size) {
   const int N = raw_str.size();
-  show(raw_str);
-  {
-    vector<int> ids;
-    for (int i = 0; i < N; ++i) {
-      ids.push_back(i);
-    }
-    show(ids);
-  }
   vector<bool> is_s_types(N);
   vector<int> alphabet_offsets(alphabet_size + 1, 0);
   // chapter 0: calculate s/l types
   // count the charactor;
   {
-    char_t last_ch = '\0';
+    char_t last_ch = 0;
     bool last_s_type = false;
     for (int i = N; i-- > 0;) {
       char_t current_ch = raw_str[i];
@@ -134,38 +121,9 @@ vector<int> suffix_array_construct_helper(const vector<char_t> &raw_str,
         sa[offset] = i;
       }
     }
-    // show(sa);
-    // section 2: sort LCM substrings
-    {
-      // overkill
-      // since we kill $
-      // do it
-      int old_offset = N;
-      char_t ch = raw_str[old_offset - 1];
-      int index = bucket_begins[ch]++;
-      sa[index] = old_offset - 1;
-    }
-    // show(sa);
-    for (int i = 0; i < N; ++i) {
-      int old_offset = sa[i];
-      if (old_offset <= 0 || is_s_types[old_offset - 1]) {
-        continue;
-      }
-      char_t ch = raw_str[old_offset - 1];
-      int index = bucket_begins[ch]++;
-      sa[index] = old_offset - 1;
-    }
-    // show(sa);
-    bucket_ends = alphabet_offsets;
-    for (int i = N; i-- > 0;) {
-      int old_offset = sa[i];
-      if (old_offset <= 0 || !is_s_types[old_offset - 1]) {
-        continue;
-      }
-      char_t ch = raw_str[old_offset - 1];
-      int index = --bucket_ends[ch + 1];
-      sa[index] = old_offset - 1;
-    }
+    show(sa);
+    sa.resize(N);
+    induction(N, raw_str, is_s_types, alphabet_offsets, sa);
   }
   if (mode == 1) {
     show(sas[0]);
@@ -176,9 +134,8 @@ vector<int> suffix_array_construct_helper(const vector<char_t> &raw_str,
   // show(sas[1]);
 
   // charter two: recursive sort
-  // section 4: construct new string to do recursive work
   {
-
+    // section 4: construct new string to do recursive work
     vector<char_t> new_str(N, -1);
     char_t new_ch = 0;
     // use flag to make new_ch compact
@@ -196,7 +153,8 @@ vector<int> suffix_array_construct_helper(const vector<char_t> &raw_str,
         if (flag)
           new_ch++;
         flag = false;
-        end_cond = sas[1][i + 1];
+        if (i != N - 1)
+          end_cond = sas[1][i + 1];
       }
     }
     // new_str_index => old_str_index
@@ -215,14 +173,19 @@ vector<int> suffix_array_construct_helper(const vector<char_t> &raw_str,
     vector<int> well_ordered = suffix_array_construct_helper(new_str, new_ch);
     cout << "****" << endl;
     show(well_ordered);
+
+    // section 5: do the final sort
+    auto bucket_ends = alphabet_offsets;
+    auto &sa = sas[0];
+    sa.clear();
+    sa.resize(N + 1, -1);
+    for (int new_i = length; new_i-- > 0;) {
+      int i = mapping[well_ordered[new_i]];
+      char_t ch = raw_str[i];
+      int offset = --bucket_ends[ch + 1];
+      sa[offset] = i;
+    }
+    induction(N, raw_str, is_s_types, alphabet_offsets, sa);
+    return sa;
   }
-  return {};
-  // for (int i = 1; i < raw_str.size(); ++i) {
-  //   }
-  //   char_t ch = raw_str[i];
-  // }
-
-  // section 4
 }
-
-void suffix_array(const vector<int> &S) {}
