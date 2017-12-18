@@ -3,23 +3,13 @@
 #include <iostream>
 #include <string>
 
-void show_f(vector<int> res, const char *str) {
-  for (auto x : res) {
-    // cout << x << " ";
-    printf("%2d ", x);
-  }
-  cout << "--" << str << endl;
-}
-
-#define show(res) show_f(res, #res);
-// $ is \0 for us
 typedef int char_t;
 
 inline void induction(int N, const vector<char_t> &raw_str,
                       const vector<bool> &is_s_types,
                       const vector<int> &alphabet_offsets, vector<int> &sa) {
   // section 2: sort LCM substrings
-  auto bucket_begins = alphabet_offsets;
+  vector<int> bucket_begins = alphabet_offsets;
   {
     // overkill
     // since we kill $
@@ -96,8 +86,8 @@ vector<int> suffix_array_construct_helper(const vector<char_t> &raw_str,
     sa.resize(N + 1, -1);
     // section 1: find LCM charactor
     // ch => begin
-    auto bucket_begins = alphabet_offsets;
-    auto bucket_ends = alphabet_offsets;
+    vector<int> bucket_begins = alphabet_offsets;
+    vector<int> bucket_ends = alphabet_offsets;
     // ch => end, +1 for copy_free
     // find LCM character
     if (instance == 0) {
@@ -121,12 +111,9 @@ vector<int> suffix_array_construct_helper(const vector<char_t> &raw_str,
         sa[offset] = i;
       }
     }
-    show(sa);
-    sa.resize(N);
     induction(N, raw_str, is_s_types, alphabet_offsets, sa);
   }
   if (mode == 1) {
-    show(sas[0]);
     return sas[0];
   }
 
@@ -153,8 +140,7 @@ vector<int> suffix_array_construct_helper(const vector<char_t> &raw_str,
         if (flag)
           new_ch++;
         flag = false;
-        if (i != N - 1)
-          end_cond = sas[1][i + 1];
+        end_cond = sas[1][i + 1];
       }
     }
     // new_str_index => old_str_index
@@ -167,16 +153,10 @@ vector<int> suffix_array_construct_helper(const vector<char_t> &raw_str,
       }
     }
     new_str.resize(length);
-    cout << "------" << endl;
-    show(new_str);
-    show(mapping);
     vector<int> well_ordered = suffix_array_construct_helper(new_str, new_ch);
-    cout << "****" << endl;
-    show(well_ordered);
-
     // section 5: do the final sort
-    auto bucket_ends = alphabet_offsets;
-    auto &sa = sas[0];
+    vector<int> bucket_ends = alphabet_offsets;
+    vector<int> &sa = sas[0];
     sa.clear();
     sa.resize(N + 1, -1);
     for (int new_i = length; new_i-- > 0;) {

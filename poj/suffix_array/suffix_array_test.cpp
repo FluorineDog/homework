@@ -6,6 +6,16 @@
 #include <string>
 using std::string;
 using std::vector;
+
+void show_f(vector<int> res, const char *str) {
+  for (auto x : res) {
+    // cout << x << " ";
+    printf("%2d ", x);
+  }
+  cout << "--" << str << endl;
+}
+
+#define show(res) show_f(res, #res);
 TEST(suffix_array, test1) {
   string s = "1234543212346432123474321234543216345432";
   // string s = "23145";
