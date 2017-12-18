@@ -1,6 +1,5 @@
 #include "../wheel.h"
 #include <stdint.h>
-#include <iostream>
 #include <string>
 
 typedef int char_t;
@@ -169,3 +168,7 @@ vector<int> suffix_array_construct_helper(const vector<char_t> &raw_str,
     return sa;
   }
 }
+
+#ifdef HEIGHT
+
+#endif

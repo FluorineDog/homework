@@ -1,4 +1,6 @@
 #undef DOG_DEBUG
+#ifndef DOG_WHEEL_H_
+#define DOG_WHEEL_H_
 #include <stdarg.h>
 #include <stdio.h>
 
@@ -145,3 +147,5 @@ using std::pair;
 using std::set;
 using std::map;
 using std::make_pair;
+
+#endif // DOG_WHEEL_H_
