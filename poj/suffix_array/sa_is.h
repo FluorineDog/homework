@@ -3,6 +3,17 @@
 #include <string>
 
 typedef int char_t;
+// void checker(const vector<char_t> &raw_str, const vector<int> &sa) {
+//   for (int i = 0; i < (int)raw_str.size() - 1; ++i) {
+//     int s_i = sa[i] - 1;
+//     int s_i_next = sa[i + 1] - 1;
+//     while (raw_str[++s_i] == raw_str[++s_i_next])
+//       ;
+//     if (raw_str[s_i] > raw_str[s_i_next]) {
+//       cout << "fuck" << endl;
+//     };
+//   }
+// }
 
 inline void induction(int N, const vector<char_t> &raw_str,
                       const vector<bool> &is_s_types,
@@ -74,7 +85,7 @@ vector<int> suffix_array_construct_helper(const vector<char_t> &raw_str,
   // mode 2 has recursize work to do
   int mode = 1;
   for (int i = 0; i < alphabet_size; ++i) {
-    if (alphabet_offsets[mode] > 1) {
+    if (alphabet_offsets[i + 1] - alphabet_offsets[i] > 1) {
       mode = 2;
       break;
     }
@@ -170,18 +181,21 @@ vector<int> suffix_array_construct_helper(const vector<char_t> &raw_str,
 }
 
 // void show_f(vector<int> res, const char *str) {
-//   for(int i = 0; i < (int) res.size(); ++i){
+//   for (int i = 0; i < (int)res.size(); ++i) {
 //     // cout << res[i] << " ";
 //     printf("%2d ", res[i]);
+//     if (i % 32 == 31) {
+//       cout << "**" << i / 32 << endl;
+//     }
 //   }
 //   cout << "--" << str << endl;
 // }
 
 // #define show(res) show_f(res, #res);
 
-// void show_id(int n){
+// void show_id(int n) {
 //   vector<int> id_autogen;
-//   for(int i = 0 ; i < n; ++i){
+//   for (int i = 0; i < n; ++i) {
 //     id_autogen.push_back(i);
 //   }
 //   show(id_autogen);
