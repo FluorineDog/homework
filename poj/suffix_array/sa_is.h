@@ -169,20 +169,20 @@ vector<int> suffix_array_construct_helper(const vector<char_t> &raw_str,
   }
 }
 
-void show_f(vector<int> res, const char *str) {
-  for(int i = 0; i < (int) res.size(); ++i){
-    // cout << res[i] << " ";
-    printf("%2d ", res[i]);
-  }
-  cout << "--" << str << endl;
-}
+// void show_f(vector<int> res, const char *str) {
+//   for(int i = 0; i < (int) res.size(); ++i){
+//     // cout << res[i] << " ";
+//     printf("%2d ", res[i]);
+//   }
+//   cout << "--" << str << endl;
+// }
 
-#define show(res) show_f(res, #res);
+// #define show(res) show_f(res, #res);
 
-void show_id(int n){
-  vector<int> id_autogen;
-  for(int i = 0 ; i < n; ++i){
-    id_autogen.push_back(i);
-  }
-  show(id_autogen);
-}
+// void show_id(int n){
+//   vector<int> id_autogen;
+//   for(int i = 0 ; i < n; ++i){
+//     id_autogen.push_back(i);
+//   }
+//   show(id_autogen);
+// }
