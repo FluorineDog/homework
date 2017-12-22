@@ -1,3 +1,5 @@
+#ifndef DOG_FENWICK_TREE_H_
+#define DOG_FENWICK_TREE_H_
 #include "../wheel.h"
 
 // NIL should be identity of moniod
@@ -78,3 +80,5 @@ private:
   int bsize_;
   int length_;
 };
+
+#endif

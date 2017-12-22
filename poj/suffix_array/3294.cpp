@@ -1,5 +1,4 @@
 #include <algorithm>
-#define private public
 #undef min
 #undef max
 #define T int
@@ -10,36 +9,6 @@
 #include "sa_is.h"
 #include <map>
 
-void height_helper(Fenwick &tree, const vector<char_t> &raw_str,
-                   const vector<int> &sa, const vector<int> &rank) {
-  // height[i] = h[SA[i]] = LCS(SA[i], SA[i-1]);
-  int N = raw_str.size();
-  // s_i => sa_i
-  int height = 0;
-  for (int s_i = 0; s_i < N; ++s_i) {
-    int sa_i = rank[s_i];
-    if (sa_i > 0) {
-      int last_sa_i = sa_i - 1;
-      int last_s_i = sa[last_sa_i];
-      while (true) {
-        char_t left = raw_str[s_i + height];
-        char_t right = raw_str[last_s_i + height];
-        if (left != right) {
-          break;
-        }
-        ++height;
-      }
-      tree.raw_update(last_sa_i, height);
-    }
-    if (height) {
-      --height;
-    }
-  }
-  tree.fast_init();
-  // vector<int> dup(tree.data.begin() + tree.bsize_,
-                  // tree.data.begin() + tree.bsize_ + tree.length_);
-  // show(dup);
-}
 
 void workload() {
   int string_count;
@@ -67,10 +36,7 @@ void workload() {
   vector<int> sa = suffix_array_construct_helper(raw_str, seperator);
   int N = raw_str.size();
   Fenwick tree(N);
-  vector<int> rank(N);
-  for (int i = 0; i < N; ++i) {
-    rank[sa[i]] = i;
-  }
+  vector<int> rank = get_rank(N, sa);
 
   // show_id(raw_str.size());
   // show(raw_str);
