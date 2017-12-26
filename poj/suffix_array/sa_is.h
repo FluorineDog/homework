@@ -1,3 +1,5 @@
+#ifndef DOG_SA_IS_H_
+#define DOG_SA_IS_H_
 #include "../wheel.h"
 #include <stdint.h>
 #include <string>
@@ -236,3 +238,5 @@ vector<int> suffix_array_construct_helper(const vector<char_t> &raw_str,
 //   }
 //   show(id_autogen);
 // }
+
+#endif 
