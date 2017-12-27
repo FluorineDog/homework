@@ -61,6 +61,10 @@ public:
     printf("%c", k);
     return *this;
   }
+  OutputStream &operator<<(unsigned long k) {
+    printf("%lu", k);
+    return *this;
+  }
   OutputStream &operator<<(int k) {
     printf("%d", k);
     return *this;
@@ -108,6 +112,10 @@ public:
   }
   DebugStream &operator<<(long long k) {
     errprintf("%lld", k);
+    return *this;
+  }
+  DebugStream &operator<<(unsigned long k) {
+    errprintf("%lu", k);
     return *this;
   }
   DebugStream &operator<<(unsigned k) {
