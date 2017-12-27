@@ -1,11 +1,12 @@
 #include <algorithm>
 #undef min
 #undef max
-#define T int
-#define NIL (1 << 29)
-#define INIT (1 << 29)
-#define FUNC(a, b) std::min(a, b)
-#include "../fenwick_tree/fenwick.h"
+// #define T int
+// #define NIL (1 << 29)
+// #define INIT (1 << 29)
+// #define FUNC(a, b) std::min(a, b)
+// #include "../fenwick_tree/fenwick.h"
+#define DOG_ENABLE_HEIGHT_ARRAY
 #include "sa_is.h"
 #include <map>
 

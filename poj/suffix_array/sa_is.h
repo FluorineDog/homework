@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <string>
 
+
 typedef int char_t;
 // void checker(const vector<char_t> &raw_str, const vector<int> &sa) {
 //   for (int i = 0; i < (int)raw_str.size() - 1; ++i) {
@@ -23,6 +24,13 @@ inline vector<int> get_rank(int N, const vector<int> sa){
   }
   return rank;
 }
+
+#ifdef DOG_ENABLE_HEIGHT_ARRAY
+#define T int
+#define NIL (1 << 29)
+#define INIT (1 << 29)
+#define FUNC(a, b) std::min(a, b)
+#include "../fenwick_tree/fenwick.h"
 
 void height_helper(Fenwick &tree, const vector<char_t> &raw_str,
                    const vector<int> &sa, const vector<int> &rank) {
@@ -52,6 +60,7 @@ void height_helper(Fenwick &tree, const vector<char_t> &raw_str,
   tree.fast_init();
 }
 
+#endif
 
 inline void induction(int N, const vector<char_t> &raw_str,
                       const vector<bool> &is_s_types,

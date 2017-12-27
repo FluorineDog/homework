@@ -7,7 +7,7 @@
 #define T int
 #define FUNC(a, b) ((a) + (b))
 #define NIL 0
-#define INIT 1
+#define INIT 0
 #endif
 
 class Fenwick {

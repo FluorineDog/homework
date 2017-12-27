@@ -3,6 +3,7 @@ import re
 import sys
 import os
 import pyperclip
+pattern = re.compile('^#include *"(.*)"')
 
 def pack(filename):
 	abspath = os.path.abspath(filename)
@@ -10,7 +11,6 @@ def pack(filename):
 	os.chdir(dirname)
 	file = open(abspath, "r")
 	data = ""
-	pattern = re.compile('#include *"(.*)"')
 	for line in file.readlines():
 		m = pattern.match(line)
 		if not m :
