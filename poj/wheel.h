@@ -49,9 +49,25 @@ public:
     scanf("%lf", &k);
     return *this;
   }
+  template <class Container> void getstring(Container &vec) {
+
+    int ch;
+    do {
+      ch = getchar();
+    } while (ch == ' ' || ch == '\n');
+    vec.push_back(ch);
+
+    while (true) {
+      int ch = getchar();
+      if (ch == EOF || ch == ' ' || ch == '\n') {
+        break;
+      }
+      vec.push_back(ch);
+    }
+  }
 } cin;
 void poj_throw() {
-  int* fuck = NULL;
+  int *fuck = NULL;
   scanf("%d", fuck);
 }
 

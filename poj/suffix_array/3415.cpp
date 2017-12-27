@@ -15,31 +15,32 @@ struct Data {
 };
 
 void workload() {
-  std::string a, b;
+  // std::string a, b;
   int K;
   std::cin >> K;
   if (K == 0) {
     exit(0);
   }
-  std::cin >> a >> b;
-  vector<char_t> raw_str;
-  size_t total_size = a.size() + b.size() + 2;
-  raw_str.reserve(total_size);
-
-  for (size_t i = 0; i < a.size(); ++i) {
-    raw_str.push_back(a[i]);
-  }
+  // std::cin >> a >> b;
+  static vector<char_t> raw_str(2 * 100000 + 2);
+	raw_str.clear();
+  // size_t total_size = a.size() + b.size() + 2;
+  // raw_str.reserve(total_size);
+  // for (size_t i = 0; i < a.size(); ++i) {
+    // raw_str.push_back(a[i]);
+  // }
+	cin.getstring(raw_str);
   raw_str.push_back('#');
-  for (size_t i = 0; i < b.size(); ++i) {
-    raw_str.push_back(b[i]);
-  }
+	int a_size = raw_str.size();
+	cin.getstring(raw_str);
   raw_str.push_back('$');
+	size_t total_size = raw_str.size();
 
   vector<int> sa = suffix_array_construct_helper(raw_str, 128);
   Fenwick height(total_size);
   vector<int> rank = get_rank(total_size, sa);
   height_helper(height, raw_str, sa, rank);
-  vector<Data> record(a.size() + 1);
+  vector<Data> record(a_size);
   ull sum = 0;
   int last_height = 0;
   for (size_t sa_i = 0; sa_i < total_size; ++sa_i) {
@@ -48,14 +49,14 @@ void workload() {
     if (cur_height >= last_height) {
       last_height = cur_height;
       Data &ref = record[cur_height];
-      if (sa[sa_i] < (int)a.size() + 1) {
+      if (sa[sa_i] < a_size) {
         ref.a_count++;
       } else {
         ref.b_count++;
       }
     } else {
       Data leak;
-      if (sa[sa_i] < (int)a.size() + 1) {
+      if (sa[sa_i] < a_size) {
         leak.a_count++;
       } else {
         leak.b_count++;
