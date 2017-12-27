@@ -100,6 +100,9 @@ inline void induction(int N, const vector<char_t> &raw_str,
 vector<int> suffix_array_construct_helper(const vector<char_t> &raw_str,
                                           int alphabet_size) {
   const int N = raw_str.size();
+  if(N == 0){
+    return vector<int>();
+  }
   vector<bool> is_s_types(N);
   vector<int> alphabet_offsets(alphabet_size + 1, 0);
   // chapter 0: calculate s/l types
