@@ -4,7 +4,6 @@
 #include <stdint.h>
 #include <string>
 
-
 typedef int char_t;
 // void checker(const vector<char_t> &raw_str, const vector<int> &sa) {
 //   for (int i = 0; i < (int)raw_str.size() - 1; ++i) {
@@ -17,7 +16,7 @@ typedef int char_t;
 //     };
 //   }
 // }
-inline vector<int> get_rank(int N, const vector<int> sa){
+inline vector<int> get_rank(int N, const vector<int> sa) {
   vector<int> rank(N);
   for (int i = 0; i < N; ++i) {
     rank[sa[i]] = i;
@@ -25,7 +24,7 @@ inline vector<int> get_rank(int N, const vector<int> sa){
   return rank;
 }
 
-#ifdef DOG_ENABLE_HEIGHT_ARRAY
+#ifdef DOG_ENABLE_HEIGHT_TREE
 #define T int
 #define NIL (1 << 29)
 #define INIT (1 << 29)
@@ -59,7 +58,35 @@ void height_helper(Fenwick &tree, const vector<char_t> &raw_str,
   }
   tree.fast_init();
 }
-
+#else
+vector<int> get_height(const vector<char_t> &raw_str, const vector<int> &sa,
+                       const vector<int> &rank) {
+  // height[i] = h[SA[i]] = LCS(SA[i], SA[i-1]);
+  int N = raw_str.size();
+  vector<int> result(N - 1);
+  // s_i => sa_i
+  int height = 0;
+  for (int s_i = 0; s_i < N; ++s_i) {
+    int sa_i = rank[s_i];
+    if (sa_i > 0) {
+      int last_sa_i = sa_i - 1;
+      int last_s_i = sa[last_sa_i];
+      while (true) {
+        char_t left = raw_str[s_i + height];
+        char_t right = raw_str[last_s_i + height];
+        if (left != right) {
+          break;
+        }
+        ++height;
+      }
+      result[last_sa_i] = height;
+    }
+    if (height) {
+      --height;
+    }
+  }
+  return result;
+}
 #endif
 
 inline void induction(int N, const vector<char_t> &raw_str,
@@ -100,7 +127,7 @@ inline void induction(int N, const vector<char_t> &raw_str,
 vector<int> suffix_array_construct_helper(const vector<char_t> &raw_str,
                                           int alphabet_size) {
   const int N = raw_str.size();
-  if(N == 0){
+  if (N == 0) {
     return vector<int>();
   }
   vector<bool> is_s_types(N);
@@ -251,4 +278,4 @@ vector<int> suffix_array_construct_helper(const vector<char_t> &raw_str,
 //   show(id_autogen);
 // }
 
-#endif 
+#endif

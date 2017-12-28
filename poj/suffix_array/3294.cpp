@@ -6,7 +6,7 @@
 // #define INIT (1 << 29)
 // #define FUNC(a, b) std::min(a, b)
 // #include "../fenwick_tree/fenwick.h"
-#define DOG_ENABLE_HEIGHT_ARRAY
+#define DOG_ENABLE_HEIGHT_TREE
 #include "sa_is.h"
 #include <map>
 

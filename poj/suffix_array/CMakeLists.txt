@@ -5,5 +5,5 @@ project(suffix_array_tree)
 
 # add_executable(3294 3294)
 # add_executable(3415 3415)
-add_executable(2406 2406)
-# add_executable(3693 3693)
+# add_executable(2406 2406)
+add_executable(3693 3693)
