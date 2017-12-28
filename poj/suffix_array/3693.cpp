@@ -4,7 +4,8 @@
 #include <stack>
 using std::swap;
 struct Height_reduce {
-  Height_reduce(const Fenwick &height, const vector<int> &rank):ref_height(height), ref_rank(rank) {}
+  Height_reduce(const Fenwick &height, const vector<int> &rank)
+      : ref_height(height), ref_rank(rank) {}
   const Fenwick &ref_height;
   const vector<int> &ref_rank;
   int operator()(int str_a, int str_b) {
@@ -30,25 +31,12 @@ void workload(int case_num) {
   Fenwick height(N - 1);
   height_helper(height, raw_str, sa, rank);
   Height_reduce height_reduce(height, rank);
-  // int location = 0;
-  // int length = 0;
-  // int multiple = 0;
-  // for (int sa_i = 0; sa_i < N - 1; ++sa_i) {
-  //   int h = height[sa_i];
-  //   int delta = std::abs(sa[sa_i] - sa[sa_i + 1]);
-  //   int new_mul = h / delta + 1;
-  //   if (new_mul > multiple) {
-  //     multiple = new_mul;
-  //     length = h / delta * delta + delta;
-  //     location = std::min(sa[sa_i], sa[sa_i + 1]);
-  //   }
-  // }
 
   // search all L
   // common multiple
-  int max_multiple = 1;
-  vector<pair<int, int> /**/> record;
-  record.reserve(N / 2);
+  int max_multiple = 0;
+  pair<int, int> min_record;
+  bool write_through = true;
 
   for (int L = 1; L <= N / 2; ++L) {
     for (int str_i = 0; str_i < N - L;) {
@@ -72,11 +60,17 @@ void workload(int case_num) {
 
       if (multiple >= max_multiple) {
         if (multiple > max_multiple) {
-          record.clear();
+          max_multiple = multiple;
+          write_through = true;
+          // record.clear();
         }
         int next_i = str_i + L * multiple + L;
         do {
-          record.push_back(make_pair(str_i, L));
+          pair<int, int> new_record = make_pair(rank[str_i], L);
+          if (write_through || new_record < min_record) {
+            min_record = new_record;
+          }
+          write_through = false;
         } while (str_i-- > 0 &&
                  height_reduce(str_i, str_i + L) >= multiple * L);
         str_i = next_i;
@@ -86,11 +80,13 @@ void workload(int case_num) {
       }
     }
   }
-  for (size_t i = 0; i < record.size(); ++i) {
-    cout << "(" << record[i].first << ", " << record[i].second << ") ";
+  cout << "Case " << case_num << ": ";
+  int str_i = sa[min_record.first];
+  for (int mul = 0; mul < max_multiple + 1; ++mul) {
+    for (int i = str_i; i < str_i + min_record.second; ++i) {
+      cout << (char)raw_str[i];
+    }
   }
-  // ull sum = 0;
-  // int last_height = 0;
   cout << endl;
 }
 
