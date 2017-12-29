@@ -46,15 +46,15 @@ void workload_read(int read_pipe_fd) {
 }
 
 void killee(int) {
-  cerr << "Child Process " << global_child_id << " killed by parent" << endl;
+  fprintf(stderr, "Child Process %d killed by parent\n", global_child_id);
   _exit(0);
 }
 
 void killer(int) { 
-  cerr << "i'm killer" << endl;
+  cerr << "i'm killer\n";
   kill(pid1, SIGUSR1);
   kill(pid2, SIGUSR1);
-  cerr << "parrent is killed";
+  cerr << "parrent is killed\n";
   exit(0);
 }
 void deaf(int){
