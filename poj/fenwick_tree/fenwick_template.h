@@ -2,6 +2,26 @@
 #define DOG_FENWICK_TREE_TEMPLATE_H_
 #include "../wheel.h"
 
+struct Func {
+  // closest functor
+  typedef pair<pair<int, int>, int> T;
+  T operator()(T a, T b) {
+    if (a.second == 0) {
+      return b;
+    } else if (b.second == -1) {
+      return a;
+    }
+    int min = b.first.first - a.first.second;
+    min = std::min(min, a.second);
+    min = std::min(min, b.second);
+    return make_pair(make_pair(a.first.first, b.first.second), min);
+  }
+  static T NIL;
+  static T gen(int loc) {
+    return make_pair(make_pair(loc, loc), INT32_MAX / 4);
+  }
+};
+
 // NIL should be identity of moniod
 template<typename T, T NIL, T INIT, typename FUNC>
 class Fenwick {
