@@ -1,11 +1,15 @@
+#include <cassert>
 #include <vector>
 using std::vector;
 #define clz(x) __builtin_clz(x)
 #define ctz(x) __builtin_ctz(x)
 
-typedef double T;
+#ifndef NIL
+typedef long long T;
 #define NIL 0
 #define func(a, b) ((a) + (b))
+#endif
+
 class MonoidTree {
 public:
   MonoidTree(int length) {
@@ -14,58 +18,50 @@ public:
     for (bsize = 1; bsize < length; bsize <<= 1) {
       layer_count++;
     }
-    bsize_ = bsize;
-    // int leading_zeros = clz(size - 1);
-    // layer_count = 32 - leading_zeros;
-    data.resize(layer_count, vector<T>(bsize, NIL));
+    this->length_ = length;
+    raw_data.resize(length, NIL);
+    begin_data.resize(layer_count, vector<T>(length, NIL));
+    end_data.resize(layer_count, vector<T>(length, NIL));
   }
 
-  T raw_update(int index, T k) { data[0][index] = k; }
+  void raw_update(int index, T k) { raw_data[index] = k; }
 
   void fast_init() {
-    const vector<T> &raw_data = data[0];
-    for (int layer = 1; layer < layer_count; ++layer) {
+    for (int layer = 0; layer < layer_count; ++layer) {
       int step = 1 << layer;
-      int mask = 1 << layer - 1;
-      int decision_bit = 1 << (layer - 1);
-      // need [beg, stand)
-      // 			[stand, end)
-      for (int stand = 0; stand < bsize_; stand += step) {
-        // [beg, stand + step)
-        // from [old_stand, stand + step) to what the fuck
-        // <== XXXX1-XXXY0
-        int old_stand = stand + decision_bit;
-        T right = data[layer - 1][old_stand];
-        for (int i = old_stand; i-- > stand;) {
-          right = func(raw_data[i], right);
-          data[layer][i] = right;
+      for (int index = 0; index < this->length_; index += step) {
+        T acc = NIL;
+        int end_index = std::min(index + step, this->length_);
+        for (int i = end_index; i-- > index;) {
+          acc = func(raw_data[i], acc);
+          begin_data[layer][i] = acc;
         }
-        // [stand, end)
-        // from [stand, old_stand) to what the fuck
-        // <== XXXX1-XXXY0
-        T left = data[layer][stand];
-        for (int i = old_stand; i < stand + step; ++i) {
-          data[layer][i] = left;
-          left = func(left, raw_data[i]);
+        acc = NIL;
+        for (int i = index; i < end_index; ++i) {
+          end_data[layer][i] = acc;
+          acc = func(acc, raw_data[i]);
         }
       }
     }
   }
 
   T reduce(int beg, int end) {
-    if(beg == end){
+    if (beg == end) {
       return NIL;
     }
-    int base = beg ^ end;
-    int lz = clz(base);
-    int stand = 1 << (32 - lz);
-    int left_lz = clz(stand - beg);
-    int right_lz = clz(end - stand);
-    
+    assert(beg < end);
+    // find stand in [begin, end)
+    int layer = 31 - clz(beg ^ end);
+    T left = begin_data[layer][beg];
+    T right = end_data[layer][end];
+    return func(left, right);
   }
 
 private:
-  vector<vector<T> /**/> data;
+  vector<T> raw_data;
+  vector<vector<T> /**/> begin_data;
+  vector<vector<T> /**/> end_data;
   int layer_count;
-  int bsize_;
+  // int bsize_;
+  int length_;
 };

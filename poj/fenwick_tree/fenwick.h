@@ -81,4 +81,9 @@ private:
   int length_;
 };
 
+#undef T
+#undef FUNC
+#undef NIL 
+#undef INIT
+
 #endif
