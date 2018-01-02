@@ -1,6 +1,7 @@
 // #undef DOG_DEBUG
 #ifndef DOG_WHEEL_H_
 #define DOG_WHEEL_H_
+#include <cctype>
 #include <stdarg.h>
 #include <stdio.h>
 
@@ -12,7 +13,20 @@ public:
     freopen(filename, "r", stdin);
 #endif
   }
-
+  long long getInt() {
+    int ch = getchar();
+    while (!isdigit(ch)) {
+      ch = getchar();
+    }
+    long long result = ch - '0';
+    ch = getchar();
+    while (isdigit(ch)) {
+      result *= 10;
+      result += ch - '0';
+      ch = getchar();
+    }
+    return result;
+  }
   // easy to make mistake
   // if insist, use getchar() instead
   // InputStream &operator>>(char &k) { scanf("%c", k); }

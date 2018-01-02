@@ -7,7 +7,7 @@ T ancestor_merge(T a, T b) { return a.first < b.first ? a : b; }
 #include "monoid_tree.h"
 // #include "../fenwick_tree/fenwick.h"
 #include <stack>
-#define T std::pair<int, int> 
+#define T std::pair<int, int>
 
 struct Vertex {
   // int ancestor;
@@ -65,12 +65,13 @@ void workload() {
   for (int k = 0; k < N; ++k) {
     int vertex;
     int edge_count;
-    scanf(" %d:(%d)", &vertex, &edge_count);
+    vertex = cin.getInt();
+    edge_count = cin.getInt();
     --vertex;
     graph[vertex].edges.reserve(edge_count);
     for (int i = 0; i < edge_count; ++i) {
       int edge;
-      scanf("%d", &edge);
+      edge = cin.getInt();
       --edge;
       graph[vertex].edges.push_back(edge);
       possible_root[edge] = true;
@@ -92,16 +93,17 @@ void workload() {
     }
     --index;
     tree.raw_update(index, graph[i].ancestor);
-    // cerr << index << "**" << tree[index].first << "**" << tree[index].second + 1
-        //  << endl;
   }
   tree.fast_init();
   int K;
-  scanf("%d", &K);
+  // scanf("%d", &K);
+  K = cin.getInt();
   vector<int> record(N);
   while (K-- > 0) {
     int a, b;
-    scanf(" (%d %d)", &a, &b);
+    // scanf(" (%d %d)", &a, &b);
+    a = cin.getInt();
+    b = cin.getInt();
     --a;
     --b;
     int beg = graph[a].discover_time;
