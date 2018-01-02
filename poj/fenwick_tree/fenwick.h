@@ -3,7 +3,7 @@
 #include "../wheel.h"
 
 // NIL should be identity of moniod
-#ifndef T
+#ifndef NIL
 #define T int
 #define FUNC(a, b) ((a) + (b))
 #define NIL 0
