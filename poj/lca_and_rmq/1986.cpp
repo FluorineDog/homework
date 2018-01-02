@@ -1,6 +1,7 @@
+#define private public
 #include "../wheel.h"
 typedef std::pair<int, pair<int, int> /**/> T;
-#define NIL std::make_pair(1 << 30, make_pair(-1, -1))
+#define NIL std::make_pair(1 << 30, make_pair(0, 0))
 #define INIT NIL
 T ancestor_merge(T a, T b) {
   if (a.first < b.first) {
@@ -10,7 +11,7 @@ T ancestor_merge(T a, T b) {
   } else {
     int left = a.second.first + b.second.first - a.second.second;
     int right = b.second.second;
-    return make_pair(a.first, make_pair(left, right));
+    return make_pair(b.first, make_pair(left, right));
   }
 }
 #define FUNC(a, b) ancestor_merge(a, b)
@@ -36,7 +37,7 @@ public:
       graph[i].discover_time = -1;
     }
     timestamp = 0;
-    ancestor = make_pair(-1, make_pair(-1, -1));
+    ancestor = make_pair(-1, make_pair(0, 0));
     depth = -1;
     dfs(graph, source);
   }
@@ -45,8 +46,8 @@ public:
       graph[i].discover_time = -1;
     }
     timestamp = 0;
-    for (int source = 0; source < graph.size(); ++source) {
-      ancestor = make_pair(-1, make_pair(-1, -1));
+    for (int source = 0; source < (int)graph.size(); ++source) {
+      ancestor = make_pair(-1, make_pair(0, 0));
       depth = -1;
       dfs(graph, source);
     }
@@ -60,7 +61,7 @@ private:
       vertex.discover_time = timestamp++;
       vertex.ancestor = ancestor;
       for (int i = 0; i < (int)vertex.neighbors.size(); ++i) {
-        ancestor = make_pair(depth, make_pair(0,0));
+        ancestor = make_pair(depth, make_pair(0, 0));
         dfs(graph, vertex.neighbors[i]);
       }
       vertex.finish_time = timestamp;
@@ -86,15 +87,17 @@ void workload() {
   while (M-- > 0) {
     int u, v;
     ull w;
-    cin >> u >> v >> w;
+    char str[2];
+    cin >> u >> v >> w >> str;
+    --u, --v;
     edges.push_back(make_pair(make_pair(u, v), w));
     graph[u].neighbors.push_back(v);
     graph[v].neighbors.push_back(u);
   }
   int source = 0;
   DFS()(graph, source);
-  // MonoidTree tree(N - 1);
   Fenwick tree(N - 1);
+
   for (int i = 0; i < N; ++i) {
     int index = graph[i].discover_time;
     if (index == 0) {
@@ -104,30 +107,41 @@ void workload() {
     tree.raw_update(index, graph[i].ancestor);
   }
 
+  for (int i = 0; i < (int)edges.size(); ++i) {
+    int u = edges[i].first.first;
+    int v = edges[i].first.second;
+    ull w = edges[i].second;
+    int vertex = graph[u].discover_time > graph[v].discover_time ? u : v;
+    int dis = graph[vertex].discover_time;
+    int fin = graph[vertex].finish_time;
+    if (dis != 0) {
+      --dis;
+      T ref = tree[dis];
+      ref.second.second += w;
+      tree.raw_update(dis, ref);
+    }
+    if (fin != N) {
+      --fin;
+      T ref = tree[fin];
+      ref.second.first += w;
+      tree.raw_update(fin, ref);
+    }
+  }
   tree.fast_init();
+
   int K;
-  // scanf("%d", &K);
-  K = cin.getInt();
-  vector<int> record(N);
+  cin >> K;
   while (K-- > 0) {
     int a, b;
-    // scanf(" (%d %d)", &a, &b);
-    a = cin.getInt();
-    b = cin.getInt();
+    cin >> a >> b;
     --a;
     --b;
     int beg = graph[a].discover_time;
     int end = graph[b].discover_time;
     if (beg > end)
       std::swap(beg, end);
-    int ancestor = tree.reduce(beg, end).second;
-    // cerr << beg << "*" << end << "*" << ancestor + 1 << endl;
-  }
-
-  for (int i = 0; i < N; ++i) {
-    if (record[i]) {
-      printf("%d:%d\n", i + 1, record[i]);
-    }
+    std::pair<int, int> distance = tree.reduce(beg, end).second;
+    cout << distance.first + distance.second << endl;
   }
 }
 
