@@ -81,19 +81,20 @@ private:
 };
 
 void workload() {
-  int N, M;
-  int status = scanf("%d%d", &N, &M);
-  if (status != 2) {
+  int N, M, loc;
+  int status = scanf("%d%d%d", &N, &M, &loc);
+  --loc;
+  if (status != 3) {
     exit(0);
   }
   Graph graph(N);
   vector<pair<pair<int, int>, ull> /**/> edges;
   edges.reserve(M);
-  while (M-- > 0) {
+  // while (M-- > 0) {
+  for (int i = 0; i < N - 1; ++i) {
     int u, v;
     ull w;
-    char str[2];
-    cin >> u >> v >> w >> str;
+    cin >> u >> v >> w;
     --u, --v;
     edges.push_back(make_pair(make_pair(u, v), w));
     graph[u].neighbors.push_back(v);
@@ -134,21 +135,52 @@ void workload() {
   }
   tree.fast_init();
 
-  int K;
-  cin >> K;
-  while (K-- > 0) {
-    int a, b;
-    cin >> a >> b;
-    --a;
-    --b;
-    int beg = graph[a].discover_time;
-    int end = graph[b].discover_time;
-    if (beg > end)
-      std::swap(beg, end);
-    std::pair<ull, ull> distance = tree.reduce(beg, end).second;
-    cout << distance.first + distance.second << endl;
+  while (M-- > 0) {
+    int op;
+    cin >> op;
+    if (op == 0) {
+      // move message
+      int a, b;
+      cin >> a;
+      --a;
+      b = loc;
+      loc = a;
+      int beg = graph[a].discover_time;
+      int end = graph[b].discover_time;
+      if (beg > end)
+        std::swap(beg, end);
+      std::pair<ull, ull> distance = tree.reduce(beg, end).second;
+      cout << distance.first + distance.second << endl;
+    } else {
+      // change edge
+      int i;
+      ull new_w;
+      cin >> i >> new_w;
+      --i;
+      int u = edges[i].first.first;
+      int v = edges[i].first.second;
+      ull w = edges[i].second;
+      w = new_w - w;
+      edges[i].second = new_w;
+      int vertex = graph[u].discover_time > graph[v].discover_time ? u : v;
+      int dis = graph[vertex].discover_time;
+      int fin = graph[vertex].finish_time;
+      if (dis != 0) {
+        --dis;
+        T ref = tree[dis];
+        ref.second.second += w;
+        tree.update(dis, ref);
+      }
+      if (fin != N) {
+        --fin;
+        T ref = tree[fin];
+        ref.second.first += w;
+        tree.update(fin, ref);
+      }
+    }
   }
 }
+
 
 int main() {
   cin.redirect("data.in");
