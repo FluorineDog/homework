@@ -4,10 +4,14 @@ import sys
 import os
 import pyperclip
 pattern = re.compile('^#include *"(.*)"')
+did = set()
 
 def pack(filename):
 	abspath = os.path.abspath(filename)
 	dirname = os.path.dirname(abspath)
+	if abspath in did:
+		return ""
+	did.add(abspath)
 	os.chdir(dirname)
 	file = open(abspath, "r")
 	data = ""
