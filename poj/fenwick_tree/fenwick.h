@@ -4,7 +4,7 @@
 
 // NIL should be identity of moniod
 #ifndef NIL
-#define T int
+typedef int T;
 #define FUNC(a, b) ((a) + (b))
 #define NIL 0
 #define INIT 0
@@ -81,9 +81,5 @@ private:
   int length_;
 };
 
-#undef T
-#undef FUNC
-#undef NIL 
-#undef INIT
 
 #endif
