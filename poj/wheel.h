@@ -105,10 +105,10 @@ void poj_throw() {
 
 class OutputStream {
 public:
-  OutputStream(){
-    char buffer[1 << 19];
-    setvbuf(stdout, buffer, _IOFBF, sizeof(buffer));
-  };
+  // OutputStream(){
+    // char buffer[1 << 19];
+    // setvbuf(stdout, buffer, _IOFBF, sizeof(buffer));
+  // };
   OutputStream &operator<<(char k) {
     printf("%c", k);
     return *this;
