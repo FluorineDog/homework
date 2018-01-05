@@ -1,11 +1,13 @@
 #include "../wheel.h"
 #define clz(x) __builtin_clz(x)
-typedef long long T;
+typedef int T;
 #define NIL (1 << 30)
 #define INIT NIL
 #define FUNC(a, b) std::min(a, b)
 // #include "monoid_tree.h"
 #include "../fenwick_tree/fenwick.h"
+typedef Fenwick MonoidTree;
+
 struct Data {
   int father;
   int max;
@@ -118,7 +120,7 @@ void workload() {
     graph[v].neighbors.push_back(u);
   }
   DFS()(graph, 0);
-  Fenwick tree(N);
+  MonoidTree tree(N);
   for (int i = 1; i < N; ++i) {
     tree.raw_update(graph[i].discover_time - 1, graph[i].ancestor_depth);
   }
@@ -153,7 +155,8 @@ void workload() {
       right = right.append_up(graph[right.father].jmpTable[k]);
       n_depth -= 1 << k;
     }
-    cout << right.blend_source(left) << endl;
+    // cout << right.blend_source(left) << endl;
+    printf("%d\n", right.blend_source(left))
   }
 }
 
