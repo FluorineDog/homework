@@ -33,12 +33,36 @@ struct Vertex {
   int ancestor_depth;
   int price;
   int depth;
-  vector<Data> jmpTable;
+  // vector<Data> jmpTable;
   int discover_time;
   int finish_time;
-  vector<int> neighbors;
+  int edge_beg;
+  // vector<int> neighbors;
+  Vertex() : edge_beg(0) {}
 };
-typedef vector<Vertex> Graph;
+// typedef vector<Vertex> Graph;
+
+class Graph : public vector<Vertex> {
+public:
+  Graph(int V, int E = 0) : vector(V) {
+    edges.reserve(E + 1);
+    edges.push_back(Edge(-1, -1));
+  }
+  struct Edge {
+    int next;
+    int to;
+    Edge(int next, int to) : next(next), to(to) {}
+  };
+  void add_edge(int from, int to) {
+    int pre_beg = operator[](from).edge_beg;
+    operator[](from).edge_beg = edges.size();
+    edges.push_back(Edge(pre_beg, to));
+  }
+  Edge get_edge(int edge_id) { return edges[edge_id]; }
+
+private:
+  vector<Edge> edges;
+};
 class DFS {
 public:
   DFS() {}
@@ -85,9 +109,10 @@ private:
           cur_beg = acc.father;
         }
       }
-      for (int i = 0; i < (int)vertex.neighbors.size(); ++i) {
+      for (Graph::Edge edge = graph.get_edge(vertex.edge_beg); edge.to != -1;
+           edge = graph.get_edge(edge.next)) {
         ancestor_depth = depth;
-        dfs(graph, vertex.neighbors[i], source);
+        dfs(graph, edge.to, source);
       }
       vertex.finish_time = timestamp;
     }
@@ -99,7 +124,6 @@ private:
   int depth;
   int timestamp;
 };
-
 void workload() {
   int N;
   {
@@ -116,8 +140,8 @@ void workload() {
     int u, v;
     cin >> u >> v;
     --u, --v;
-    graph[u].neighbors.push_back(v);
-    graph[v].neighbors.push_back(u);
+    graph.add_edge(u, v);
+    graph.add_edge(v, u);
   }
   DFS()(graph, 0);
   MonoidTree tree(N);
