@@ -112,7 +112,7 @@ void workload() {
   if (status != 3) {
     exit(0);
   }
-  Graph graph(N, 2*(N-1));
+  Graph graph(N, 2 * (N - 1));
   vector<pair<pair<int, int>, ull> /**/> edges;
   edges.reserve(M);
   // while (M-- > 0) {
@@ -177,7 +177,8 @@ void workload() {
       if (beg > end)
         std::swap(beg, end);
       std::pair<ull, ull> distance = tree.reduce(beg, end).second;
-      cout << distance.first + distance.second << endl;
+      // cout << distance.first + distance.second << endl;
+      printf("%lld\n", distance.first + distance.second);
     } else {
       // change edge
       int i;

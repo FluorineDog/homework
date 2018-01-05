@@ -14,7 +14,7 @@ struct Data {
   int min;
   int up_gap;
   int down_gap;
-  Data(int father, int value)
+  Data(int father = -1, int value = -1)
       : father(father), max(value), min(value), up_gap(0), down_gap(0) {}
   Data append_up(const Data &v) const {
     Data tmp(v);
@@ -26,6 +26,12 @@ struct Data {
   }
   int blend_source(const Data &v) {
     return std::max(std::max(up_gap, v.down_gap), max - v.min);
+  }
+};
+struct DataArray{
+  Data data[20];
+  Data& operator[](int index){
+    return data[index];
   }
 };
 
@@ -44,9 +50,11 @@ struct Vertex {
 
 class Graph : public vector<Vertex> {
 public:
-  Graph(int V, int E = 0) : vector(V) {
+  Graph(int V, int E = 0)  {
+    this->resize(V);
     edges.reserve(E + 1);
     edges.push_back(Edge(-1, -1));
+    jmpTable.resize(V);
   }
   struct Edge {
     int next;
@@ -59,6 +67,7 @@ public:
     edges.push_back(Edge(pre_beg, to));
   }
   Edge get_edge(int edge_id) { return edges[edge_id]; }
+  vector<DataArray> jmpTable;
 
 private:
   vector<Edge> edges;
@@ -96,17 +105,16 @@ private:
       vertex.discover_time = timestamp++;
       vertex.depth = depth;
       vertex.ancestor_depth = ancestor_depth;
-      vertex.jmpTable.reserve(32 - clz(depth));
       {
         Data acc = Data(parent, vertex.price);
-        vertex.jmpTable.push_back(acc);
         // [beg 2^k] = [beg 2^--k] * [beg double 2^--k]
-        int cur_beg = acc.father;
         int k = 0;
+        graph.jmpTable[source][k] = acc;
+        int cur_beg = acc.father;
         while (cur_beg != -1 && graph[cur_beg].depth - (1 << k) >= -1) {
-          acc = acc.append_up(graph[cur_beg].jmpTable[k]);
-          vertex.jmpTable.push_back(acc);
+          acc = acc.append_up(graph.jmpTable[cur_beg][k]);
           ++k;
+          graph.jmpTable[source][k] = acc;
           cur_beg = acc.father;
         }
       }
@@ -156,8 +164,8 @@ void workload() {
     int m, n;
     cin >> m >> n;
     m--, n--;
-    Data left = graph[m].jmpTable[0];
-    Data right = graph[n].jmpTable[0];
+    Data left = graph.jmpTable[m][0];
+    Data right = graph.jmpTable[n][0];
     int m_depth = graph[m].depth;
     int n_depth = graph[n].depth;
 
@@ -171,17 +179,17 @@ void workload() {
     while (m_depth > common_depth) {
       int k = 31 - clz(m_depth - common_depth);
       // extend 2^k
-      left = left.append_up(graph[left.father].jmpTable[k]);
+      left = left.append_up(graph.jmpTable[left.father][k]);
       m_depth -= 1 << k;
     }
     while (n_depth > common_depth) {
       int k = 31 - clz(n_depth - common_depth);
       // extend 2^k
-      right = right.append_up(graph[right.father].jmpTable[k]);
+      right = right.append_up(graph.jmpTable[right.father][k]);
       n_depth -= 1 << k;
     }
     // cout << right.blend_source(left) << endl;
-    printf("%d\n", right.blend_source(left))
+    printf("%d\n", right.blend_source(left));
   }
 }
 

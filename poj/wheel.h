@@ -55,7 +55,7 @@ public:
     k = getInt();
     return *this;
   }
-#else //HIGH_IO_PERFORMANCE
+#else  // HIGH_IO_PERFORMANCE
   InputStream &operator>>(int &k) {
     scanf("%d", &k);
     return *this;
@@ -72,7 +72,7 @@ public:
     scanf("%llu", &k);
     return *this;
   }
-#endif //HIGH_IO_PERFORMANCE
+#endif // HIGH_IO_PERFORMANCE
   InputStream &operator>>(char *str) {
     scanf("%s", str);
     return *this;
@@ -105,6 +105,10 @@ void poj_throw() {
 
 class OutputStream {
 public:
+  OutputStream(){
+    char buffer[1 << 19];
+    setvbuf(stdout, buffer, _IOFBF, sizeof(buffer));
+  };
   OutputStream &operator<<(char k) {
     printf("%c", k);
     return *this;
@@ -137,6 +141,9 @@ public:
     printf("%f", k);
     return *this;
   }
+  //  setHP{
+
+  // }
 } cout;
 
 class DebugStream {
