@@ -38,7 +38,24 @@ public:
     } while (k == ' ' || k == '\n');
     return *this;
   }
-
+#ifdef HIGH_IO_PERFORMANCE
+  InputStream &operator>>(int &k) {
+    k = getInt();
+    return *this;
+  }
+  InputStream &operator>>(long long &k) {
+    k = getInt();
+    return *this;
+  }
+  InputStream &operator>>(unsigned &k) {
+    k = getInt();
+    return *this;
+  }
+  InputStream &operator>>(unsigned long long &k) {
+    k = getInt();
+    return *this;
+  }
+#else //HIGH_IO_PERFORMANCE
   InputStream &operator>>(int &k) {
     scanf("%d", &k);
     return *this;
@@ -55,6 +72,7 @@ public:
     scanf("%llu", &k);
     return *this;
   }
+#endif //HIGH_IO_PERFORMANCE
   InputStream &operator>>(char *str) {
     scanf("%s", str);
     return *this;

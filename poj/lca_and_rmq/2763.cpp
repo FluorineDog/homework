@@ -1,3 +1,4 @@
+#define HIGH_IO_PERFORMANCE
 #define private public
 #include "../wheel.h"
 typedef std::pair<int, pair<ull, ull> /**/> T;
@@ -30,10 +31,32 @@ struct Vertex {
   T ancestor;
   int discover_time;
   int finish_time;
-  vector<int> neighbors;
+  // vector<int> neighbors;
+  int edge_beg;
+};
+class Graph : public vector<Vertex> {
+public:
+  Graph(int V, int E = 0) {
+    this->resize(V);
+    edges.reserve(E + 1);
+    edges.push_back(Edge(-1, -1));
+  }
+  struct Edge {
+    int next;
+    int to;
+    Edge(int next, int to) : next(next), to(to) {}
+  };
+  void add_edge(int from, int to) {
+    int pre_beg = operator[](from).edge_beg;
+    operator[](from).edge_beg = edges.size();
+    edges.push_back(Edge(pre_beg, to));
+  }
+  Edge get_edge(int edge_id) { return edges[edge_id]; }
+
+private:
+  vector<Edge> edges;
 };
 
-typedef vector<Vertex> Graph;
 class DFS {
 public:
   DFS() {}
@@ -65,9 +88,11 @@ private:
       Vertex &vertex = graph[source];
       vertex.discover_time = timestamp++;
       vertex.ancestor = ancestor;
-      for (int i = 0; i < (int)vertex.neighbors.size(); ++i) {
+
+      for (Graph::Edge edge = graph.get_edge(vertex.edge_beg); edge.to != -1;
+           edge = graph.get_edge(edge.next)) {
         ancestor = make_pair(depth, make_pair(0, 0));
-        dfs(graph, vertex.neighbors[i]);
+        dfs(graph, edge.to);
       }
       vertex.finish_time = timestamp;
     }
@@ -87,7 +112,7 @@ void workload() {
   if (status != 3) {
     exit(0);
   }
-  Graph graph(N);
+  Graph graph(N, 2*(N-1));
   vector<pair<pair<int, int>, ull> /**/> edges;
   edges.reserve(M);
   // while (M-- > 0) {
@@ -97,8 +122,10 @@ void workload() {
     cin >> u >> v >> w;
     --u, --v;
     edges.push_back(make_pair(make_pair(u, v), w));
-    graph[u].neighbors.push_back(v);
-    graph[v].neighbors.push_back(u);
+    // graph[u].neighbors.push_back(v);
+    // graph[v].neighbors.push_back(u);
+    graph.add_edge(u, v);
+    graph.add_edge(v, u);
   }
   int source = 0;
   DFS()(graph, source);
@@ -180,7 +207,6 @@ void workload() {
     }
   }
 }
-
 
 int main() {
   cin.redirect("data.in");
