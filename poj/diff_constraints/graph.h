@@ -43,15 +43,16 @@ public:
       int from = q.front();
       q.pop();
       Vertex &u = graph[from];
-      u.visited++;
+      // u.visited++;
       u.in_queue = 0;
-      if (u.visited == (int)graph.size()) {
-        return false;
-      }
       for (Edge edge = get_edge(u.edge_beg); edge.to != -1;
            edge = get_edge(edge.next)) {
         Vertex &v = graph[edge.to];
         ull new_value = u.value + edge.value;
+        v.visited++;
+        if (v.visited >= (int)graph.size()) {
+          return false;
+        }
         if (new_value < v.value) {
           v.value = new_value;
           if (!v.in_queue) {
