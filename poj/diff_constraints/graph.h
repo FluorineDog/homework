@@ -37,23 +37,26 @@ public:
     Graph &graph = *this;
     graph[source].value = 0;
     graph[source].in_queue = 1;
-    std::stack<int> q;
+    std::queue<int> q;
     q.push(source);
     while (!q.empty()) {
-      int from = q.top();
+      int from = q.front();
       q.pop();
       Vertex &u = graph[from];
-      // u.visited++;
+      u.visited++;
+      if (u.visited >= (int)graph.size()) {
+        return false;
+      }
       u.in_queue = 0;
       for (Edge edge = get_edge(u.edge_beg); edge.to != -1;
            edge = get_edge(edge.next)) {
         Vertex &v = graph[edge.to];
+        // v.visited++;
+        // if (v.visited >= (int)graph.size()) {
+        //   return false;
+        // }
         ull new_value = u.value + edge.value;
         if (new_value < v.value) {
-          v.visited++;
-          if (v.visited >= (int)graph.size()) {
-            return false;
-          }
           v.value = new_value;
           if (!v.in_queue) {
             q.push(edge.to);
