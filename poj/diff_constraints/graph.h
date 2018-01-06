@@ -38,22 +38,22 @@ public:
     while (!q.empty()) {
       int from = q.front();
       q.pop();
-			Vertex& u = graph[from];
+      Vertex &u = graph[from];
       u.visited++;
-			if(u.visited == graph.size()){
-				return false;
-			}
+      if (u.visited == graph.size()) {
+        return false;
+      }
       for (Edge edge = get_edge(from); edge.to != -1;
            edge = get_edge(edge.next)) {
-				Vertex& v = graph[edge.to];
-				ull new_value = u.value + edge.value;
-				if(v.value < new_value)	{
-					v.value = new_value;
-					q.push(edge.to);
-				}
+        Vertex &v = graph[edge.to];
+        ull new_value = u.value + edge.value;
+        if (v.value < new_value) {
+          v.value = new_value;
+          q.push(edge.to);
+        }
       }
     }
-		return true;
+    return true;
   }
 
 private:
