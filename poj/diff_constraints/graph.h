@@ -1,10 +1,12 @@
 #include "../wheel.h"
 #include <queue>
+#include <stack>
 struct Vertex {
   ull value;
   int edge_beg;
   int visited;
-  Vertex() : value(1LL << 30), edge_beg(0), visited(0) {}
+  int in_queue;
+  Vertex() : value(1LL << 30), edge_beg(0), visited(0), in_queue(0) {}
 };
 
 class Graph : public vector<Vertex> {
@@ -34,6 +36,7 @@ public:
   bool spfa(int source) {
     Graph &graph = *this;
     graph[source].value = 0;
+    graph[source].in_queue = 1;
     std::queue<int> q;
     q.push(source);
     while (!q.empty()) {
@@ -41,6 +44,7 @@ public:
       q.pop();
       Vertex &u = graph[from];
       u.visited++;
+      u.in_queue = 0;
       if (u.visited == (int)graph.size()) {
         return false;
       }
@@ -50,7 +54,10 @@ public:
         ull new_value = u.value + edge.value;
         if (new_value < v.value) {
           v.value = new_value;
-          q.push(edge.to);
+          if (!v.in_queue) {
+            q.push(edge.to);
+            v.in_queue = 1;
+          }
         }
       }
     }
