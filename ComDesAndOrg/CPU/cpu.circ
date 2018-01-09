@@ -3,7 +3,7 @@
 This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
 <lib desc="#Wiring" name="0">
     <tool name="Splitter">
-      <a name="facing" val="west"/>
+      <a name="facing" val="north"/>
     </tool>
     <tool name="Pin">
       <a name="facing" val="north"/>
@@ -13,7 +13,6 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
       <a name="radix" val="10signed"/>
     </tool>
     <tool name="Tunnel">
-      <a name="facing" val="east"/>
       <a name="width" val="32"/>
     </tool>
     <tool name="Pull Resistor">
@@ -23,8 +22,6 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
       <a name="facing" val="north"/>
     </tool>
     <tool name="Constant">
-      <a name="facing" val="north"/>
-      <a name="width" val="3"/>
       <a name="value" val="0x0"/>
     </tool>
   </lib>
@@ -40,13 +37,9 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
       <a name="inputs" val="2"/>
     </tool>
     <tool name="NOR Gate">
-      <a name="size" val="30"/>
-      <a name="inputs" val="4"/>
+      <a name="inputs" val="2"/>
     </tool>
     <tool name="XOR Gate">
-      <a name="facing" val="north"/>
-      <a name="width" val="32"/>
-      <a name="size" val="30"/>
       <a name="inputs" val="2"/>
     </tool>
     <tool name="XNOR Gate">
@@ -63,11 +56,9 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
   </lib>
   <lib desc="#Plexers" name="2">
     <tool name="Multiplexer">
-      <a name="facing" val="north"/>
       <a name="width" val="32"/>
     </tool>
     <tool name="Demultiplexer">
-      <a name="facing" val="north"/>
       <a name="select" val="5"/>
     </tool>
   </lib>
@@ -85,7 +76,8 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
       <a name="width" val="1"/>
     </tool>
     <tool name="Comparator">
-      <a name="width" val="16"/>
+      <a name="width" val="32"/>
+      <a name="mode" val="unsigned"/>
     </tool>
   </lib>
   <lib desc="#Memory" name="4">
@@ -107,11 +99,12 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
       <a name="valign" val="base"/>
     </tool>
   </lib>
-  <lib desc="jar#cs3410.jar#edu.cornell.cs3410.Components" name="7">
+  <lib desc="jar#/home/mike/workspace/homework/ComDesAndOrg/CPU/cs3410.jar#edu.cornell.cs3410.Components" name="7">
     <tool name="MIPSProgramROM">
       <a name="contents" val=""/>
     </tool>
   </lib>
+  <lib desc="file#/home/mike/workspace/homework/ComDesAndOrg/CPU/alu.circ" name="8"/>
   <main name="cpu"/>
   <options>
     <a name="gateUndefined" val="ignore"/>
@@ -159,83 +152,169 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
     <a name="clabel" val=""/>
     <a name="clabelup" val="east"/>
     <a name="clabelfont" val="SansSerif plain 12"/>
-    <wire from="(10,170)" to="(740,170)"/>
-    <wire from="(230,90)" to="(230,120)"/>
-    <wire from="(390,90)" to="(390,110)"/>
-    <wire from="(310,120)" to="(310,130)"/>
-    <wire from="(470,90)" to="(470,130)"/>
-    <wire from="(320,110)" to="(320,130)"/>
-    <wire from="(270,90)" to="(270,110)"/>
-    <wire from="(630,70)" to="(670,70)"/>
-    <wire from="(350,90)" to="(350,100)"/>
-    <wire from="(340,100)" to="(340,130)"/>
-    <wire from="(370,130)" to="(470,130)"/>
-    <wire from="(640,130)" to="(670,130)"/>
-    <wire from="(350,110)" to="(350,130)"/>
-    <wire from="(230,120)" to="(310,120)"/>
-    <wire from="(360,120)" to="(430,120)"/>
-    <wire from="(630,100)" to="(670,100)"/>
-    <wire from="(350,110)" to="(390,110)"/>
-    <wire from="(190,130)" to="(300,130)"/>
-    <wire from="(740,10)" to="(740,170)"/>
-    <wire from="(310,100)" to="(330,100)"/>
-    <wire from="(10,10)" to="(740,10)"/>
-    <wire from="(330,100)" to="(330,130)"/>
-    <wire from="(190,90)" to="(190,130)"/>
-    <wire from="(50,70)" to="(100,70)"/>
-    <wire from="(240,150)" to="(290,150)"/>
-    <wire from="(430,90)" to="(430,120)"/>
-    <wire from="(360,120)" to="(360,130)"/>
-    <wire from="(310,90)" to="(310,100)"/>
-    <wire from="(340,100)" to="(350,100)"/>
-    <wire from="(10,10)" to="(10,170)"/>
-    <wire from="(580,40)" to="(670,40)"/>
+    <wire from="(410,580)" to="(470,580)"/>
+    <wire from="(330,500)" to="(330,570)"/>
     <wire from="(270,110)" to="(320,110)"/>
+    <wire from="(340,660)" to="(390,660)"/>
+    <wire from="(430,550)" to="(430,560)"/>
+    <wire from="(470,570)" to="(470,580)"/>
+    <wire from="(50,70)" to="(100,70)"/>
+    <wire from="(310,90)" to="(310,100)"/>
+    <wire from="(350,90)" to="(350,100)"/>
+    <wire from="(360,120)" to="(360,130)"/>
+    <wire from="(360,580)" to="(360,590)"/>
+    <wire from="(270,90)" to="(270,110)"/>
+    <wire from="(570,600)" to="(610,600)"/>
+    <wire from="(390,90)" to="(390,110)"/>
+    <wire from="(350,110)" to="(350,130)"/>
+    <wire from="(630,100)" to="(670,100)"/>
+    <wire from="(370,570)" to="(370,590)"/>
+    <wire from="(680,700)" to="(680,730)"/>
+    <wire from="(720,700)" to="(720,730)"/>
+    <wire from="(430,90)" to="(430,120)"/>
+    <wire from="(400,560)" to="(400,590)"/>
+    <wire from="(380,560)" to="(380,590)"/>
+    <wire from="(370,130)" to="(470,130)"/>
+    <wire from="(340,100)" to="(340,130)"/>
+    <wire from="(390,500)" to="(390,590)"/>
+    <wire from="(230,90)" to="(230,120)"/>
+    <wire from="(10,10)" to="(10,170)"/>
+    <wire from="(400,560)" to="(430,560)"/>
+    <wire from="(310,100)" to="(330,100)"/>
+    <wire from="(190,90)" to="(190,130)"/>
+    <wire from="(390,660)" to="(410,660)"/>
+    <wire from="(470,90)" to="(470,130)"/>
+    <wire from="(340,100)" to="(350,100)"/>
+    <wire from="(390,610)" to="(390,660)"/>
+    <wire from="(280,580)" to="(360,580)"/>
+    <wire from="(410,580)" to="(410,590)"/>
+    <wire from="(410,700)" to="(410,710)"/>
+    <wire from="(240,150)" to="(290,150)"/>
+    <wire from="(740,700)" to="(740,770)"/>
+    <wire from="(310,120)" to="(310,130)"/>
+    <wire from="(280,570)" to="(280,580)"/>
+    <wire from="(320,110)" to="(320,130)"/>
+    <wire from="(190,130)" to="(300,130)"/>
+    <wire from="(630,70)" to="(670,70)"/>
+    <wire from="(410,660)" to="(410,680)"/>
+    <wire from="(330,100)" to="(330,130)"/>
+    <wire from="(360,530)" to="(360,560)"/>
+    <wire from="(350,110)" to="(390,110)"/>
+    <wire from="(330,570)" to="(370,570)"/>
+    <wire from="(650,700)" to="(650,740)"/>
+    <wire from="(10,170)" to="(740,170)"/>
+    <wire from="(10,10)" to="(740,10)"/>
+    <wire from="(770,660)" to="(800,660)"/>
+    <wire from="(770,560)" to="(800,560)"/>
+    <wire from="(360,560)" to="(380,560)"/>
+    <wire from="(640,130)" to="(670,130)"/>
+    <wire from="(740,10)" to="(740,170)"/>
+    <wire from="(580,40)" to="(670,40)"/>
+    <wire from="(410,660)" to="(420,660)"/>
+    <wire from="(230,120)" to="(310,120)"/>
+    <wire from="(190,660)" to="(200,660)"/>
+    <wire from="(360,120)" to="(430,120)"/>
+    <comp lib="5" loc="(230,90)" name="Hex Digit Display"/>
     <comp lib="0" loc="(640,130)" name="Tunnel">
       <a name="facing" val="east"/>
       <a name="width" val="16"/>
       <a name="label" val="有条件分支成功跳转"/>
     </comp>
-    <comp lib="7" loc="(610,390)" name="RegisterFile"/>
     <comp lib="0" loc="(670,100)" name="Probe">
       <a name="facing" val="west"/>
       <a name="radix" val="10unsigned"/>
+    </comp>
+    <comp lib="5" loc="(470,90)" name="Hex Digit Display"/>
+    <comp lib="0" loc="(630,70)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="width" val="16"/>
+      <a name="label" val="无条件分支指令数"/>
+    </comp>
+    <comp lib="0" loc="(670,130)" name="Probe">
+      <a name="facing" val="west"/>
+      <a name="radix" val="10unsigned"/>
+    </comp>
+    <comp lib="0" loc="(240,150)" name="Tunnel">
+      <a name="facing" val="east"/>
+      <a name="width" val="32"/>
+      <a name="label" val="SyscallOut"/>
+    </comp>
+    <comp lib="6" loc="(168,214)" name="Text">
+      <a name="text" val="数码管输出应该用寄存器锁存，否则显示数据只能一闪而过"/>
     </comp>
     <comp lib="0" loc="(630,100)" name="Tunnel">
       <a name="facing" val="east"/>
       <a name="width" val="16"/>
       <a name="label" val="有条件分支指令数"/>
     </comp>
-    <comp lib="0" loc="(580,40)" name="Tunnel">
-      <a name="facing" val="east"/>
-      <a name="width" val="16"/>
-      <a name="label" val="总周期数"/>
-    </comp>
-    <comp lib="6" loc="(255,192)" name="Text">
-      <a name="text" val="可以通过项目增加Logisim库的方式将前几次实验完成的电路作为子电路引入到本电路中使用"/>
-    </comp>
-    <comp lib="0" loc="(670,130)" name="Probe">
-      <a name="facing" val="west"/>
-      <a name="radix" val="10unsigned"/>
-    </comp>
     <comp lib="0" loc="(670,40)" name="Probe">
       <a name="facing" val="west"/>
       <a name="radix" val="10unsigned"/>
     </comp>
+    <comp lib="5" loc="(190,90)" name="Hex Digit Display"/>
+    <comp lib="0" loc="(720,730)" name="Tunnel">
+      <a name="facing" val="north"/>
+      <a name="width" val="5"/>
+      <a name="label" val="rs-addr"/>
+    </comp>
+    <comp lib="0" loc="(100,70)" name="Tunnel">
+      <a name="label" val="RST"/>
+    </comp>
+    <comp lib="0" loc="(330,500)" name="Tunnel">
+      <a name="facing" val="south"/>
+      <a name="width" val="5"/>
+      <a name="label" val="rs-addr"/>
+    </comp>
+    <comp lib="4" loc="(130,750)" name="Register">
+      <a name="width" val="32"/>
+      <a name="label" val="PC"/>
+      <a name="labelfont" val="SansSerif bold 12"/>
+    </comp>
+    <comp lib="5" loc="(350,90)" name="Hex Digit Display"/>
+    <comp lib="0" loc="(360,530)" name="Tunnel">
+      <a name="facing" val="south"/>
+      <a name="width" val="5"/>
+      <a name="label" val="rt-addr"/>
+    </comp>
+    <comp lib="8" loc="(980,590)" name="☆ALU"/>
     <comp lib="5" loc="(310,90)" name="Hex Digit Display"/>
-    <comp lib="5" loc="(470,90)" name="Hex Digit Display"/>
-    <comp lib="6" loc="(168,214)" name="Text">
-      <a name="text" val="数码管输出应该用寄存器锁存，否则显示数据只能一闪而过"/>
+    <comp lib="0" loc="(390,610)" name="Splitter">
+      <a name="facing" val="north"/>
+      <a name="fanout" val="6"/>
+      <a name="incoming" val="32"/>
+      <a name="appear" val="center"/>
+      <a name="bit1" val="0"/>
+      <a name="bit2" val="0"/>
+      <a name="bit3" val="0"/>
+      <a name="bit4" val="0"/>
+      <a name="bit5" val="0"/>
+      <a name="bit6" val="1"/>
+      <a name="bit7" val="1"/>
+      <a name="bit8" val="1"/>
+      <a name="bit9" val="1"/>
+      <a name="bit10" val="1"/>
+      <a name="bit11" val="2"/>
+      <a name="bit12" val="2"/>
+      <a name="bit13" val="2"/>
+      <a name="bit14" val="2"/>
+      <a name="bit15" val="2"/>
+      <a name="bit16" val="3"/>
+      <a name="bit17" val="3"/>
+      <a name="bit18" val="3"/>
+      <a name="bit19" val="3"/>
+      <a name="bit20" val="3"/>
+      <a name="bit21" val="4"/>
+      <a name="bit22" val="4"/>
+      <a name="bit23" val="4"/>
+      <a name="bit24" val="4"/>
+      <a name="bit25" val="4"/>
+      <a name="bit26" val="5"/>
+      <a name="bit27" val="5"/>
+      <a name="bit28" val="5"/>
+      <a name="bit29" val="5"/>
+      <a name="bit30" val="5"/>
+      <a name="bit31" val="5"/>
     </comp>
-    <comp lib="5" loc="(390,90)" name="Hex Digit Display"/>
-    <comp lib="4" loc="(340,390)" name="ROM">
-      <a name="addrWidth" val="10"/>
-      <a name="dataWidth" val="32"/>
-      <a name="contents">addr/data: 10 32
-0
-</a>
-    </comp>
-    <comp lib="5" loc="(270,90)" name="Hex Digit Display"/>
     <comp lib="0" loc="(290,150)" name="Splitter">
       <a name="facing" val="north"/>
       <a name="fanout" val="8"/>
@@ -273,51 +352,106 @@ This file is intended to be loaded by Logisim (http://www.cburch.com/logisim/).
       <a name="bit30" val="7"/>
       <a name="bit31" val="7"/>
     </comp>
-    <comp lib="0" loc="(630,70)" name="Tunnel">
+    <comp lib="0" loc="(580,40)" name="Tunnel">
       <a name="facing" val="east"/>
       <a name="width" val="16"/>
-      <a name="label" val="无条件分支指令数"/>
+      <a name="label" val="总周期数"/>
     </comp>
-    <comp lib="5" loc="(230,90)" name="Hex Digit Display"/>
+    <comp lib="6" loc="(255,192)" name="Text">
+      <a name="text" val="可以通过项目增加Logisim库的方式将前几次实验完成的电路作为子电路引入到本电路中使用"/>
+    </comp>
+    <comp lib="5" loc="(270,90)" name="Hex Digit Display"/>
+    <comp lib="0" loc="(410,680)" name="Splitter">
+      <a name="facing" val="south"/>
+      <a name="incoming" val="32"/>
+      <a name="appear" val="center"/>
+      <a name="bit1" val="0"/>
+      <a name="bit2" val="0"/>
+      <a name="bit3" val="0"/>
+      <a name="bit4" val="0"/>
+      <a name="bit5" val="0"/>
+      <a name="bit6" val="0"/>
+      <a name="bit7" val="0"/>
+      <a name="bit8" val="0"/>
+      <a name="bit9" val="0"/>
+      <a name="bit10" val="0"/>
+      <a name="bit11" val="0"/>
+      <a name="bit12" val="0"/>
+      <a name="bit13" val="0"/>
+      <a name="bit14" val="0"/>
+      <a name="bit15" val="0"/>
+      <a name="bit16" val="1"/>
+      <a name="bit17" val="1"/>
+      <a name="bit18" val="1"/>
+      <a name="bit19" val="1"/>
+      <a name="bit20" val="1"/>
+      <a name="bit21" val="1"/>
+      <a name="bit22" val="1"/>
+      <a name="bit23" val="1"/>
+      <a name="bit24" val="1"/>
+      <a name="bit25" val="1"/>
+      <a name="bit26" val="1"/>
+      <a name="bit27" val="1"/>
+      <a name="bit28" val="1"/>
+      <a name="bit29" val="1"/>
+      <a name="bit30" val="1"/>
+      <a name="bit31" val="1"/>
+    </comp>
+    <comp lib="0" loc="(740,770)" name="Tunnel">
+      <a name="facing" val="north"/>
+      <a name="width" val="5"/>
+      <a name="label" val="rt-addr"/>
+    </comp>
+    <comp lib="0" loc="(470,570)" name="Tunnel">
+      <a name="facing" val="south"/>
+      <a name="width" val="6"/>
+      <a name="label" val="funcode"/>
+    </comp>
     <comp lib="0" loc="(670,70)" name="Probe">
       <a name="facing" val="west"/>
       <a name="radix" val="10unsigned"/>
     </comp>
-    <comp lib="6" loc="(449,154)" name="Text">
-      <a name="text" val="数码管输出"/>
+    <comp lib="0" loc="(430,550)" name="Tunnel">
+      <a name="facing" val="south"/>
+      <a name="width" val="5"/>
+      <a name="label" val="shamt"/>
     </comp>
+    <comp lib="4" loc="(340,660)" name="ROM">
+      <a name="addrWidth" val="10"/>
+      <a name="dataWidth" val="32"/>
+      <a name="contents">addr/data: 10 32
+0
+</a>
+    </comp>
+    <comp lib="0" loc="(390,500)" name="Tunnel">
+      <a name="facing" val="south"/>
+      <a name="width" val="5"/>
+      <a name="label" val="rd-addr"/>
+    </comp>
+    <comp lib="7" loc="(770,610)" name="RegisterFile"/>
     <comp lib="6" loc="(607,215)" name="Text">
       <a name="text" val="总复位信号应将除ROM以外所有存储组件全部清零"/>
     </comp>
-    <comp lib="5" loc="(350,90)" name="Hex Digit Display"/>
     <comp lib="5" loc="(50,70)" name="Button">
       <a name="color" val="#11ff29"/>
       <a name="label" val="总复位"/>
       <a name="labelloc" val="south"/>
       <a name="labelcolor" val="#ff0a08"/>
     </comp>
-    <comp lib="5" loc="(190,90)" name="Hex Digit Display"/>
     <comp lib="5" loc="(430,90)" name="Hex Digit Display"/>
-    <comp lib="0" loc="(240,150)" name="Tunnel">
-      <a name="facing" val="east"/>
-      <a name="width" val="32"/>
-      <a name="label" val="SyscallOut"/>
+    <comp lib="0" loc="(410,710)" name="Tunnel">
+      <a name="facing" val="north"/>
+      <a name="width" val="16"/>
+      <a name="label" val="imm16"/>
     </comp>
-    <comp lib="6" loc="(274,344)" name="Text">
-      <a name="text" val="指令存储器"/>
-      <a name="font" val="SansSerif bold 12"/>
+    <comp lib="5" loc="(390,90)" name="Hex Digit Display"/>
+    <comp lib="6" loc="(449,154)" name="Text">
+      <a name="text" val="数码管输出"/>
     </comp>
-    <comp lib="4" loc="(100,390)" name="Register">
-      <a name="width" val="32"/>
-      <a name="label" val="PC"/>
-      <a name="labelfont" val="SansSerif bold 12"/>
-    </comp>
-    <comp lib="6" loc="(536,293)" name="Text">
-      <a name="text" val="寄存器文件"/>
-      <a name="font" val="SansSerif bold 12"/>
-    </comp>
-    <comp lib="0" loc="(100,70)" name="Tunnel">
-      <a name="label" val="RST"/>
+    <comp lib="0" loc="(280,570)" name="Tunnel">
+      <a name="facing" val="south"/>
+      <a name="width" val="6"/>
+      <a name="label" val="opcode"/>
     </comp>
   </circuit>
 </project>
