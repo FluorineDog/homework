@@ -1,7 +1,7 @@
 import random
-N = 500
+N = 5000
 T = 30
-O = 10000
+O = 1000
 print(N, T, O)
 for i in range(0, O):
 	if random.randint(0, 1) == 0:
