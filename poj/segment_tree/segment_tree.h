@@ -46,7 +46,7 @@ public:
     }
   }
   void reach(int index) {
-    for (int offset = layers_; offset > 1; offset--) {
+    for (int offset = layers_; offset > 0; offset--) {
       int i = index >> offset;
       int bsize = bsize_ >> offset;
       int k = bsize + i;

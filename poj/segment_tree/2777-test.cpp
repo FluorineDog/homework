@@ -1,9 +1,10 @@
-#include "../wheel.h"
+#include <iostream>
 typedef int T;
 #define FUNC(a, b) ((a) | (b))
 #define NIL 0
 #define INIT 1
 #include "segment_tree.h"
+#include "../fenwick_tree/fenwick.h"
 
 inline int numberOfSetBits(unsigned i) {
   // Java: use >>> instead of >>
@@ -17,8 +18,8 @@ void workload() {
   if (scanf("%d%d%d", &L, &T, &O) != 3) {
     exit(0);
   }
-  SegmentTree tree(L);
-	// tree.log();
+  Fenwick tree(L);
+  // tree.log();
   while (O-- > 0) {
     char ch;
     cin >> ch;
@@ -27,15 +28,16 @@ void workload() {
       cin >> a >> b >> color;
       int c = std::min(a, b);
       int d = std::max(a, b);
-      tree.range_update(c - 1, d, 1 << (color - 1));
-			// tree.log();
-			c += d;
+      for (int i = c - 1; i < d; ++i) {
+        tree.update(i, 1 << (color - 1));
+      }
+      // tree.log();
     } else {
       cin >> a >> b;
       int c = std::min(a, b);
       int d = std::max(a, b);
       int color = tree.reduce(c - 1, d);
-			// tree.log();
+      // tree.log();
       cout << numberOfSetBits(color) << endl;
     }
   }

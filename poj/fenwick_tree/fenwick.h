@@ -20,6 +20,7 @@ public:
     data.reserve(bsize * 2);
     data.resize(bsize, NIL);
     data.resize(bsize + length, INIT);
+    data.resize(bsize + bsize, NIL);
     this->length_ = length;
     this->bsize_ = bsize;
     fast_init();
