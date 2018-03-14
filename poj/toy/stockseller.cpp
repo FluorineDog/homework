@@ -15,6 +15,12 @@ using std::vector;
 constexpr auto inf = std::numeric_limits<int>::max() / 4;
 using Data = std::pair<int, int>;
 Data dog_sum(Data data1, Data data2) {
+	if(data1.second == inf){
+		return data2;
+	}
+	else if(data2.second == inf){
+		return data1;
+	}
 	auto[sum1, depth1] = data1;
 	auto[sum2, depth2] = data2;
 	int sum = sum1 + sum2;
