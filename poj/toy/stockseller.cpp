@@ -15,11 +15,6 @@ using std::vector;
 constexpr auto inf = std::numeric_limits<int>::max() / 4;
 using Data = std::pair<int, int>;
 Data dog_sum(Data data1, Data data2) {
-	if (data1.second == inf) {
-		return data2;
-	} else if (data2.second == inf) {
-		return data1;
-	}
 	auto[sum1, depth1] = data1;
 	auto[sum2, depth2] = data2;
 	int sum = sum1 + sum2;
@@ -29,8 +24,8 @@ Data dog_sum(Data data1, Data data2) {
 
 typedef Data T;
 #define FUNC(a, b) dog_sum((a), (b))
-#define NIL make_pair(0, inf)
-#define INIT make_pair(1, 0)
+#define NIL make_pair(0, 0)
+#define INIT make_pair(1, 1)
 #define FILP make_pair(-1, -1)
 using ll = long long;
 
@@ -42,7 +37,7 @@ int main() {
 	//
 	// Fenwick_tree
 	int N;
-	cin.redirect("toy/stock/1.in");
+	// cin.redirect("toy/stock/1.in");
 
 	cin >> N;
 	Fenwick lookup(N);
@@ -61,7 +56,7 @@ int main() {
 	// 	auto[sum, dep] = dog_sum(make_pair(-2, -2), make_pair(0, -1));
 	// 	cout << sum << "&&" << dep << "# " << endl;
 	// }
-	for (int index = N; --index > 0;) {
+	for (int index = N; index-- > 0;) {
 		auto[value, select_i] = record[index];
 		lookup.update(select_i, FILP);
 		auto info = lookup.reduce(0, N);
@@ -75,11 +70,14 @@ int main() {
 			// acc[select_i] = -1;
 			sum += value;
 		}
-		// info = lookup.reduce(0, N);
+		info = lookup.reduce(0, N);
 		// cout << info.first << "$ ";
 	}
 	cout << sum << endl;
 	// int tmp = 0;
+	// for(int i = 0; i < N; ++i){
+	// 	cout << acc[i] << "*" << i << "  ";
+	// }
 	// for (int i = 0; i < N; ++i) {
 	// 	tmp += acc[i];
 	// 	acc[i] = tmp;
