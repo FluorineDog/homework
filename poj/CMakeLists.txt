@@ -11,7 +11,7 @@ add_definitions(-D_GLIBCXX_DEBUG)
 # add_subdirectory(fenwick_tree)
 # add_subdirectory(suffix_array)
 # add_subdirectory(lca_and_rmq)
-add_subdirectory(segment_tree)
+# add_subdirectory(segment_tree)
 # add_subdirectory(diff_constraints)
 add_subdirectory(toy)
 
