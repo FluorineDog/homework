@@ -46,10 +46,10 @@ int main() {
 			waster.push_back(p.first);
 		}
 	}
-	for(auto x: waster){
-		cout << x << ' ';
-	}
-	cout << endl;
+	// for(auto x: waster){
+	// 	cout << x << ' ';
+	// }
+	// cout << endl;
 	assert(data.size() == 2);
 	for(int i = 0; i < waster.size() / 2; ++i){
 		sum += waster[i];
