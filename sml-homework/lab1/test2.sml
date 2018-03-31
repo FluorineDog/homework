@@ -4,3 +4,5 @@ fun sum [] = 0;
 fun mult [] = 1;
     | mult (x::L) = x * (mult L);
 
+fun Mult [] = 1l
+    | mult (x_list::L)  = (mult x_list) * (Mult L)
