@@ -4,7 +4,15 @@
 #include <cctype>
 #include <stdarg.h>
 #include <stdio.h>
+#ifdef DOG_USE_SYSTEM_IOSTREAM
+#include <iostream>
+#include <cassert>
+using std::cin;
+using std::cout;
+using std::cerr;
+using std::endl;
 
+#else // DOG_USE_SYSTEM_IOSTREAM
 namespace dog_util {
 class InputStream {
 public:
@@ -197,6 +205,9 @@ using dog_util::cout;
 using dog_util::cerr;
 using dog_util::endl;
 using dog_util::poj_throw;
+#endif 
+
+
 typedef long long ll;
 typedef long long ull;
 
