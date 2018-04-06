@@ -1,21 +1,21 @@
 // #undef DOG_DEBUG
 #ifndef DOG_WHEEL_H_
 #define DOG_WHEEL_H_
-#include <cctype>
 #include <stdarg.h>
 #include <stdio.h>
+#include <cctype>
 #ifdef DOG_USE_SYSTEM_IOSTREAM
-#include <iostream>
 #include <cassert>
+#include <iostream>
+using std::cerr;
 using std::cin;
 using std::cout;
-using std::cerr;
 using std::endl;
 
-#else // DOG_USE_SYSTEM_IOSTREAM
+#else  // DOG_USE_SYSTEM_IOSTREAM
 namespace dog_util {
 class InputStream {
-public:
+ public:
   void redirect(const char *filename) {
 #ifdef DOG_DEBUG
     freopen(filename, "r", stdin);
@@ -63,7 +63,7 @@ public:
     k = getInt();
     return *this;
   }
-#else  // HIGH_IO_PERFORMANCE
+#else   // HIGH_IO_PERFORMANCE
   InputStream &operator>>(int &k) {
     scanf("%d", &k);
     return *this;
@@ -80,7 +80,7 @@ public:
     scanf("%llu", &k);
     return *this;
   }
-#endif // HIGH_IO_PERFORMANCE
+#endif  // HIGH_IO_PERFORMANCE
   InputStream &operator>>(char *str) {
     scanf("%s", str);
     return *this;
@@ -89,8 +89,8 @@ public:
     scanf("%lf", &k);
     return *this;
   }
-  template <class Container> void getstring(Container &vec) {
-
+  template <class Container>
+  void getstring(Container &vec) {
     int ch;
     do {
       ch = getchar();
@@ -105,6 +105,32 @@ public:
       vec.push_back(ch);
     }
   }
+
+  template <class Container>
+  void getline(Container &vec) {
+    int ch;
+    do {
+      ch = getchar();
+    } while (ch == '\n');
+    vec.push_back(ch);
+
+    while (true) {
+      int ch = getchar();
+      if (ch == EOF || ch == '\n') {
+        break;
+      }
+      vec.push_back(ch);
+    }
+  }
+
+  void skipline() {
+    while (true) {
+      int ch = getchar();
+      if (ch == EOF || ch == '\n') {
+        break;
+      }
+    }
+  }
 } cin;
 void poj_throw() {
   int *fuck = NULL;
@@ -112,10 +138,10 @@ void poj_throw() {
 }
 
 class OutputStream {
-public:
+ public:
   // OutputStream(){
-    // char buffer[1 << 19];
-    // setvbuf(stdout, buffer, _IOFBF, sizeof(buffer));
+  // char buffer[1 << 19];
+  // setvbuf(stdout, buffer, _IOFBF, sizeof(buffer));
   // };
   OutputStream &operator<<(char k) {
     printf("%c", k);
@@ -155,7 +181,7 @@ public:
 } cout;
 
 class DebugStream {
-public:
+ public:
   int errprintf(const char *str, ...) {
 #ifdef DOG_DEBUG
     va_list argptr;
@@ -199,27 +225,34 @@ public:
   }
 } cerr;
 const char *endl = "\n";
-}
+}  // namespace dog_util
+using dog_util::cerr;
 using dog_util::cin;
 using dog_util::cout;
-using dog_util::cerr;
 using dog_util::endl;
 using dog_util::poj_throw;
-#endif 
-
+#endif
 
 typedef long long ll;
 typedef long long ull;
 
+#include <stdio.h>
 #include <algorithm>
 #include <map>
 #include <set>
-#include <stdio.h>
 #include <vector>
-using std::vector;
+using std::make_pair;
+using std::map;
 using std::pair;
 using std::set;
-using std::map;
-using std::make_pair;
+using std::vector;
 
-#endif // DOG_WHEEL_H_
+#endif  // DOG_WHEEL_H_ <stdio.h>
+#include <vector>
+using std::make_pair;
+using std::map;
+using std::pair;
+using std::set;
+using std::vector;
+
+#endif  // DOG_WHEEL_H_
