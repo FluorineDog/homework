@@ -4,15 +4,15 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <cctype>
-#ifdef DOG_USE_SYSTEM_IOSTREAM
-#include <cassert>
-#include <iostream>
-using std::cerr;
-using std::cin;
-using std::cout;
-using std::endl;
+// #ifdef DOG_USE_SYSTEM_IOSTREAM
+// #include <cassert>
+// #include <iostream>
+// using std::cerr;
+// using std::cin;
+// using std::cout;
+// using std::endl;
 
-#else  // DOG_USE_SYSTEM_IOSTREAM
+// #else  // DOG_USE_SYSTEM_IOSTREAM
 namespace dog_util {
 class InputStream {
  public:
@@ -46,6 +46,7 @@ class InputStream {
     } while (k == ' ' || k == '\n');
     return *this;
   }
+
 #ifdef HIGH_IO_PERFORMANCE
   InputStream &operator>>(int &k) {
     k = getInt();
@@ -81,6 +82,7 @@ class InputStream {
     return *this;
   }
 #endif  // HIGH_IO_PERFORMANCE
+
   InputStream &operator>>(char *str) {
     scanf("%s", str);
     return *this;
@@ -231,7 +233,6 @@ using dog_util::cin;
 using dog_util::cout;
 using dog_util::endl;
 using dog_util::poj_throw;
-#endif
 
 typedef long long ll;
 typedef long long ull;
@@ -247,12 +248,4 @@ using std::pair;
 using std::set;
 using std::vector;
 
-#endif  // DOG_WHEEL_H_ <stdio.h>
-#include <vector>
-using std::make_pair;
-using std::map;
-using std::pair;
-using std::set;
-using std::vector;
-
-#endif  // DOG_WHEEL_H_
+#endif  // DOG_WHEEL_H_ 

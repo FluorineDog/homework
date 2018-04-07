@@ -1,18 +1,15 @@
 #pragma once
-#include "wheel.h"
 #include <queue>
 #include <stack>
+#include "wheel.h"
 struct Vertex {
   int color;
-  int value;
   int edge_beg;
-  int visited;
-  int in_queue;
-  Vertex() : value(1LL << 30), edge_beg(0), visited(0), in_queue(0) {}
+  Vertex() : edge_beg(0), color(-1) {}
 };
 
 class Graph : public vector<Vertex> {
-public:
+ public:
   Graph(int V, int E = 0) {
     this->resize(V);
     edges.reserve(E + 1);
@@ -21,7 +18,7 @@ public:
 
   struct Edge {
     int next;
-    int to;     // vertex
+    int to;  // vertex
     Edge(int next, int to) : next(next), to(to) {}
   };
 
@@ -32,6 +29,8 @@ public:
   }
 
   Edge get_edge(int edge_id) { return edges[edge_id]; }
-
+  Edge edge_begin(Vertex& v) { return get_edge(v.edge_beg); }
+  Edge edge_next(Edge& e) { return get_edge(e.next); }
+  bool edge_valid(Edge& e) { return e.next != -1; }
   vector<Edge> edges;
 };
