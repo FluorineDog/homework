@@ -29,6 +29,7 @@ class Graph : public vector<Vertex> {
   }
 
   Edge get_edge(int edge_id) { return edges[edge_id]; }
+  // Edge edge_begin(int id) { return get_edge((*this)[id].edge_beg); }
   Edge edge_begin(Vertex& v) { return get_edge(v.edge_beg); }
   Edge edge_next(Edge& e) { return get_edge(e.next); }
   bool edge_valid(Edge& e) { return e.next != -1; }
