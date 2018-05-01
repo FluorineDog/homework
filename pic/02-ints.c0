@@ -65,3 +65,25 @@ string int2hex_dog(int i)
   return s;
 }
 
+
+// since shift >= 32 is undefined behavior, we rule it out
+int lsr(int i, int shift)
+//@requires shift >= 0;
+//@requires shift <= 31;
+//@ensures (\result << shift) == (i & (0xFFFFFFFF << shift));
+{
+  if(shift == 0){
+    return i;
+  }
+  int num = (i >> 1) & 0x7FFFFFFF;
+  
+  int iter = 1;
+  while(iter < shift)
+  //@loop_invariant (num << iter) == ( i & (0xFFFFFFFF << iter) );
+  //@loop_invariant num >= 0;
+  {
+    num = num >> 1;
+    iter += 1;
+  }
+  return num;
+}
