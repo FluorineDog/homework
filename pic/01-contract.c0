@@ -4,18 +4,30 @@
  * 15-122 Principles of Imperative Computation
  */
 
+
+// #include <fake_header.h>
+
 // Specification function!
+int safe_multiply(int a, int b) {
+  int magic_number = 0x7badbeef;
+  if (a == 0) {
+    return 0;
+  }
+  int res = a * b;
+  if (b != res / a) {
+    // return magic_number;
+    error("Overflow");
+  }
+  return res;
+}
+
 int POW(int b, int e)
 //@requires e >= 0;
 {
   if (e == 0) return 1;
   if (b == 0) return 0;
   int sub_res = POW(b, e - 1);
-  if (sub_res >= (((1 << 31) - 1) / b)) {
-    error("Overflow");
-  } else {
-    return sub_res * b;
-  }
+  return safe_multiply(sub_res, b);
 }
 
 int f(int x, int y)
@@ -27,21 +39,21 @@ int f(int x, int y)
   int r = 1;    /* Line 21 */
   while (e > 0) /* Line 22 */
   //@loop_invariant e >= 0; /* Line 23 */
-  //@loop_invariant POW(b, e) * r == POW(x, y);
+  //@loop_invariant safe_multiply(POW(b, e), r) == POW(x, y);
   {
-    if (e % 2 == 1) { /* Line 26 */
-      r = b * r; /* Line 27 */
+    if (e % 2 == 1) {          /* Line 26 */
+      r = safe_multiply(r, b); /* Line 27 */
     }
-    b = b * b; /* Line 29 */
-    e = e / 2; /* Line 30 */
+    b = safe_multiply(b, b); /* Line 29 */
+    e = e / 2;               /* Line 30 */
   }
   return r;
 }
 
-int check(){
+int main() {
   int sum = 0;
-  for(int i = 0; i < 100; i += 1){
-    for(int j = 0; j < 100; j += 1){
+  for (int i = 0; i < 100; i += 1) {
+    for (int j = 0; j < 50; j += 1) {
       sum += f(i, j);
     }
   }
