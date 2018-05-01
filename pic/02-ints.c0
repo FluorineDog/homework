@@ -1,0 +1,36 @@
+#include <fake_header.h>
+
+int quot(int x, int y)
+//@requires y != 0 && (y != -1 || x != (1<<31));
+//@ensures \result == x / y;
+{
+  int base = y > 0 ? y : -y;
+  int acc = y > 0 ? 1 : -1;
+  int num = x;
+  int res = 0;
+  if (num < 0) {
+    while (num <= -base)
+    //@loop_invariant num <= 0;
+    //@loop_invariant quot(num, base) + res == x / y;
+    {
+      num += base;
+      res -= acc;
+    }
+  } else {
+    while (num >= base)
+    //@loop_invariant num >= 0;
+    //@loop_invariant quot(num, base) + res == x / y;
+    {
+      num -= base;
+      res += acc;
+    }
+  }
+  return res;
+}
+
+int rem(int x, int y)
+//@requires y != 0 && (y != -1 || x != (1<<31));
+//@ensures \result + y * quot(x, y) == x;
+{
+  return x - y * quot(x, y);
+}
