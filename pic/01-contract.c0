@@ -9,7 +9,13 @@ int POW(int b, int e)
 //@requires e >= 0;
 {
   if (e == 0) return 1;
-  return POW(b, e - 1) * b;
+  if (b == 0) return 0;
+  int sub_res = POW(b, e - 1);
+  if (sub_res >= (((1 << 31) - 1) / b)) {
+    error("Overflow");
+  } else {
+    return sub_res * b;
+  }
 }
 
 int f(int x, int y)
@@ -24,10 +30,20 @@ int f(int x, int y)
   //@loop_invariant POW(b, e) * r == POW(x, y);
   {
     if (e % 2 == 1) { /* Line 26 */
-      r = b * r;      /* Line 27 */
+      r = b * r; /* Line 27 */
     }
     b = b * b; /* Line 29 */
     e = e / 2; /* Line 30 */
   }
   return r;
+}
+
+int check(){
+  int sum = 0;
+  for(int i = 0; i < 100; i += 1){
+    for(int j = 0; j < 100; j += 1){
+      sum += f(i, j);
+    }
+  }
+  return sum;
 }
