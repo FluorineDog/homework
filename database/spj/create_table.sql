@@ -1,5 +1,6 @@
 /* Supplier */
 
+drop table if exists SPJ;
 drop table if exists S;
 create table S( 
   sno char(10) primary key,
@@ -32,18 +33,21 @@ create table SPJ(
   pno char(10), 
   jno char(10), 
   /* quantity */
-  qty int
+  qty int,
+  constraint fk_spj_sno foreign key(sno) references S(sno),
+  constraint fk_spj_pno foreign key(pno) references P(pno),
+  constraint fk_spj_jno foreign key(jno) references J(jno)
 );
 
 
-INSERT INTO `S` (sno, sname, status, city) VALUES 
+INSERT INTO S (sno, sname, status, city) VALUES 
 ('S1', '精益', 20, '天津'), 
 ('S2', '盛锡', 10, '北京'), 
 ('S3', '东方红', 30, '北京'), 
 ('S4', '丰泰盛', 20, '天津'), 
 ('S5', '为民', 30, '上海');
 
-INSERT INTO `P` (pno, pname, color, weight) VALUES 
+INSERT INTO P (pno, pname, color, weight) VALUES 
 ('P1', '螺母', '红', 12), 
 ('P2', '螺栓', '绿', 17), 
 ('P3', '螺丝刀', '蓝', 14), 
@@ -51,7 +55,7 @@ INSERT INTO `P` (pno, pname, color, weight) VALUES
 ('P5', '凸轮', '蓝', 40), 
 ('P6', '齿轮', '红', 30);
 
-insert into `J` values 
+insert into J values 
 ('J1', '三建', '北京'), 
 ('J2', '一汽', '长春'), 
 ('J3', '弹簧厂', '天津'), 
@@ -60,7 +64,7 @@ insert into `J` values
 ('J6', '无线电厂', '常州'), 
 ('J7', '半导体厂', '南京');
 
-INSERT INTO `SPJ` (sno, pno, jno, qty) VALUES 
+INSERT INTO SPJ (sno, pno, jno, qty) VALUES 
 ('S1', 'P1', 'J1', 200), 
 ('S1', 'P1', 'J3', 100), 
 ('S1', 'P1', 'J4', 700), 
