@@ -1,4 +1,8 @@
 #include <fake_header.h>
+// clang-format off
+#use <string>
+#use <util>
+// clang-format on
 
 int quot(int x, int y)
 //@requires y != 0 && (y != -1 || x != (1<<31));
@@ -34,3 +38,30 @@ int rem(int x, int y)
 {
   return x - y * quot(x, y);
 }
+
+string getInstance(int i)
+//@requires i >= 0 && i <= 15;
+{
+  string digits = "0123456789ABCDEF";
+  return string_sub(digits, i, i + 1);
+}
+
+string int2hex_dog(int i)
+//@ensures string_equal(\result,int2hex(i));
+{
+  int iter = 0;
+  string s = "";
+  int num = i;
+  int consumed = 0;
+  while (iter != 8)
+  //@loop_invariant iter == string_length(s);
+  //@loop_invariant string_equal(s, string_sub(int2hex(i), 8-iter,8));
+  {
+    int digit = num & 0xF;
+    s = string_join(getInstance(digit), s);
+    num >>= 4;
+    iter += 1;
+  }
+  return s;
+}
+
