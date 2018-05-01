@@ -117,7 +117,7 @@ class CostEngine {
     }
     assert(conflict % 2 == 0);
     conflict /= 2;
-    assert(conflict == g.current_cost)
+    assert(conflict == g.current_cost);
   }
 
  private:
