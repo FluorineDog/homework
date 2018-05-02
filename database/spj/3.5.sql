@@ -1,8 +1,13 @@
+-- 1
 select sname, city from S;
+
+-- 2
 select pname, color, `weight` from P;
 
+-- 3
 select distinct jno from SPJ where sno='S1';
 
+-- 4
 select pname, sum(qty) from P, SPJ where 
   P.pno = SPJ.pno and 
   jno = 'J2'
@@ -20,6 +25,7 @@ select distinct jname from S, SPJ, J where
   J.jno = SPJ.jno and
   S.city = '上海';
 
+-- 7
 select J.jno from J where not exists(
   select * from SPJ, S where 
     J.jno = SPJ.jno and
@@ -33,9 +39,8 @@ select J.jno from J where not exists(
 -- 9
 -- update SPJ set sno='S3' where sno='S5' and jno='J4' and pno='P6';
 
--- 10
--- on delete cascade
+-- 10 /* on delete cascade */
 -- delete from S where sno='S2';
 
 -- 11 
-insert into SPJ value('S2', 'P4', 'J6', 200) 
+-- insert into SPJ value('S2', 'P4', 'J6', 200);
