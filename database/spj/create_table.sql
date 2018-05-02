@@ -34,12 +34,12 @@ create table SPJ(
   jno char(10), 
   /* quantity */
   qty int,
-  constraint fk_spj_sno foreign key(sno) references S(sno),
-  constraint fk_spj_pno foreign key(pno) references P(pno),
-  constraint fk_spj_jno foreign key(jno) references J(jno)
+  constraint fk_spj_sno foreign key(sno) references S(sno) on delete cascade,
+  constraint fk_spj_pno foreign key(pno) references P(pno) on delete cascade,
+  constraint fk_spj_jno foreign key(jno) references J(jno) on delete cascade
 );
 
-
+'J6','J6',
 INSERT INTO S (sno, sname, status, city) VALUES 
 ('S1', '精益', 20, '天津'), 
 ('S2', '盛锡', 10, '北京'), 
