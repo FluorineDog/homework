@@ -16,5 +16,14 @@ select jno from J where not exists(
     J.jno = SPJ.jno
 );
 
-select 
-/**/
+/* 5 */
+select jno from (select distinct SPJ.jno, count(SPJ.pno) from SPJ inner join (
+    select distinct TMP.pno from SPJ as TMP where TMP.sno='S1'
+  ) as REF on (SPJ.pno = REF.pno)
+  group by SPJ.jno
+  having count(SPJ.pno) = (
+    select count(distinct TMP.pno) 
+    from SPJ as TMP 
+    where TMP.sno='S1'
+  )) as final;
+-- select * from SPJ inner join S1Part on (S1Part.pno=SPJ.pno);
