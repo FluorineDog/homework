@@ -39,7 +39,6 @@ create table SPJ(
   constraint fk_spj_jno foreign key(jno) references J(jno) on delete cascade
 );
 
-'J6','J6',
 INSERT INTO S (sno, sname, status, city) VALUES 
 ('S1', '精益', 20, '天津'), 
 ('S2', '盛锡', 10, '北京'), 
