@@ -2,18 +2,17 @@
 select sname, city from S;
 
 -- 2
-select pname, color, `weight` from P;
+select pname, color, weight from P;
 
 -- 3
 select distinct jno from SPJ where sno='S1';
 
 -- 4
-select pname, sum(qty) from P, SPJ where 
+select pname, sum(qty) as sum_qty from P, SPJ where 
   P.pno = SPJ.pno and 
   jno = 'J2'
   group by pname;
   
-
 -- 5
 select distinct pno from S, SPJ where 
   city='上海' and 
