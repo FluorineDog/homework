@@ -1,0 +1,73 @@
+
+#use <conio>
+
+bool range_checker(int beg, int end, int length){
+  // check if <beg, end> is valid
+  return 0 <= beg && beg <= end && end <= length;
+}
+
+bool check_array(
+  int[] A, int beg_a, int end_a,
+  int[] B, int beg_b, int end_b
+ )
+//@requires range_checker(beg_a, end_a, \length(A));
+//@requires range_checker(beg_b, end_b, \length(B));
+{
+  if(end_a - beg_a != end_b - beg_b){
+    return false;
+  }
+  for(int i = 0; i < end_a - beg_a; i += 1){
+    if(A[beg_a + i] != B[beg_b + i]){
+      return false;
+    }
+  }
+  return true;
+}
+
+
+
+int[] array_part(int[] A, int beg, int end)
+//@requires range_checker(beg, end, \length(A));
+//@ensures \length(\result) == end-beg;
+//@ensures check_array(\result, 0, end-beg, A, beg, end);
+{
+  int[] result = alloc_array(int, end - beg);
+  for(int i = 0; i < end - beg; i += 1)
+  //@loop_invariant i + beg <= end;
+  //@loop_invariant check_array(result, 0, i, A, beg, beg+i);
+  {
+    result[i] = A[i + beg];
+  }
+  return result;
+}
+
+int copy_into(int [] src, int beg_src, int count, 
+              int [] dest, int beg_dest)
+//@requires range_checker(beg_src, beg_src+count, \length(src));
+//@requires range_checker(beg_dest, beg_dest+count, \length(dest));
+//@ensures check_array(src, beg_src, beg_src + count, dest, beg_dest, beg_dest + count);
+{
+  for(int i = 0; i < count; i += 1)
+  //@loop_invariant check_array(src, beg_src, beg_src + i, dest, beg_dest, beg_dest + i);
+  {
+    dest[beg_dest + i] = src[beg_src + i];
+  }
+  return count + beg_dest;
+}
+
+int main(){
+  int[] arr = alloc_array(int, 10);
+  for(int i = 0; i < 10; i += 1){
+    arr[i] = i;
+  }
+  int[] brr = array_part(arr, 5, 10);
+  for(int i = 0; i < 5; i += 1){
+    printint(brr[i]);
+  }
+  int fin = copy_into(arr, 2, 5, brr, 0);
+  printint(fin);
+  for(int i = 0; i < 5; i += 1){
+    printint(brr[i]);
+  }
+  return 0;
+}
