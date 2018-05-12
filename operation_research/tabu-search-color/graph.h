@@ -54,7 +54,7 @@ class Graph : public vector<Vertex> {
       bool operator==(const Iterator& other) const { return !(*this != other); }
 
       bool operator!=(const Iterator& other) const {
-        return edge.next != other.edge.next;
+        return edge.next != -1;
       }
 
       Iterator operator++() {

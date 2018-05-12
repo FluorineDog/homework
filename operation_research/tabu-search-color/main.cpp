@@ -67,10 +67,11 @@ bool search(Graph g, int color_count, std::default_random_engine& e) {
 
   // vector<set<int, int>> vertex_colors;
 
-  for (size_t from = 0; from < g.size(); ++from) {
+  for (int from = 0; from < (int)g.size(); ++from) {
     auto& v = g[from];
     for(auto to: g.get_edges(from)){
-      cout << "e " << from << " " << to << endl;
+      if(from < to ) continue;
+      cout << "e " << from + 1 << " " << to + 1 << endl;
     }
     // for (auto edge = g.edge_begin(v); g.edge_valid(edge); edge = g.edge_next(edge)) {
     //   cout << "e " << from << " " << edge.to << endl;
