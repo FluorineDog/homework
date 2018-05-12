@@ -18,6 +18,7 @@ struct Edge {
 class Graph : public vector<Vertex> {
  public:
   Graph(int V, int E = 0) {
+
     this->resize(V);
     edges.reserve(E + 1);
     edges.push_back(Edge(-1, -1));
@@ -53,7 +54,7 @@ class Graph : public vector<Vertex> {
       bool operator==(const Iterator& other) const { return !(*this != other); }
 
       bool operator!=(const Iterator& other) const {
-        return edge.to != other.edge.to;
+        return edge.next != other.edge.next;
       }
 
       Iterator operator++() {
