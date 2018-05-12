@@ -51,10 +51,13 @@ class Graph : public vector<Vertex> {
       Iterator(const Graph& graph, Edge edge) : edge(edge), graph(graph) {}
       int operator*() const { return edge.to; }
 
-      bool operator==(const Iterator& other) const { return !(*this != other); }
+      // bool operator==(const Iterator& other) const { return !(*this != other); }
 
-      bool operator!=(const Iterator& other) const {
-        return edge.next != -1;
+      // bool operator!=(const Iterator& other) const {
+      //   return edge.next != -1;
+      // }
+      bool operator!=(int other) const {
+        return edge.next != other;
       }
 
       Iterator operator++() {
@@ -69,7 +72,8 @@ class Graph : public vector<Vertex> {
 
     Edges(const Graph& graph, int beg) : graph(graph), beg(beg) {}
     Iterator begin() const { return Iterator(graph, graph.edge_begin_id(beg)); }
-    Iterator end() const { return Iterator(graph, graph.edge_begin_id(0)); }
+    // Iterator end() const { return Iterator(graph, graph.edge_begin_id(0)); }
+    static constexpr int end() { return -1; }
 
    private:
     const Graph& graph;

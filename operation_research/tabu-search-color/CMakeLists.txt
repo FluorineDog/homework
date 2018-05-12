@@ -9,7 +9,4 @@ add_definitions(-DDOG_DEBUG)
 # add_definitions(-DDOG_USE_SYSTEM_IOSTREAM)
 add_definitions(-D_GLIBCXX_DEBUG)
 
-
 add_executable(main main.cpp)
-
-
