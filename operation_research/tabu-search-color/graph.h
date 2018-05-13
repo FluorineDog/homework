@@ -43,6 +43,7 @@ class Graph : public vector<Vertex> {
     return g_tmp;
   }
 
+ private:
   class Edges {
    public:
     class Iterator {
@@ -95,6 +96,7 @@ class Graph : public vector<Vertex> {
     int size;
   };
 
+ public:
   VertexIds vertex_ids() const { return VertexIds((int)size()); }
   Edges edges(int beg) const { return Edges(*this, beg); }
 
