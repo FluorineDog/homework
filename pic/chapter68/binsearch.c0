@@ -6,9 +6,14 @@ bool is_in(int x, int [] A, int lower, int upper){
   return false;
 }
 
+bool range_checker(int beg, int end, int length){
+  // check if <beg, end> is valid
+  return 0 <= beg && beg <= end && end <= length;
+}
+
 
 bool is_sorted(int [] A, int lower, int upper)
-//@requires 0 <= lower && lower <= upper && upper <= \length(A);
+//@requires range_checker(lower, upper, length);
 //@requires pred != NULL;
 {
   for (int i = lower; i < upper - 1; i++)
@@ -28,7 +33,7 @@ int binsearch(int x, int[] A, int n)
   int lo = 0;
   int hi = n;
   while (lo < hi)
-  //@loop_invariant 0 <= lo && lo <= hi && hi <= n;
+  //@loop_invariant range_checker(lo, hi, n)
   //@loop_invariant (lo == 0 || A[lo-1] < x);
   //@loop_invariant (hi == n || A[hi] > x);
   {
@@ -43,3 +48,29 @@ int binsearch(int x, int[] A, int n)
   }
   return -1;
 }
+int binsearch(int x, int[] A, int n)
+//@requires 0 <= n && n <= \length(A);
+//@requires is_sorted(A, 0, n);
+/*@ensures (-1 == \result && !is_in(x, A, 0, n))
+|| ((0 <= \result && \result < n) && A[\result] == x);
+@*/
+{
+  int lo = 0;
+  int hi = n;
+  while (lo < hi)
+  //@loop_invariant range_checker(lo, hi, n)
+  //@loop_invariant (lo == 0 || A[lo-1] < x);
+  //@loop_invariant (hi == n || A[hi] > x);
+  {
+    int mid = lo + (hi - lo) / 2;
+    //@assert lo <= mid && mid < hi;
+    if (A[mid] == x)
+      return mid;
+    else if (A[mid] < x)
+      lo = mid + 1;
+    else /*@assert(A[mid] > x);@*/
+      hi = mid;
+  }
+  return -1;
+}
+
