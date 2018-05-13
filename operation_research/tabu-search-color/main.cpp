@@ -45,7 +45,7 @@ int main() {
     graph.add_edge(to, from);
   }
 
-  // graph = graph.optimize();
+  graph = graph.optimize();
   std::default_random_engine e(67);
   search(graph, 1, e);
   
@@ -67,9 +67,9 @@ bool search(Graph g, int color_count, std::default_random_engine& e) {
 
   // vector<set<int, int>> vertex_colors;
 
-  for (int from = 0; from < (int)g.size(); ++from) {
+  for (auto from: g.vertex_ids()) {
     auto& v = g[from];
-    for(auto to: g.get_edges(from)){
+    for(auto to: g.edges(from)){
       if(from < to ) continue;
       cout << "e " << from + 1 << " " << to + 1 << endl;
     }
