@@ -6,7 +6,7 @@ bool range_checker(int beg, int end, int length){
   return 0 <= beg && beg <= end && end <= length;
 }
 
-bool check_array(
+bool array_equal(
   int[] A, int beg_a, int end_a,
   int[] B, int beg_b, int end_b
  )
@@ -29,12 +29,12 @@ bool check_array(
 int[] array_part(int[] A, int beg, int end)
 //@requires range_checker(beg, end, \length(A));
 //@ensures \length(\result) == end-beg;
-//@ensures check_array(\result, 0, end-beg, A, beg, end);
+//@ensures array_equal(\result, 0, end-beg, A, beg, end);
 {
   int[] result = alloc_array(int, end - beg);
   for(int i = 0; i < end - beg; i += 1)
   //@loop_invariant i + beg <= end;
-  //@loop_invariant check_array(result, 0, i, A, beg, beg+i);
+  //@loop_invariant array_equal(result, 0, i, A, beg, beg+i);
   {
     result[i] = A[i + beg];
   }
@@ -45,10 +45,10 @@ int copy_into(int [] src, int beg_src, int count,
               int [] dest, int beg_dest)
 //@requires range_checker(beg_src, beg_src+count, \length(src));
 //@requires range_checker(beg_dest, beg_dest+count, \length(dest));
-//@ensures check_array(src, beg_src, beg_src + count, dest, beg_dest, beg_dest + count);
+//@ensures array_equal(src, beg_src, beg_src + count, dest, beg_dest, beg_dest + count);
 {
   for(int i = 0; i < count; i += 1)
-  //@loop_invariant check_array(src, beg_src, beg_src + i, dest, beg_dest, beg_dest + i);
+  //@loop_invariant array_equal(src, beg_src, beg_src + i, dest, beg_dest, beg_dest + i);
   {
     dest[beg_dest + i] = src[beg_src + i];
   }
