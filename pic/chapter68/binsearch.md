@@ -129,7 +129,7 @@ int binsearch_standard(int x, int[] A, int n)
   int hi = n;
   while(lo < hi)
   //@loop_invariant range_checker(lo, hi, n);
-  //@loop_invariant lo == 0 || A[lo] < x;
+  //@loop_invariant lo == 0 || A[lo - 1] < x;
   //@loop_invariant hi == n || x <= A[hi];
   {
     int mid = lo + (hi - lo) / 2;
@@ -156,6 +156,6 @@ int binsearch_standard(int x, int[] A, int n)
    A[lo - 1] = A[mid] < x成立, 循环不变量继续保持
 4. 当A[mid] < x时, A[lo-1] < x性质被继承, 而将hi 替换为mid后,
    A[hi] = A[mid] >= x成立, 循环不变量继续保持
-5. mid ∈ [lo, hi), 而要么有lo = mid = 1, 要么有hi = mid, 区间严格缩小
-   程序会终止在lo == hi处
+5. mid ∈ [lo, hi), 而要么有lo := mid-1, 要么有hi := mid, 区间严格缩小
+   程序会终止在lo=hi处
 6. 最后\result=lo=hi, 满足不变量性质即为满足题设条件.
