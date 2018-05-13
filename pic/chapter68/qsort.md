@@ -28,6 +28,7 @@ bool is_permutation(int[] arr, int abeg, int aend,  //
 //...
 {
   int[] A_copy = alloc_array(int , upper - lower);
+  copy_into(A, lower, upper - lower, A_copy, 0);
   //...
   //@assert is_permutation(A_copy, 0, upper - lower, A, lower, upper);
 }
@@ -52,5 +53,5 @@ bool is_permutation(int[] arr, int abeg, int aend,  //
 [5, 3, 1, 0, 2, 4, 6]
 
 # Exercise 4
-
-
+为了使得被浪费的内存有意义, 我实现了sort_stable系列, 可以保证其稳定性. 
+代码见qsort.md中的qsort_stable, 不再贴出. 
