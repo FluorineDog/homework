@@ -1,7 +1,7 @@
 # Exercise 1
 ## Inspiration
 左闭右开区间实际上是编码规范的一部分. 
-但是为了实现全闭空间, 我们将原来的hi替换为（hi+1）, 
+但是为了实现全闭空间, 我们将原来的hi替换为(hi+1), 
 再根据语法语义进行相应调整即可. 
 ## Code
 参见 binsearch.c0的binsearch_inclusive
@@ -158,4 +158,10 @@ int binsearch_standard(int x, int[] A, int n)
    A[hi] = A[mid] >= x成立, 循环不变量继续保持
 5. mid ∈ [lo, hi), 而要么有lo := mid-1, 要么有hi := mid, 区间严格缩小
    程序会终止在lo=hi处
-6. 最后\result=lo=hi, 满足不变量性质即为满足题设条件.
+6. 最后\result = lo = hi, 满足不变量性质即为满足题设条件.
+
+# Exercise 4
+当lo, hi ∈ [2^30 , 2^31) 时, lo + hi会溢出变为负数, 从而不满足lo <= mid && mid < h的条件
+
+# Exercise 5
+不满足终止条件, 会走入死循环.
