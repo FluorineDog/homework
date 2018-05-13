@@ -34,21 +34,27 @@ int binsearch(int x, int[] A, int n)
   int hi = n;
   while (lo < hi)
   //@loop_invariant range_checker(lo, hi, n)
-  //@loop_invariant (lo == 0 || A[lo-1] < x);
-  //@loop_invariant (hi == n || A[hi] > x);
+  //@loop_invariant is_in(x, A, lo, hi) == is_in(x, A, 0, n);
   {
     int mid = lo + (hi - lo) / 2;
     //@assert lo <= mid && mid < hi;
-    if (A[mid] == x)
+    if (A[mid] == x){
       return mid;
-    else if (A[mid] < x)
+    }
+    else if (A[mid] < x){
+      //@assert !is_in(x, A, lo, mid + 1);
       lo = mid + 1;
-    else /*@assert(A[mid] > x);@*/
+    }
+    else {
+      //@assert !is_in(x, A, mid, hi);
+      /*@assert(A[mid] > x);@*/
       hi = mid;
+    }
   }
   return -1;
 }
-int binsearch(int x, int[] A, int n)
+
+int binsearch_inclusive(int x, int[] A, int n)
 //@requires 0 <= n && n <= \length(A);
 //@requires is_sorted(A, 0, n);
 /*@ensures (-1 == \result && !is_in(x, A, 0, n))
@@ -56,21 +62,21 @@ int binsearch(int x, int[] A, int n)
 @*/
 {
   int lo = 0;
-  int hi = n;
-  while (lo < hi)
-  //@loop_invariant range_checker(lo, hi, n)
+  int hi = n - 1; // to be inclusive
+  while (lo <= hi)
+  //@loop_invariant 0 <= lo && hi < n
   //@loop_invariant (lo == 0 || A[lo-1] < x);
-  //@loop_invariant (hi == n || A[hi] > x);
+  //@loop_invariant (hi == n - 1 || A[hi + 1] > x);
   {
-    int mid = lo + (hi - lo) / 2;
-    //@assert lo <= mid && mid < hi;
+    //@assert lo <= hi;
+    int mid = lo + (hi + 1 - lo) / 2;
+    //@assert lo <= mid && mid <= hi;
     if (A[mid] == x)
       return mid;
     else if (A[mid] < x)
       lo = mid + 1;
     else /*@assert(A[mid] > x);@*/
-      hi = mid;
+      hi = mid - 1;
   }
   return -1;
 }
-
