@@ -1,3 +1,4 @@
+#use <conio>
 bool is_in(int x, int [] A, int lower, int upper){
   for (int i = lower; i < upper; i++)
     //@loop_invariant lower <= i;
@@ -13,8 +14,7 @@ bool range_checker(int beg, int end, int length){
 
 
 bool is_sorted(int [] A, int lower, int upper)
-//@requires range_checker(lower, upper, length);
-//@requires pred != NULL;
+//@requires range_checker(lower, upper, \length(A));
 {
   for (int i = lower; i < upper - 1; i++)
     //@loop_invariant lower <= i;
@@ -33,7 +33,7 @@ int binsearch(int x, int[] A, int n)
   int lo = 0;
   int hi = n;
   while (lo < hi)
-  //@loop_invariant range_checker(lo, hi, n)
+  //@loop_invariant range_checker(lo, hi, n);
   //@loop_invariant is_in(x, A, lo, hi) == is_in(x, A, 0, n);
   {
     int mid = lo + (hi - lo) / 2;
@@ -64,7 +64,7 @@ int binsearch_inclusive(int x, int[] A, int n)
   int lo = 0;
   int hi = n - 1; // to be inclusive
   while (lo <= hi)
-  //@loop_invariant 0 <= lo && hi < n
+  //@loop_invariant 0 <= lo && hi < n;
   //@loop_invariant (lo == 0 || A[lo-1] < x);
   //@loop_invariant (hi == n - 1 || A[hi + 1] > x);
   {
@@ -80,3 +80,30 @@ int binsearch_inclusive(int x, int[] A, int n)
   }
   return -1;
 }
+
+bool check(){
+  int N = 100;
+  int[] arr = alloc_array(int, N);
+  for(int i = 0; i < N; i+= 1){
+    arr[i] = 2 * i + 1;
+  }
+  for(int i = 0; i < 2*N+1; i += 1){
+    int loc = binsearch_inclusive(i, arr, N);
+    int loc2 = binsearch_inclusive(i, arr, N);
+    // @assert loc == loc2;
+    bool f404 = loc == -1 && i % 2 == 0;
+    bool f200 = loc != -1 && arr[loc] == i;
+    // @assert f404 || f200;
+    if(!f404 && !f200){
+      return false;
+    }
+  }
+  return true;
+}
+
+
+
+
+
+
+

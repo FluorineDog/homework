@@ -40,7 +40,7 @@
    此时, 由于有序性, false = is_in(x, A, lo, mid + 1)是满足的, 则
    is_in(x, A, lo, hi) = is_in(x, A, lo, mid + 1) || is_in(x, A, mid + 1, hi)
       = is_in(x, A, mid + 1, hi), 将lo替换为mid + 1循环不变量继续保持
-6. 如果A[mid] > x, 我们选择[lo, mid)作为新的搜索区间. 
+6. 如果x < A[mid], 我们选择[lo, mid)作为新的搜索区间. 
    此时, 由于有序性, false = is_in(x, A, mid, hi)是满足的, 则
    is_in(x, A, lo, hi) = is_in(x, A, lo, mid) || is_in(x, A, mid, hi)
       = is_in(x, A, lo, mid), 将hi替换为mid 循环不变量继续保持
