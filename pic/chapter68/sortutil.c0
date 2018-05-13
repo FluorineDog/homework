@@ -39,6 +39,21 @@ bool gt_seg(int x, int[] A, int lower, int upper)
   return true;
 }
 
+/* lt_seg(x, A, lower, upper)
+ * iff x < A[lower..upper)
+ * iff x < A[i] for all lower <= i < upper
+ */
+bool lt_seg(int x, int[] A, int lower, int upper)
+//@requires 0 <= lower && lower <= upper && upper <= \length(A);
+{
+  for (int i = lower; i < upper; i++)
+    //@loop_invariant lower <= i && i <= upper;
+    if (!(x < A[i])) return false;
+  return true;
+}
+
+
+
 /* le_seg(x, A, lower, upper)
  * iff x <= A[lower..upper)
  * iff x <= A[i] for all lower <= i < upper

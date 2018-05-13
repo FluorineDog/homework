@@ -1,11 +1,12 @@
 #use <rand>
 #use "sortutil.c0"
 #use "util.c0"
+#use "04-array.c0"
 
-bool range_checker(int beg, int end, int length){
-  // check if <beg, end> is valid
-  return 0 <= beg && beg <= end && end <= length;
-}
+// bool range_checker(int beg, int end, int length){
+//   // check if <beg, end> is valid
+//   return 0 <= beg && beg <= end && end <= length;
+// }
 
 bool is_permutation(int[] arr, int abeg, int aend,  //
                     int[] brr, int bbeg, int bend)
@@ -35,8 +36,10 @@ int partition(int[] A, int lower, int pivot_index, int upper)
 //@ensures le_seg(A[\result], A, \result+1, upper);
 {
   int[] A_copy = alloc_array(int, upper - lower);
+  copy_into(A, lower, upper - lower, A_copy, 0);
   int pivot = A[pivot_index];
   swap(A, pivot_index, upper - 1);
+  //@assert is_permutation(A_copy, 0, upper - lower, A, lower, upper);
 
   int left = lower;
   int right = upper - 2;
@@ -65,6 +68,7 @@ void qsort(int[] A, int lower, int upper, rand_t gen)
 //@ensures is_sorted(A, lower, upper);
 {
   int[] A_copy = alloc_array(int, upper - lower);
+  copy_into(A, lower, upper - lower, A_copy, 0);
   if (upper - lower <= 1) return;
   int pivot_index = lower + abs(rand(gen) % (upper - lower));
   /* pivot_index = upper-1 or pivot_index = 0 gives O(n^2) for sorted array */
@@ -99,6 +103,7 @@ int partition_stable(int[] A, int lower, int pivot_index, int upper)
 //@ensures le_seg(A[\result], A, \result+1, upper);
 {
   int[] A_copy = alloc_array(int, upper - lower);
+  copy_into(A, lower, upper - lower, A_copy, 0);
   int[] lt_arr = alloc_array(int, upper - lower);
   int[] ge_arr = alloc_array(int, upper - lower);
   int lt_count = 0;
@@ -129,7 +134,7 @@ int partition_stable(int[] A, int lower, int pivot_index, int upper)
   }
   
   //@assert is_permutation(A_copy, 0, upper - lower, A, lower, upper);
-  return left;
+  return lt_count;
 }
 
 void qsort_stable(int[] A, int lower, int upper, rand_t gen)
@@ -137,6 +142,7 @@ void qsort_stable(int[] A, int lower, int upper, rand_t gen)
 //@ensures is_sorted(A, lower, upper);
 {
   int[] A_copy = alloc_array(int, upper - lower);
+  copy_into(A, lower, upper - lower, A_copy, 0);
   if (upper - lower <= 1) return;
   int pivot_index = lower + abs(rand(gen) % (upper - lower));
   /* pivot_index = upper-1 or pivot_index = 0 gives O(n^2) for sorted array */
@@ -165,17 +171,18 @@ void sort_stable(int[] A, int lower, int upper)
 bool check_qsort() {
   int seed = 0xc0c0ffee;
   rand_t gen = init_rand(seed);
-  int arr = alloc_array(int, 100);
+  int[] arr = alloc_array(int, 100);
   for (int i = 0; i < 100; i+=1) {
     arr[i] = rand(gen);
   }
   sort(arr, 0, 100);
 
-  int brr = alloc_array(int, 100);
+  gen = init_rand(seed);
+  int[] brr = alloc_array(int, 100);
   for (int i = 0; i < 100; i+=1) {
     brr[i] = rand(gen);
   }
   sort_stable(brr, 0, 100);
-  return true;
+  return array_equal(arr, 0, 100, brr, 0, 100);
 }   
 
