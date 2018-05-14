@@ -13,6 +13,11 @@ using std::tuple;
 using std::vector;
 // #include "heap_del.h"
 
+constexpr int get2shift(int N){
+  int zeros = __builtin_clz(N - 1);
+  return 32 - zeros;
+}
+
 constexpr int inf = std::numeric_limits<int>::max() / 4;
 
 class EnemyTable {
@@ -26,10 +31,11 @@ class EnemyTable {
   }
   void init() {
     m_table.clear();
-    this->vertex_count = graph.size();
+    int v_count = graph.size();
+    this->vertex_shift = get2shift(v_count);
     // TODO 
     int color_count = graph.get_color_count();
-    m_table.resize(vertex_count * color_count, 0);
+    m_table.resize((1 << vertex_shift) * color_count, 0);
     int cost = 0;
     for (auto from : graph.vertex_ids()) {
       auto v = graph[from];
@@ -60,11 +66,11 @@ class EnemyTable {
   int& table(int vertex_id, int color_id) {
     // vertex_count
     // used for cache
-    return m_table[color_id * vertex_count + vertex_id];
+    return m_table[(color_id << vertex_shift) | vertex_id];
   }
   const Graph& graph;
   vector<int> m_table;
   int total_cost;
-  int vertex_count;
+  int vertex_shift;
 };
 
