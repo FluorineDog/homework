@@ -1,3 +1,4 @@
+#pragma once
 #include <algorithm>
 #include <limits>
 #include <map>
@@ -14,19 +15,20 @@ using std::vector;
 
 constexpr int inf = std::numeric_limits<int>::max() / 4;
 
-class EnemyTable  {
+class EnemyTable {
  public:
   // EnemyTable() = default;
-  EnemyTable(const Graph& graph, int color_count) : graph(graph) {
-    init(color_count);
+  EnemyTable(const Graph& graph) : graph(graph) {
+    init();
   }
   int& operator()(int vertex_id, int color_id) {
     return table(vertex_id, color_id);
   }
-  void init(int color_count) {
+  void init() {
     m_table.clear();
     this->vertex_count = graph.size();
-    this->color_count;
+    // TODO 
+    int color_count = graph.get_color_count();
     m_table.resize(vertex_count * color_count, 0);
     int cost = 0;
     for (auto from : graph.vertex_ids()) {
@@ -47,21 +49,22 @@ class EnemyTable  {
       table(victim_id, new_color)++;
     }
   }
-
+  bool check() {
+    Graph g = graph;
+    EnemyTable eng(g);
+    bool tableEq = eng.m_table == this->m_table;
+    bool costEq = eng.total_cost == this->total_cost;
+    return tableEq && costEq;
+  }
  private:
   int& table(int vertex_id, int color_id) {
+    // vertex_count
+    // used for cache
     return m_table[color_id * vertex_count + vertex_count];
   }
   const Graph& graph;
   vector<int> m_table;
   int total_cost;
   int vertex_count;
-  int color_count;
 };
 
-class CostEngine {
- public:
-   
- private:
-  vector<int> enemyTable;
-};

@@ -4,14 +4,14 @@
 #include <set>
 #include <string>
 #include "graph.h"
-#include "engine.h"
+#include "cost_engine.h"
 using std::set;
 using std::string;
 
 constexpr int COLOR = 10;
 
 // #include "heap_del.h"
-bool search(Graph g, int color_count, std::default_random_engine& e);
+bool search(Graph& g, int color_count, std::default_random_engine& e);
 
 int main() {
   const char* filename = "data/DSJC125.1.col";
@@ -48,7 +48,6 @@ int main() {
 
   graph = graph.optimize();
   std::default_random_engine e(67);
-  search(graph, 1, e);
   
   // set by random
   // for (int k = vertex_count; k-- > 0;) {
@@ -60,26 +59,3 @@ int main() {
   return 0;
 }
 
-bool search(Graph g, int color_count, std::default_random_engine& e) {
-  // using set
-  for (auto& v : g) {
-    v.color = e() % color_count;
-  }
-
-  // vector<set<int, int>> vertex_colors;
-
-  for (auto from: g.vertex_ids()) {
-    auto& v = g[from];
-    for(auto to: g.edges(from)){
-      if(from < to ) continue;
-      cout << "e " << from + 1 << " " << to + 1 << endl;
-    }
-    // for (auto edge = g.edge_begin(v); g.edge_valid(edge); edge = g.edge_next(edge)) {
-    //   cout << "e " << from << " " << edge.to << endl;
-    // }
-    //   auto& to_vertex = graph[edge.to];
-    //   vertex_colors[vertex_id].insert(to_vertex.color);
-    // }
-  }
-  return false;
-}
