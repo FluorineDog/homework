@@ -8,13 +8,13 @@
 using std::set;
 using std::string;
 
-constexpr int COLOR = 10;
 
 // #include "heap_del.h"
 bool search(Graph& g, int color_count, std::default_random_engine& e);
 
 int main() {
   const char* filename = "data/DSJC125.1.col";
+  const int preset_color_count = 5;
 
   cin.redirect(filename);
   char ch;
@@ -48,6 +48,9 @@ int main() {
 
   graph = graph.optimize();
   std::default_random_engine e(67);
+  graph.set_color_count(preset_color_count);
+
+  CostEngine eng(graph);
   
   // set by random
   // for (int k = vertex_count; k-- > 0;) {

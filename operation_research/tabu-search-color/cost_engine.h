@@ -1,5 +1,5 @@
 #pragma once
-#include <engine.h>
+#include "enemy_table.h"
 #include <random>
 class CostEngine {
  public:
