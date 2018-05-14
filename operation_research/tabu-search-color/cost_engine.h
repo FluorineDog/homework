@@ -17,12 +17,9 @@ class CostEngine {
   bool search(std::default_random_engine& e) {
     // using set
     int color_count = graph.get_color_count();
-    for (auto& v : graph) {
-      v.color = e() % color_count;
-    }
-
-    for (int i = 0; i < 100000; ++i) {
-      int vertex_id = e() % graph.size();
+    int vertex_count = graph.size();
+    for (size_t i = 0; i < 10000000UL; ++i) {
+      int vertex_id = e() % vertex_count;
       int color = e() % color_count;
       this->shift(vertex_id, color);
     }

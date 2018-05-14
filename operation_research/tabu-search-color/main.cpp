@@ -3,18 +3,20 @@
 #include <random>
 #include <set>
 #include <string>
-#include "graph.h"
 #include "cost_engine.h"
+#include "graph.h"
 using std::set;
 using std::string;
-
 
 // #include "heap_del.h"
 bool search(Graph& g, int color_count, std::default_random_engine& e);
 
 int main() {
-  const char* filename = "data/DSJC125.1.col";
-  const int preset_color_count = 5;
+  // const char* filename = "data/DSJC125.1.col";
+  // const int preset_color_count = 5;
+  
+  const char* filename = "data/DSJC500.5.col";
+  const int preset_color_count = 48;
 
   cin.redirect(filename);
   char ch;
@@ -47,11 +49,17 @@ int main() {
   }
 
   graph = graph.optimize();
-  std::default_random_engine e(67);
   graph.set_color_count(preset_color_count);
 
+  std::default_random_engine e(67);
+  for (auto& v : graph) {
+    v.color = e() % preset_color_count;
+  }
+
   CostEngine eng(graph);
-  
+  e.seed(67);
+  std::cout << eng.search(e) << std::endl;
+
   // set by random
   // for (int k = vertex_count; k-- > 0;) {
   //   cout << "searching " << k << endl;
@@ -61,4 +69,3 @@ int main() {
 
   return 0;
 }
-

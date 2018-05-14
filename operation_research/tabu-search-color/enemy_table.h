@@ -60,7 +60,7 @@ class EnemyTable {
   int& table(int vertex_id, int color_id) {
     // vertex_count
     // used for cache
-    return m_table[color_id * vertex_count + vertex_count];
+    return m_table[color_id * vertex_count + vertex_id];
   }
   const Graph& graph;
   vector<int> m_table;
