@@ -4,6 +4,7 @@
 #include <set>
 #include <string>
 #include "graph.h"
+#include "engine.h"
 using std::set;
 using std::string;
 

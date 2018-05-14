@@ -10,26 +10,42 @@ using std::pair;
 using std::set;
 using std::tuple;
 using std::vector;
-#include "heap_del.h"
-constexpr int inf = std::numeric_limits<int> / 4;
+// #include "heap_del.h"
 
-
+constexpr int inf = std::numeric_limits<int>::max() / 4;
 
 class EnemyTable : vector<int> {
  public:
-  EnemyTable(int vertex_count, int color_count) : vector(vertex_count) {}
+  // EnemyTable() = default;
+  EnemyTable(const Graph& graph, int color_count):graph(graph) { init(color_count); }
   int& operator()(int vertex_id, int color_id) {
     return (*this)[color_id * vertex_count + vertex_count];
   }
-  void init(const Graph graph){
-    for(int from = 0; from < graph.size(); ++from){
-      for()
-    } 
+  void init(int color_count) {
+    auto& table = *this;
+    this->clear();
+    this->vertex_count = graph.size();
+    this->color_count;
+    this->resize(vertex_count * color_count, 0);
+    int cost = 0;
+    for (auto from : graph.vertex_ids()) {
+      auto v = graph[from];
+      for (auto to : graph.edges(from)) {
+        table(to, v.color)++;
+        cost++;
+      }
+    }
+    total_cost = cost / 2;
+  }
+  void shift(int vertex_id, int color_to){
+    
   }
  private:
+  Graph& graph;
+  int total_cost;
   int vertex_count;
   int color_count;
-}
+};
 
 class CostEngine {
  public:
