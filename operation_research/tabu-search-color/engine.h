@@ -17,9 +17,12 @@ constexpr int inf = std::numeric_limits<int>::max() / 4;
 class EnemyTable : vector<int> {
  public:
   // EnemyTable() = default;
-  EnemyTable(const Graph& graph, int color_count):graph(graph) { init(color_count); }
+  EnemyTable(const Graph& graph, int color_count) : graph(graph) {
+    init(color_count);
+  }
+
   int& operator()(int vertex_id, int color_id) {
-    return (*this)[color_id * vertex_count + vertex_count];
+    return table(vertex_id, color_id);
   }
   void init(int color_count) {
     auto& table = *this;
@@ -37,10 +40,21 @@ class EnemyTable : vector<int> {
     }
     total_cost = cost / 2;
   }
-  void shift(int vertex_id, int color_to){
-    
+
+  void shift(int vertex_id, int new_color) {
+    auto& table = *this;
+    auto& v = graph[vertex_id];
+    auto origin_color = v.color;
+    for (auto victim_id : graph.edges(vertex_id)) {
+      table(victim_id, origin_color)--;
+      table(victim_id, new_color)++;
+    }
   }
+
  private:
+  int table(int vertex_id, int color_id) {
+    return (*this)[color_id * vertex_count + vertex_count];
+  }
   Graph& graph;
   int total_cost;
   int vertex_count;
