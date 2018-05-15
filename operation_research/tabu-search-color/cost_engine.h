@@ -15,22 +15,22 @@ struct Movement {
 
 inline void update_max(bool en, Movement& dest, Movement& src, int& count,
                        std::default_random_engine& e) {
-  if (en && src.value - dest.value > 0) {
-    dest = src;
-  }
-  // if (en) {
-  //   int diff = src.value - dest.value;
-  //   if (diff == 0) {
-  //     ++count;
-  //     if (e() % count == 0) {
-  //       dest = src;
-  //     }
-  //   }
-  //   if (diff > 0) {
-  //     dest = src;
-  //     count = 1;
-  //   }
+  // if (en && src.value - dest.value > 0) {
+  // dest = src;
   // }
+  if (en) {
+    int diff = src.value - dest.value;
+    if (diff == 0) {
+      ++count;
+      if (e() % count == 0) {
+        dest = src;
+      }
+    }
+    if (diff > 0) {
+      dest = src;
+      count = 1;
+    }
+  }
 }
 
 class CostEngine {
@@ -56,7 +56,7 @@ class CostEngine {
     Movement overall_best(-inf, 0, 0);
     int valid_count = 0;
     int overall_count = 0;
-    for (int v_id : graph.vertex_ids( 0 )) {
+    for (int v_id : graph.vertex_ids(0)) {
       auto v = graph[v_id];
       int potential = enemyTable(v_id, v.color);
       if (potential == 0) {
@@ -66,7 +66,6 @@ class CostEngine {
         if (color == v.color) continue;
         int improve = potential - enemyTable(v_id, color);
         bool valid = tabuTable.test(v_id, color, iter);
-        // cout << valid;
         Movement new_entry(improve, v_id, color);
         update_max(valid, legal_best, new_entry, valid_count, e);
         update_max(!valid, overall_best, new_entry, overall_count, e);
@@ -82,34 +81,27 @@ class CostEngine {
     int color_count = graph.get_color_count();
     int vertex_count = graph.size();
     int history_best = enemyTable.get_cost();
-    int heat = 3;
     for (size_t i = 0; i < 100000000ULL; ++i) {
       Movement choose;
       int current = enemyTable.get_cost();
       if (current == 0) {
+        cout << i << " iter" << endl;
         break;
       }
-      auto [legal, overall] = pick_move(i, e, heat);
-      if (legal.value > 0) {
-        choose = legal;
-      } else if (current - overall.value < history_best) {
-        history_best = current - overall.value;
-        heat = 1;
-        // i += 10000;
+      auto [legal, overall] = pick_move(i, e);
+      if (current - overall.value < history_best) {
         choose = overall;
       } else {
         choose = legal;
       }
-      this->tabu(choose.v_id, graph[choose.v_id].color, i,
-                 std::min(100UL, current + e() % 7));
+      history_best = std::min(current - overall.value, history_best);
       this->shift(choose.v_id, choose.color);
       if (i % 100000UL == 0) {
-        heat += 1;
-        if (heat >= 20) {
-          heat = 1;
-        }
         cout << current << "(" << history_best << ") at" << i << endl;
       }
+      current = enemyTable.get_cost();
+      this->tabu(choose.v_id, graph[choose.v_id].color, i,
+                 std::min(100UL, current + e() % 6));
     }
     for (auto v_id : graph.vertex_ids()) {
       auto& v = graph[v_id];
