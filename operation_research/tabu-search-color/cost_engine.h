@@ -3,8 +3,16 @@
 #include "enemy_table.h"
 #include "tabu_table.h"
 
-inline void update_max(bool en, tuple<int, int, int>& dest, tuple<int, int, int> src){
-  if(en && std::get<0>(src) > std::get<0>(dest)){
+struct Movement {
+  Movement(int value, int v_id, int color)
+      : value(value), v_id(v_id), color(color) {}
+  int value;
+  int v_id;
+  int color;
+};
+
+inline void update_max(bool en, Movement& dest, Movement& src) {
+  if (en && src.value > dest.value) {
     dest = src;
   }
 }
@@ -19,28 +27,30 @@ class CostEngine {
     graph[vertex_id].color = new_color;
   }
 
+  int tabu() { return 0; }
   // calculate best
-  int pick_move(int iter) const {
+  std::tuple<Movement, Movement> pick_move(int iter) const {
     //    v_id, color, cost
-    tuple<int, int, int> legal_best = {-inf, 0, 0};
-    tuple<int, int, int> overall_best = {-inf, 0, 0};
+    Movement legal_best(-inf, 0, 0);
+    Movement overall_best(-inf, 0, 0);
     for (int v_id : graph.vertex_ids()) {
       auto v = graph[v_id];
       int potential = enemyTable(v_id, v.color);
       if (potential == 0) {
         continue;
       }
-      for(int color = 0; color < graph.get_color_count(); ++color){
-        if(color == v.color) continue;
+      for (int color = 0; color < graph.get_color_count(); ++color) {
+        if (color == v.color) continue;
         int improve = potential - enemyTable(v_id, color);
         bool valid = tabuTable.test(v_id, color, iter);
-        auto new_entry = std::make_tuple(improve, v_id, color);
+        Movement new_entry(improve, v_id, color);
         update_max(valid, legal_best, new_entry);
         update_max(true, overall_best, new_entry);
       }
     }
+    return make_tuple(legal_best, overall_best);
   }
-  int tabu();
+
   const Graph& get_graph() { return graph; }
   bool search(std::default_random_engine& e) {
     // using set
