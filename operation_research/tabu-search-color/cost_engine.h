@@ -19,7 +19,7 @@ inline void update_max(bool en, Movement& dest, Movement& src) {
 
 class CostEngine {
  public:
-  CostEngine(const Graph& graph) : graph(graph), enemyTable(this->graph) {}
+  CostEngine(const Graph& graph) : graph(graph), enemyTable(this->graph), tabuTable(graph) {}
 
   // shift data and calculate new coflicts involved
   void shift(int vertex_id, int new_color) {
@@ -27,7 +27,9 @@ class CostEngine {
     graph[vertex_id].color = new_color;
   }
 
-  int tabu() { return 0; }
+  int tabu(int vertex_id, int color, int iter, int step) { 
+    tabuTable.tabu(vertex_id, color, iter + step);
+  }
   // calculate best
   std::tuple<Movement, Movement> pick_move(int iter) const {
     //    v_id, color, cost

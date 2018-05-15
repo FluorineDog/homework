@@ -47,6 +47,10 @@ class EnemyTable {
     total_cost = cost / 2;
   }
 
+  int get_cost() const{
+    return total_cost;
+  }
+
   void shift(int vertex_id, int new_color) {
     auto& v = graph[vertex_id];
     auto old_color = v.color;

@@ -26,4 +26,4 @@ class TabuTable {
   }
   vector<int> deadline_vec;
   int color_count;
-}
+};
