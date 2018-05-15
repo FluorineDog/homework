@@ -12,11 +12,11 @@ using std::string;
 // bool search(Graph& g, int color_count, std::default_random_engine& e);
 
 int main() {
-  const char* filename = "data/DSJC125.1.col";
-  const int preset_color_count = 10;
+  // const char* filename = "data/DSJC125.1.col";
+  // const int preset_color_count = 5;
 
-  // const char* filename = "data/DSJC500.5.col";
-  // const int preset_color_count = 50;
+  const char* filename = "data/DSJC500.5.col";
+  const int preset_color_count = 49;
 
   cin.redirect(filename);
   char ch;
@@ -55,13 +55,13 @@ int main() {
   for (auto& v : graph) {
     v.color = e() % preset_color_count;
   }
-  for (int from : graph.vertex_ids()) {
-    int degree = 0;
-    for (auto to : graph.edges(from)) {
-      degree++;
-    }
-    std::cout << degree << " " << from << std::endl;
-  }
+  // for (int from : graph.vertex_ids()) {
+  //   int degree = 0;
+  //   for (auto to : graph.edges(from)) {
+  //     degree++;
+  //   }
+  //   std::cout << degree << " " << from << std::endl;
+  // }
   
 
   CostEngine eng(graph);

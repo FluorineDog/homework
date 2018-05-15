@@ -15,6 +15,28 @@ struct Edge {
   int dest() { return to; }
 };
 
+class Range {
+ public:
+  Range(int size, int rd = 0) : size(size), offset(rd % size) {}
+  struct Iterator {
+    Iterator(int id, int size) : id(id), size(size) {}
+    Iterator& operator++() {
+      id++;
+      return *this;
+    }
+    bool operator!=(int sz) { return id != sz; }
+    int operator*() { return id >= size ? id - size : id; }
+    int id;
+    int size;
+  };
+  Iterator begin() { return Iterator(offset, size); }
+  int end() { return offset + size; }
+
+ private:
+  int size;
+  int offset;
+};
+
 class Graph : public vector<Vertex> {
  public:
   Graph(int V, int E = 0) {
@@ -42,13 +64,9 @@ class Graph : public vector<Vertex> {
     }
     return g_tmp;
   }
-  void set_color_count(int count){
-    color_count = count;
-  }
-  
-  int get_color_count() const{
-    return color_count;
-  }
+  void set_color_count(int count) { color_count = count; }
+
+  int get_color_count() const { return color_count; }
 
  private:
   class Edges {
@@ -83,28 +101,8 @@ class Graph : public vector<Vertex> {
     int beg;
   };
 
-  class VertexIds {
-   public:
-    VertexIds(int size) : size(size) {}
-    struct Iterator {
-      Iterator(int id) : id(id) {}
-      Iterator& operator++() {
-        id++;
-        return *this;
-      }
-      bool operator!=(int sz) { return id != sz; }
-      int operator*() { return id; }
-      int id;
-    };
-    static Iterator begin() { return 0; }
-    int end() { return size; }
-
-   private:
-    int size;
-  };
-
  public:
-  VertexIds vertex_ids() const { return VertexIds((int)size()); }
+  Range vertex_ids(int rd = 0) const { return Range((int)size(), rd); }
   Edges edges(int beg) const { return Edges(*this, beg); }
 
  private:
@@ -117,3 +115,4 @@ class Graph : public vector<Vertex> {
   vector<Edge> m_edges;
   int color_count;
 };
+
