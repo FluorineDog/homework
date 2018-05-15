@@ -3,8 +3,10 @@
 #include <limits>
 #include <map>
 #include <set>
+#include <stack>
 #include <vector>
 #include "graph.h"
+using std::stack;
 using std::make_tuple;
 using std::map;
 using std::pair;
@@ -47,12 +49,15 @@ class EnemyTable {
     total_cost = cost / 2;
   }
 
-  void shift(int vertex_id, int new_color) {
+  void shift(int vertex_id, int new_color, stack<int> affected) {
     auto& v = graph[vertex_id];
     auto old_color = v.color;
     for (auto victim_id : graph.edges(vertex_id)) {
       table(victim_id, old_color)--;
-      table(victim_id, new_color)++;
+      int attention = table(victim_id, new_color)++;
+      if(attention == 1){
+        affected.push(attention);
+      }
     }
   }
   bool check() {

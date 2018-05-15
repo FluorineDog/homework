@@ -1,17 +1,27 @@
 #pragma once
 #include "enemy_table.h"
+#include "tabu_table.h"
 #include <random>
 class CostEngine {
  public:
   CostEngine(const Graph& graph) : graph(graph), enemyTable(this->graph) {}
 
-  void shift(int vertex_id, int new_color) {
-    enemyTable.shift(vertex_id, new_color);
+  // shift data and calculate new coflicts involved
+  void shift(int vertex_id, int new_color, stack<int>& affected) {
+    enemyTable.shift(vertex_id, new_color, affected);
     graph[vertex_id].color = new_color;
   }
 
-  int pick_legal_move();
-  int pick_forbidden_move();
+  // calculate best 
+  // int pick_move(stack<int>& affected, std::default_random_engine& e) const{
+  //   auto rd = e();
+  //   while(!affected.empty()){
+  //     int v_id = affected.top();
+  //     Vertex v = graph[v_id];
+  //     affected.pop();
+  //     enemyTable(v_id, c.color);
+  //   }
+  // }
   int tabu();
   const Graph& get_graph() { return graph; }
   bool search(std::default_random_engine& e) {
@@ -29,4 +39,5 @@ class CostEngine {
  private:
   Graph graph;
   EnemyTable enemyTable;
+  TabuTable tabuTable;
 };
