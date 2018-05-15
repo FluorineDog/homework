@@ -15,7 +15,7 @@ int main() {
   // const char* filename = "data/DSJC125.1.col";
   // const int preset_color_count = 5;
   const char* filename = "data/DSJC500.5.col";
-  const int preset_color_count = 50;
+  const int preset_color_count = 49;
 
   cin.redirect(filename);
   char ch;

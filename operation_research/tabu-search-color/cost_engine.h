@@ -80,6 +80,7 @@ class CostEngine {
     int color_count = graph.get_color_count();
     int vertex_count = graph.size();
     int history_best = enemyTable.get_cost();
+    Graph hisGraph = graph;
     for (size_t i = 0; i < 100000000ULL; ++i) {
       Movement choose;
       int current = enemyTable.get_cost();
@@ -94,9 +95,17 @@ class CostEngine {
       } else {
         choose = legal;
       }
-      history_best = std::min(current - overall.value, history_best);
+      if (current - choose.value < history_best) {
+        history_best = current - choose.value;
+        if (history_best < 20) {
+          hisGraph = graph;
+        }
+      }
       this->shift(choose.v_id, choose.color);
       if (i % 100000UL == 0) {
+        graph = GTX(std::move(graph), hisGraph);
+        tabuTable.init(graph);
+        enemyTable.init();
         cout << current << "(" << history_best << ") at" << i << endl;
       }
       current = enemyTable.get_cost();
