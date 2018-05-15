@@ -21,6 +21,7 @@ class TabuTable {
     return deadline_vec[vertex_id * color_count + color];
   }
 
+
   const int& table(int vertex_id, int color) const{
     return deadline_vec[vertex_id * color_count + color];
   }

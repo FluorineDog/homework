@@ -12,11 +12,11 @@ using std::string;
 // bool search(Graph& g, int color_count, std::default_random_engine& e);
 
 int main() {
-  // const char* filename = "data/DSJC125.1.col";
-  // const int preset_color_count = 5;
+  const char* filename = "data/DSJC125.1.col";
+  const int preset_color_count = 5;
 
-  const char* filename = "data/DSJC500.5.col";
-  const int preset_color_count = 49;
+  // const char* filename = "data/DSJC500.5.col";
+  // const int preset_color_count = 49;
 
   cin.redirect(filename);
   char ch;

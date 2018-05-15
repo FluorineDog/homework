@@ -56,13 +56,13 @@ class CostEngine {
     Movement overall_best(-inf, 0, 0);
     int valid_count = 0;
     int overall_count = 0;
-    for (int v_id : graph.vertex_ids()) {
+    for (int v_id : graph.vertex_ids( 0 )) {
       auto v = graph[v_id];
       int potential = enemyTable(v_id, v.color);
       if (potential == 0) {
         continue;
       }
-      for (auto color : Range(graph.get_color_count())) {
+      for (auto color : Range(graph.get_color_count(), 0)) {
         if (color == v.color) continue;
         int improve = potential - enemyTable(v_id, color);
         bool valid = tabuTable.test(v_id, color, iter);
@@ -94,7 +94,8 @@ class CostEngine {
         choose = legal;
       } else if (current - overall.value < history_best) {
         history_best = current - overall.value;
-        heat = 0;
+        heat = 1;
+        // i += 10000;
         choose = overall;
       } else {
         choose = legal;
@@ -103,9 +104,9 @@ class CostEngine {
                  std::min(100UL, current + e() % 7));
       this->shift(choose.v_id, choose.color);
       if (i % 100000UL == 0) {
-        heat += 2;
-        if (heat >= 5) {
-          heat = 0;
+        heat += 1;
+        if (heat >= 20) {
+          heat = 1;
         }
         cout << current << "(" << history_best << ") at" << i << endl;
       }
