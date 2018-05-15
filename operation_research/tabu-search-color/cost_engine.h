@@ -4,6 +4,7 @@
 #include "tabu_table.h"
 
 struct Movement {
+  Movement() = default;
   Movement(int value, int v_id, int color)
       : value(value), v_id(v_id), color(color) {}
   int value;
@@ -19,7 +20,8 @@ inline void update_max(bool en, Movement& dest, Movement& src) {
 
 class CostEngine {
  public:
-  CostEngine(const Graph& graph) : graph(graph), enemyTable(this->graph), tabuTable(graph) {}
+  CostEngine(const Graph& graph)
+      : graph(graph), enemyTable(this->graph), tabuTable(graph) {}
 
   // shift data and calculate new coflicts involved
   void shift(int vertex_id, int new_color) {
@@ -27,7 +29,7 @@ class CostEngine {
     graph[vertex_id].color = new_color;
   }
 
-  int tabu(int vertex_id, int color, int iter, int step) { 
+  void tabu(int vertex_id, int color, int iter, int step) {
     tabuTable.tabu(vertex_id, color, iter + step);
   }
   // calculate best
@@ -58,12 +60,43 @@ class CostEngine {
     // using set
     int color_count = graph.get_color_count();
     int vertex_count = graph.size();
+    int history_best = enemyTable.get_cost();
+
+    // for (size_t i = 0; i < 100UL; ++i) {
+    //   int current = enemyTable.get_cost();
+    //   int vertex_id = e() % vertex_count;
+    //   int color = e() % color_count;
+    //   this->shift(vertex_id, color);
+    //   // cout << current << ":";
+    // }
+    // return enemyTable.check();
+
     for (size_t i = 0; i < 10000000UL; ++i) {
-      int vertex_id = e() % vertex_count;
-      int color = e() % color_count;
-      this->shift(vertex_id, color);
+      Movement choose;
+      int current = enemyTable.get_cost();
+      if (current == 0) {
+        break;
+      }
+      auto [legal, overall] = pick_move(i);
+      if (legal.value > 0) {
+        choose = legal;
+      } else if (current - overall.value < history_best) {
+        history_best = current - overall.value;
+        choose = overall;
+      } else {
+        choose = legal;
+      }
+      this->shift(choose.v_id, choose.color);
+      tabu(choose.v_id, choose.color, i, 100);
+      if (i % 1000UL == 0) {
+        cout << current << "(" << history_best << ") at" << i << endl;
+      }
     }
-    return enemyTable.check();
+    for (auto v_id : graph.vertex_ids()) {
+      auto& v = graph[v_id];
+      cout << v_id + 1 << " " << v.color;
+    }
+    return true;
   }
 
  private:

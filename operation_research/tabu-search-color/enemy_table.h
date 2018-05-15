@@ -13,7 +13,7 @@ using std::tuple;
 using std::vector;
 // #include "heap_del.h"
 
-constexpr int get2shift(int N){
+constexpr int get2shift(int N) {
   int zeros = __builtin_clz(N - 1);
   return 32 - zeros;
 }
@@ -23,17 +23,17 @@ constexpr int inf = std::numeric_limits<int>::max() / 4;
 class EnemyTable {
  public:
   // EnemyTable() = default;
-  EnemyTable(const Graph& graph) : graph(graph) {
-    init();
-  }
-  const int& operator()(int vertex_id, int color_id) const{
+  EnemyTable(const Graph& graph) : graph(graph) { init(); }
+  EnemyTable(const EnemyTable&) = delete;
+  EnemyTable(EnemyTable&&) = delete;
+  const int& operator()(int vertex_id, int color_id) const {
     return table(vertex_id, color_id);
   }
   void init() {
     m_table.clear();
     int v_count = graph.size();
     this->vertex_shift = get2shift(v_count);
-    // TODO 
+    // TODO
     int color_count = graph.get_color_count();
     m_table.resize((1 << vertex_shift) * color_count, 0);
     int cost = 0;
@@ -41,19 +41,19 @@ class EnemyTable {
       auto v = graph[from];
       for (auto to : graph.edges(from)) {
         table(to, v.color)++;
-        cost++;
+        if (v.color == graph[to].color) cost++;
       }
     }
     total_cost = cost / 2;
   }
 
-  int get_cost() const{
-    return total_cost;
-  }
+  int get_cost() const { return total_cost; }
 
   void shift(int vertex_id, int new_color) {
     auto& v = graph[vertex_id];
     auto old_color = v.color;
+    this->total_cost +=
+        table(vertex_id, new_color) - table(vertex_id, old_color);
     for (auto victim_id : graph.edges(vertex_id)) {
       int new_gen = table(victim_id, old_color)--;
       int old_die = table(victim_id, new_color)++;
@@ -66,13 +66,14 @@ class EnemyTable {
     bool costEq = eng.total_cost == this->total_cost;
     return tableEq && costEq;
   }
+
  private:
-  const int& table(int vertex_id, int color_id) const{
+  const int& table(int vertex_id, int color_id) const {
     // vertex_count
     // used for cache
     return m_table[(color_id << vertex_shift) | vertex_id];
   }
- 
+
   int& table(int vertex_id, int color_id) {
     // vertex_count
     // used for cache
@@ -83,4 +84,3 @@ class EnemyTable {
   int total_cost;
   int vertex_shift;
 };
-
