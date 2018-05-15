@@ -98,6 +98,9 @@ int main (int argc, char *argv[]) {
         tabuTenure[mv][c[mv]] = conflict + R() % 7 + step;
         c[mv] = mc;
         if (!conflict) break;
+        if(step % 100000UL == 0){
+          cout << step << ": " << conflict << "(" << hisBest << ")" << endl;
+        }
     }
     clock_t end = clock();
     double timeCost = (double)(end - begin)/CLOCKS_PER_SEC;

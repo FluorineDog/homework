@@ -25,8 +25,7 @@ inline void update_max(bool en, Movement& dest, Movement& src, int& count,
       if (e() % count == 0) {
         dest = src;
       }
-    }
-    if (diff > 0) {
+    } else if (diff > 0) {
       dest = src;
       count = 1;
     }
@@ -59,7 +58,7 @@ class CostEngine {
     for (int v_id : graph.vertex_ids(0)) {
       auto v = graph[v_id];
       int potential = enemyTable(v_id, v.color);
-      if (potential == 0) {
+      if (potential == 0 && e() % 100) {
         continue;
       }
       for (auto color : Range(graph.get_color_count(), 0)) {
@@ -89,7 +88,8 @@ class CostEngine {
         break;
       }
       auto [legal, overall] = pick_move(i, e);
-      if (current - overall.value < history_best) {
+      if (overall.value > legal.value &&
+          current - overall.value < history_best) {
         choose = overall;
       } else {
         choose = legal;
@@ -101,12 +101,12 @@ class CostEngine {
       }
       current = enemyTable.get_cost();
       this->tabu(choose.v_id, graph[choose.v_id].color, i,
-                 std::min(100UL, current + e() % 6));
+                 std::min(100, (int)(current + e() % 10)));
     }
-    for (auto v_id : graph.vertex_ids()) {
-      auto& v = graph[v_id];
-      cout << v_id + 1 << " " << v.color << endl;
-    }
+    // for (auto v_id : graph.vertex_ids()) {
+    //   auto& v = graph[v_id];
+    //   cout << v_id + 1 << " " << v.color << endl;
+    // }
     return true;
   }
 
