@@ -1,11 +1,13 @@
 #pragma once
 #include "graph.h"
 
-class TabuTenure{
+class TabuTenure {
  public:
+  // TabuSearch() = default;
   TabuTenure(const Graph& graph) { init(graph); }
   void init(const Graph& graph) {
-    deadline_vec.resize(graph.size() * graph.get_color_count());
+    deadline_vec.clear();
+    deadline_vec.resize(graph.size() * graph.get_color_count(), 0);
     this->color_count = 0;
   }
   void tabu(int vertex_id, int color, int deadline) {

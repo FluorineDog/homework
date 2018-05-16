@@ -6,28 +6,34 @@
 
 class TabuSearch {
  public:
-  void init(const Graph& graph, int color_count);
+  TabuSearch(const Graph& graph, int color_count)
+      : graph(graph), color_count(color_count) {
+    init();
+  }
+  void init();
   void shift(int vertex_id, int color);
   std::tuple<int, int> pick_move(int iter) const;
 
  private:
-  Graph graph;
-  vector<int> color_set;
+  const Graph& graph;
+  vector<int> colors;
   EnemyTable enemy_table;
-  static std::default_random_engine e;
   TabuTenure tenure;
-  int color_count;
+  const int color_count;
   int curr_cost;
   int hist_cost;
+
+ private:
+  static std::default_random_engine e;
 };
 
-inline void TabuSearch::init(const Graph& graph, int color_count) {
+inline void TabuSearch::init() {
   // this->graph = graph;
-  enemy_table.initBy(graph, color_set);
+  enemy_table.initBy(graph, colors);
 }
 
 inline void TabuSearch::shift(int vertex_id, int new_color) {
-  int old_color = color_set[vertex_id];
+  int old_color = colors[vertex_id];
   // update enemy_table
   for (auto victim_id : graph.edges(vertex_id)) {
     enemy_table(victim_id, old_color)--;
@@ -45,7 +51,7 @@ std::tuple<int, int> TabuSearch::pick_move(int iter) const {
   int legalDiff = inf;
   int rd = e();
   for (auto v_id : graph.vertex_ids(rd)) {
-    int old_color = color_set[v_id];
+    int old_color = colors[v_id];
     if (enemy_table(v_id, old_color) == 0) {
       continue;
     }

@@ -61,9 +61,9 @@ class EnemyTable {
   //   }
   // }
 
-  bool check(const Graph& graph, int cost) const {
+  bool check(const Graph& graph, const vector<int>& colors, int cost) const {
     EnemyTable eng;
-    int new_cost = eng.initBy(graph);
+    int new_cost = eng.initBy(graph, colors);
     bool tableEq = eng.m_table == this->m_table;
     bool costEq = cost == new_cost;
     return tableEq && costEq;
