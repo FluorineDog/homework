@@ -16,7 +16,7 @@ struct Movement {
 inline void update_max(bool en, Movement& dest, Movement& src, int& count,
                        std::default_random_engine& e) {
   // if (en && src.value - dest.value > 0) {
-  // dest = src;
+  //   dest = src;
   // }
   if (en) {
     int diff = src.value - dest.value;
@@ -55,10 +55,10 @@ class CostEngine {
     Movement overall_best(-inf, 0, 0);
     int valid_count = 0;
     int overall_count = 0;
-    for (int v_id : graph.vertex_ids(0)) {
+    for (int v_id : graph.vertex_ids()) {
       auto v = graph[v_id];
       int potential = enemyTable(v_id, v.color);
-      if (potential == 0 && e() % 100) {
+      if (potential == 0) {
         continue;
       }
       for (auto color : Range(graph.get_color_count(), 0)) {
@@ -112,12 +112,12 @@ class CostEngine {
       }
       current = enemyTable.get_cost();
       this->tabu(choose.v_id, graph[choose.v_id].color, i,
-                 std::min(100, (int)(current + e() % 5)));
+                 std::min(100, (int)( current / 2 + e() % 5)));
     }
-    // for (auto v_id : graph.vertex_ids()) {
-    //   auto& v = graph[v_id];
-    //   cout << v_id + 1 << " " << v.color << endl;
-    // }
+    for (auto v_id : graph.vertex_ids()) {
+      auto& v = graph[v_id];
+      cout << v_id + 1 << " " << v.color << endl;
+    }
     return true;
   }
 

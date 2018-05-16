@@ -13,7 +13,7 @@ class TabuTable {
   }
 
   bool test(int vertex_id, int color, int iter) const {
-    return table(vertex_id, color) <= iter;
+    return table(vertex_id, color) < iter;
   }
 
  private:

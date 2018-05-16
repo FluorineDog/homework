@@ -1,4 +1,5 @@
 #include <cassert>
+#include <cstdio>
 #include <iostream>
 #include <random>
 #include <set>
@@ -11,13 +12,19 @@ using std::string;
 // #include "heap_del.h"
 // bool search(Graph& g, int color_count, std::default_random_engine& e);
 
-int main() {
+int main(int argc, char* argv[]) {
   // const char* filename = "data/DSJC125.1.col";
   // const int preset_color_count = 5;
-  const char* filename = "data/DSJC500.5.col";
-  const int preset_color_count = 49;
+  int preset_color_count;
 
-  cin.redirect(filename);
+  if (argc != 3) {
+    cin.redirect("data/DSJC500.5.col");
+    preset_color_count = 49;
+  } else {
+    cin.redirect(argv[1]);
+    preset_color_count = strtol(argv[2], nullptr, 10);
+  }
+
   char ch;
   int vertex_count, edge_count;
   while (true) {
@@ -61,7 +68,6 @@ int main() {
   //   }
   //   std::cout << degree << " " << from << std::endl;
   // }
-  
 
   CostEngine eng(graph);
   e.seed(67);
@@ -73,6 +79,6 @@ int main() {
   //   std::default_random_engine e(67);
   //   search(graph, vertex_count, e);
   // }
-  
+
   return 0;
 }
