@@ -8,7 +8,7 @@ class TabuTenure {
   void init(const Graph& graph) {
     deadline_vec.clear();
     deadline_vec.resize(graph.size() * graph.get_color_count(), 0);
-    this->color_count = 0;
+    this->color_count = 0;// WTF
   }
   void tabu(int vertex_id, int color, int deadline) {
     // deadline_vec()
