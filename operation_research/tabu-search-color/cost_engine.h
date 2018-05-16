@@ -103,14 +103,16 @@ class CostEngine {
       }
       this->shift(choose.v_id, choose.color);
       if (i % 100000UL == 0) {
-        graph = GTX(std::move(graph), hisGraph);
-        tabuTable.init(graph);
-        enemyTable.init();
+        if (i % 5) {
+          // graph = GTX(std::move(graph), hisGraph);
+          // tabuTable.init(graph);
+          // enemyTable.init();
+        }
         cout << current << "(" << history_best << ") at" << i << endl;
       }
       current = enemyTable.get_cost();
       this->tabu(choose.v_id, graph[choose.v_id].color, i,
-                 std::min(100, (int)(current + e() % 10)));
+                 std::min(100, (int)(current + e() % 5)));
     }
     // for (auto v_id : graph.vertex_ids()) {
     //   auto& v = graph[v_id];
