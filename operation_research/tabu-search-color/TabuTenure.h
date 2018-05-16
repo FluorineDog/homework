@@ -1,8 +1,9 @@
 #pragma once
 #include "graph.h"
-class TabuTable {
+
+class TabuTenure{
  public:
-  TabuTable(const Graph& graph) { init(graph); }
+  TabuTenure(const Graph& graph) { init(graph); }
   void init(const Graph& graph) {
     deadline_vec.resize(graph.size() * graph.get_color_count());
     this->color_count = 0;
@@ -21,8 +22,7 @@ class TabuTable {
     return deadline_vec[vertex_id * color_count + color];
   }
 
-
-  const int& table(int vertex_id, int color) const{
+  const int& table(int vertex_id, int color) const {
     return deadline_vec[vertex_id * color_count + color];
   }
   vector<int> deadline_vec;
