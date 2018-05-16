@@ -33,13 +33,13 @@ select J.jno from J where not exists(
 );
 
 -- 8
--- update P set color='蓝' where color='红';
+update P set color='蓝' where color='红';
 
 -- 9
--- update SPJ set sno='S3' where sno='S5' and jno='J4' and pno='P6';
+update SPJ set sno='S3' where sno='S5' and jno='J4' and pno='P6';
 
 -- 10 /* on delete cascade */
--- delete from S where sno='S2';
+delete from S where sno='S2';
 
 -- 11 
--- insert into SPJ value('S2', 'P4', 'J6', 200);
+insert into SPJ value('S2', 'P4', 'J6', 200);
