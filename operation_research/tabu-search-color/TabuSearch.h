@@ -1,4 +1,5 @@
 #include <cassert>
+#include <functional>
 #include <random>
 #include "EnemyTable.h"
 #include "TabuTenure.h"
@@ -39,10 +40,11 @@ class TabuSearch {
   int curr_cost;
   int hist_cost;
 
-  static TabuSearch GPX(const TabuSearch& ts1, const TabuSearch& ts2);
+  static TabuSearch GPX(const TabuSearch& ts1, const TabuSearch& ts2,
+                        std::default_random_engine& e);
 
  private:
-  static std::default_random_engine e;
+  mutable std::default_random_engine e;
 };
 
 void TabuSearch::tabu(int vertex_id, int color, int ddl) {
@@ -132,28 +134,110 @@ std::tuple<int, int> TabuSearch::pick_move(int iter) const {
   }
 }
 
-inline TabuSearch TabuSearch::GPX(const TabuSearch& ts1, const TabuSearch& ts2,
-                                  std::default_random_engine& e) {
-  vector<int> replica[2] = {ts1.colors, ts2.colors};
-  int vertex_count = replica[0].size();
+inline TabuSearch TabuSearch::GPX(  //
+    const TabuSearch& ts1,          //
+    const TabuSearch& ts2,          //
+    std::default_random_engine& e   //
+) {
+#define static
+  std::reference_wrapper<const vector<int>>  //
+      replica[] = {ts1.colors, ts2.colors};
+  int vertex_count = replica[0].get().size();
   int color_count = ts1.color_count;
-  vector<pair<int, set<int>>> sheet[2];
-  sheet[0].resize(color_count, make_pair(0, set<int>()));
-  sheet[1].resize(color_count, make_pair(0, set<int>()));
-  for (auto set_id : Range(2)) {
-    for (auto v_id : Range(vertex_count)) {
-      int color = replica[set_id][v_id];
-      auto& [vertex_count, vertex_set] = sheet[set_id][color];
-      vertex_count++;
-      vertex_set.insert(v_id);
-    }
+
+  vector<int> result(vertex_count);
+  for (auto& c : result) {
+    c = e() % color_count;
   }
+
+  static vector<int> color_begs[2];
+  color_begs[0].clear();
+  color_begs[1].clear();
+
+  static vector<int> color_cnts[2];
+  color_cnts[0].clear();
+  color_cnts[1].clear();
+  color_cnts[0].resize(color_count, 0);
+  color_cnts[1].resize(color_count, 0);
+
+  static vector<std::pair<int, int>> vertex_collection[2];
+  vertex_collection[0].clear();
+  vertex_collection[1].clear();
+  // vector<int> sheet[2];
+  vector<bool> vertex_deleted;
+  vertex_deleted.resize(vertex_count, false);
+  for (auto main_id : Range(2)) {
+    auto& vc = vertex_collection[main_id];
+    for (auto v_id : Range(vertex_count)) {
+      int color = replica[main_id].get()[v_id];
+      vc.emplace_back(color, v_id);
+    }
+    std::sort(vc.begin(), vc.end());
+    int acc = 0;
+    for (auto [color, _] : vertex_collection[main_id]) {
+      int fin = color_cnts[main_id][color]++;
+      if (fin == 0) {
+        color_begs[main_id].push_back(acc);
+      }
+      acc++;
+    }
+    color_begs[main_id].push_back(acc);
+  }
+
+  // for (auto main_id : Range(2)) {
+  //   for (auto v_id : Range(vertex_count)) {
+  //     int color = replica[main_id].get()[v_id];
+  //     // sheet[main_id][color]++;
+  //     auto& [vertex_count, vertex_set] = sheet[main_id][color];
+  //     vertex_count++;
+  //     vertex_set.insert(v_id);
+  //   }
+  // }
+
+  static std::stack<pair<int, int>> records;
+  assert((int)records.size() == 0);
 
   for (auto iter : Range(color_count)) {
     int main_id = iter % 2;
     int sub_id = 1 - main_id;
-    for (auto v_id : Range(vertex_count, e())) {
-      
+    int main_color = INF;
+    int main_count = -1;
+    // find max color
+    for (auto color : Range(color_count, e())) {
+      auto count = color_cnts[main_id][color];
+      if (count > main_count) {
+        main_color = color;
+        main_count = count;
+      }
+    }
+    records.emplace(main_id, main_color);
+    // maintain main color_cnts
+    color_cnts[main_id][main_color] = 0;
+    // maintain deleted_table & sub color_cnts
+    int beg = color_begs[main_id][main_color];
+    int end = color_begs[main_id][main_color + 1];
+    for (int i = beg; i < end; ++i) {
+      auto [_, v_id] = vertex_collection[main_id][i];
+      if (!vertex_deleted[v_id]) {
+        int sub_color = replica[sub_id].get()[v_id];
+        --color_cnts[sub_id][sub_color];
+        vertex_deleted[v_id] = true;
+      }
     }
   }
+  assert((int)records.size() == color_count);
+  int iter = 0;
+  while (!records.empty()) {
+    auto [main_id, main_color] = records.top();
+    records.pop();
+    int beg = color_begs[main_id][main_color];
+    int end = color_begs[main_id][main_color + 1];
+    for (int i = beg; i < end; ++i) {
+      auto [_, v_id] = vertex_collection[main_id][i];
+      result[v_id] = iter;
+    }
+    ++iter;
+  }
+  return TabuSearch(ts1.graph, color_count, std::move(result), e());
 }
+#undef static

@@ -1,4 +1,6 @@
 #include "TabuSearch.h"
+
+static std::default_random_engine e(67);
 int main(int argc, char* argv[]) {
   int preset_color_count;
   if (argc >= 3) {
@@ -9,7 +11,6 @@ int main(int argc, char* argv[]) {
     preset_color_count = 49;
   }
 
-  std::default_random_engine e(67);
 
   if (argc >= 4) {
     e.seed(strtol(argv[3], nullptr, 10));
@@ -73,4 +74,26 @@ int main(int argc, char* argv[]) {
     }
   }
   return 0;
+}
+
+int localSearch(TabuSearch& engine) {
+  int best = INF;
+  for (int iter = 0; iter < 100000; ++iter) {
+    auto [v, c] = engine.pick_move(iter);
+    int old_color = engine.shift(v, c);
+    int cost = engine.getCurrentCost();
+    best = std::min(cost, best);
+    engine.tabu(v, old_color, iter + e() % 10 + cost);
+    if (cost == 0) {
+      cout                             //
+          << "iter: " << iter << endl  //
+          << "success " << endl;
+      exit(0);
+    }
+  }
+  cout                                     //
+      << "<=>" << best                     //
+      << "<=>" << engine.getHistoryCost()  //
+      << endl;
+  return best;
 }
