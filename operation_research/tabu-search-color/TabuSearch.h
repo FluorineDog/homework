@@ -1,27 +1,24 @@
+#include <cassert>
 #include <random>
 #include "EnemyTable.h"
 #include "TabuTenure.h"
 #include "graph.h"
-#include <cassert>
 // class based -> function based
 
 class TabuSearch {
  public:
   TabuSearch(const Graph& graph, int color_count)
-      : graph(graph), color_count(color_count){
+      : graph(graph), color_count(color_count) {
     init();
   }
   void init();
   int shift(int vertex_id, int color);
   void tabu(int vertex_id, int color, int ddl);
   std::tuple<int, int> pick_move(int iter) const;
-  int getCurrentCost() const{
-    return curr_cost;
-  }
+  int getCurrentCost() const { return curr_cost; }
 
-  int getHistoryCost() const{
-    return hist_cost;
-  }
+  int getHistoryCost() const { return hist_cost; }
+
  private:
   const Graph& graph;
   const int color_count;
@@ -34,7 +31,7 @@ class TabuSearch {
  private:
   mutable std::default_random_engine e;
 };
-void TabuSearch::tabu(int vertex_id, int color, int ddl){
+void TabuSearch::tabu(int vertex_id, int color, int ddl) {
   tenure.tabu(vertex_id, color, ddl);
 }
 
@@ -63,7 +60,6 @@ inline int TabuSearch::shift(int vertex_id, int new_color) {
   colors[vertex_id] = new_color;
   // assert(enemy_table.check(graph, colors, curr_cost));
   return old_color;
-  
 }
 
 std::tuple<int, int> TabuSearch::pick_move(int iter) const {
@@ -72,6 +68,8 @@ std::tuple<int, int> TabuSearch::pick_move(int iter) const {
   tuple<int, int> legalBest;
   int legalDiff = INF;
   int rd = e();
+  // int legalCount = 0;
+  // int tabuCount = 0;
   for (auto v_id : graph.vertex_ids(rd)) {
     int old_color = colors[v_id];
     if (enemy_table(v_id, old_color) == 0) {
@@ -92,6 +90,29 @@ std::tuple<int, int> TabuSearch::pick_move(int iter) const {
         tabuBest = new_entry;
         tabuDiff = diff;
       }
+      // if (is_legal) {
+      //   if (diff < legalDiff) {
+      //     legalCount = 1;
+      //     legalBest = new_entry;
+      //     legalDiff = diff;
+      //   } else if (diff == legalDiff) {
+      //     legalCount++;
+      //     if (e() % legalCount == 0) {
+      //       legalDiff = diff;
+      //     }
+      //   }
+      // } else {
+      //   if (diff < tabuDiff) {
+      //     tabuCount = 1;
+      //     tabuBest = new_entry;
+      //     tabuDiff = diff;
+      //   } else if (diff == tabuDiff) {
+      //     tabuCount++;
+      //     if (e() % tabuCount == 0) {
+      //       tabuBest = new_entry;
+      //     }
+      //   }
+      // }
     }
   }
 

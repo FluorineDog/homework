@@ -46,7 +46,7 @@ int main(int argc, char* argv[]) {
     auto [v, c] = engine.pick_move(iter);
     int old_color = engine.shift(v, c);
     int cost = engine.getCurrentCost();
-    if (iter % 10000 == 0) {
+    if (iter % 100000 == 0) {
       cout                                     //
           << "iter: " << iter                  //
           << " " << cost                       //
