@@ -1,9 +1,9 @@
-#include <iostream>
+#include <algorithm>
 #include <cstdio>
 #include <cstring>
-#include <algorithm>
-#include <random>
 #include <ctime>
+#include <iostream>
+#include <random>
 
 using namespace std;
 const int INF = 0x3f3f3f3f;
@@ -18,16 +18,16 @@ int step;
 int hisBest;
 
 struct Edge {
-    int to;
-    int next;
+  int to;
+  int next;
 };
 Edge edge[(MAXN + 1) * MAXN];
 int head[MAXN];
 int eCnt;
 void addEdge(int u, int v) {
-    edge[++eCnt].next = head[u];
-    edge[eCnt].to = v;
-    head[u] = eCnt;
+  edge[++eCnt].next = head[u];
+  edge[eCnt].to = v;
+  head[u] = eCnt;
 }
 
 void getInput();
@@ -35,127 +35,136 @@ void init();
 void makeColorTable();
 bool checkRes();
 
-int main (int argc, char *argv[]) {
-    std::ios::sync_with_stdio(false);
-    freopen(argv[1], "r", stdin);
-    sscanf(argv[2], "%d", &K);
-    
-    getInput();
-    init();
-    makeColorTable();
-    random_device rd;
-    default_random_engine R(rd());
+int main(int argc, char *argv[]) {
+  std::ios::sync_with_stdio(false);
+  freopen(argv[1], "r", stdin);
+  sscanf(argv[2], "%d", &K);
 
-    hisBest = INF;
+  getInput();
+  init();
+  makeColorTable();
+  random_device rd;
+  default_random_engine R(rd());
 
-    int mc, mv;
-    int tabuMc, tabuMv;
-    int tabuBest, nTabuBest;
-    int delta, cnt, tabuCnt;
+  hisBest = INF;
 
-    clock_t begin = clock();
-    while (step++ != 900000000) {
-        tabuBest = nTabuBest = INF;
-        for (int u = 1; u <= n; ++u) {
-            if (!colorTable[u][c[u]]) continue;
-            for (int k = 0; k < K; ++k) {
-                if (k == c[u]) continue;
-                delta = colorTable[u][k] - colorTable[u][c[u]];
-                if (tabuTenure[u][k] > step) {
-                    // tabu best
-                    if (delta < tabuBest) {
-                        tabuBest = delta; tabuMv = u; tabuMc = k; tabuCnt = 2;
-                    }
-                    else if (delta == tabuBest && !(R() % tabuCnt)) {
-                        tabuMv = u; tabuMc = k; ++tabuCnt;
-                    }
-                }
-                else {
-                    // no_tabu best
-                    if (delta < nTabuBest) {
-                        nTabuBest = delta; mv = u; mc = k; cnt = 2;
-                    }
-                    else if (delta == nTabuBest && !(R() % cnt)) {
-                        mv = u; mc = k; ++cnt;
-                    }
-                }
-            }
-        }
+  int mc, mv;
+  int tabuMc, tabuMv;
+  int tabuBest, nTabuBest;
+  int delta, cnt, tabuCnt;
 
-        if (nTabuBest == INF) cout << "hehe" << endl;
-        // if (tabuBest == INF && nTabuBest == INF) break; 
-        if (tabuBest < nTabuBest && conflict + tabuBest < hisBest) {
-            mc = tabuMc; mv = tabuMv; nTabuBest = tabuBest;
+  clock_t begin = clock();
+  while (step++ != 900000000) {
+    tabuBest = nTabuBest = INF;
+    for (int u = 1; u <= n; ++u) {
+      if (!colorTable[u][c[u]]) continue;
+      for (int k = 0; k < K; ++k) {
+        if (k == c[u]) continue;
+        delta = colorTable[u][k] - colorTable[u][c[u]];
+        if (tabuTenure[u][k] > step) {
+          // tabu best
+          if (delta < tabuBest) {
+            tabuBest = delta;
+            tabuMv = u;
+            tabuMc = k;
+            tabuCnt = 2;
+          } else if (delta == tabuBest && !(R() % tabuCnt)) {
+            tabuMv = u;
+            tabuMc = k;
+            ++tabuCnt;
+          }
+        } else {
+          // no_tabu best
+          if (delta < nTabuBest) {
+            nTabuBest = delta;
+            mv = u;
+            mc = k;
+            cnt = 2;
+          } else if (delta == nTabuBest && !(R() % cnt)) {
+            mv = u;
+            mc = k;
+            ++cnt;
+          }
         }
-        // update
-        // cout << nTabuBest << endl;
-        conflict += nTabuBest;
-        hisBest = min(hisBest, conflict);
-        for (int e = head[mv]; e != 0; e = edge[e].next) {
-            --colorTable[edge[e].to][c[mv]];
-            ++colorTable[edge[e].to][mc];
-        }
-        tabuTenure[mv][c[mv]] = conflict + R() % 7 + step;
-        c[mv] = mc;
-        if (!conflict) break;
-        if(step % 100000UL == 0){
-          cout << step << ": " << conflict << "(" << hisBest << ")" << endl;
-        }
+      }
     }
-    clock_t end = clock();
-    double timeCost = (double)(end - begin)/CLOCKS_PER_SEC;
 
-    if (checkRes()) {
-        cout << "Finish" << endl;
+    if (nTabuBest == INF) cout << "hehe" << endl;
+    // if (tabuBest == INF && nTabuBest == INF) break;
+    if (tabuBest < nTabuBest && conflict + tabuBest < hisBest) {
+      mc = tabuMc;
+      mv = tabuMv;
+      nTabuBest = tabuBest;
     }
-    else {
-        cout << conflict << endl;
-        cout << "Failure" << endl;
+    // update
+    // cout << nTabuBest << endl;
+    conflict += nTabuBest;
+    hisBest = min(hisBest, conflict);
+    for (int e = head[mv]; e != 0; e = edge[e].next) {
+      --colorTable[edge[e].to][c[mv]];
+      ++colorTable[edge[e].to][mc];
     }
-    printf("step: %d\ttime: %lf\n", step, timeCost);
-    return 0;
+    tabuTenure[mv][c[mv]] = conflict + R() % 7 + step;
+    c[mv] = mc;
+    if (!conflict) break;
+    if (step % 100000UL == 0) {
+      cout << step << ": " << conflict << "(" << hisBest << ")" << endl;
+    }
+  }
+  clock_t end = clock();
+  double timeCost = (double)(end - begin) / CLOCKS_PER_SEC;
+
+  if (checkRes()) {
+    cout << "Finish" << endl;
+  } else {
+    cout << conflict << endl;
+    cout << "Failure" << endl;
+  }
+  printf("step: %d\ttime: %lf\n", step, timeCost);
+  return 0;
 }
 
 void getInput() {
-    char buf[100 + 2];
-    while (fgets(buf, 100, stdin) && buf[0] != 'p');
-    char tmpC, tmpS[10];
-    int m, u, v;
-    sscanf(buf, "%c %s %d %d", &tmpC, tmpS, &n, &m);
-    while (m--) {
-        scanf("%c %d %d", &tmpC, &u, &v);
-        getchar();
-        addEdge(u, v);
-        addEdge(v, u);
-    }
+  char buf[100 + 2];
+  while (fgets(buf, 100, stdin) && buf[0] != 'p')
+    ;
+  char tmpC, tmpS[10];
+  int m, u, v;
+  sscanf(buf, "%c %s %d %d", &tmpC, tmpS, &n, &m);
+  while (m--) {
+    scanf("%c %d %d", &tmpC, &u, &v);
+    getchar();
+    addEdge(u, v);
+    addEdge(v, u);
+  }
 }
 void init() {
-    random_device rd;
-    default_random_engine R(rd());
-    for (int i = 1; i <= n; ++i) {
-        c[i] = R() % K;
-    }
+  random_device rd;
+  default_random_engine R(rd());
+  for (int i = 1; i <= n; ++i) {
+    c[i] = R() % K;
+  }
 }
 
 void makeColorTable() {
-    for (int u = 1; u <= n; ++u) {
-        for (int k = 0; k < K; ++k) {
-            int clash = 0;
-            for (int e = head[u]; e != 0; e = edge[e].next) {
-                if (k == c[edge[e].to]) ++clash;
-            }
-            if (k == c[u]) conflict += clash;
-            colorTable[u][k] = clash;
-        }
+  for (int u = 1; u <= n; ++u) {
+    for (int k = 0; k < K; ++k) {
+      int clash = 0;
+      for (int e = head[u]; e != 0; e = edge[e].next) {
+        if (k == c[edge[e].to]) ++clash;
+      }
+      if (k == c[u]) conflict += clash;
+      colorTable[u][k] = clash;
     }
-    conflict >>= 1;
+  }
+  conflict >>= 1;
 }
 
 bool checkRes() {
-    for (int u = 1; u <= n; ++u) {
-        for (int e = head[u]; e != 0; e = edge[e].next) {
-            if (c[u] == c[edge[e].to]) return false;
-        }
+  for (int u = 1; u <= n; ++u) {
+    for (int e = head[u]; e != 0; e = edge[e].next) {
+      if (c[u] == c[edge[e].to]) return false;
     }
-    return true;
+  }
+  return true;
 }

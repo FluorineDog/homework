@@ -22,6 +22,7 @@ constexpr int inf = std::numeric_limits<int>::max() / 4;
 
 class EnemyTable {
  public:
+  static constexpr int vertex_count = 509;
   EnemyTable() = default;
   EnemyTable(const EnemyTable&) = delete;
   EnemyTable(EnemyTable&&) = delete;
@@ -36,10 +37,10 @@ class EnemyTable {
   int initBy(const Graph& graph, const vector<int>& colors) {
     m_table.clear();
     int v_count = graph.size();
-    this->vertex_shift = get2shift(v_count);
+    // this->vertex_shift = get2shift(v_count);
     // TODO
-    int color_count = graph.get_color_count();
-    m_table.resize((1 << vertex_shift) * color_count, 0);
+    // int color_count = graph.get_color_count();
+    m_table.resize(vertex_count * colors.size(), 0);
     int cost = 0;
     for (auto from : graph.vertex_ids()) {
       for (auto to : graph.edges(from)) {
@@ -73,14 +74,14 @@ class EnemyTable {
   const int& table(int vertex_id, int color_id) const {
     // vertex_count
     // used for cache
-    return m_table[(color_id << vertex_shift) | vertex_id];
+    return m_table[color_id * vertex_count + vertex_id];
   }
 
   int& table(int vertex_id, int color_id) {
     // vertex_count
     // used for cache
-    return m_table[(color_id << vertex_shift) | vertex_id];
+    return m_table[color_id * vertex_count + vertex_id];
   }
   vector<int> m_table;
-  int vertex_shift;
+  // int vertex_shift;
 };

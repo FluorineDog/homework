@@ -2,6 +2,7 @@
 #include "EnemyTable.h"
 #include "TabuTenure.h"
 #include "graph.h"
+#include <cassert>
 // class based -> function based
 
 class TabuSearch {
@@ -16,10 +17,10 @@ class TabuSearch {
 
  private:
   const Graph& graph;
+  const int color_count;
   vector<int> colors;
   EnemyTable enemy_table;
   TabuTenure tenure;
-  const int color_count;
   int curr_cost;
   int hist_cost;
 
@@ -29,7 +30,11 @@ class TabuSearch {
 
 inline void TabuSearch::init() {
   // this->graph = graph;
-  enemy_table.initBy(graph, colors);
+  for (auto& c : colors) {
+    c = e() % color_count;
+  }
+  hist_cost = curr_cost = enemy_table.initBy(graph, colors);
+  tenure.init(graph);
 }
 
 inline void TabuSearch::shift(int vertex_id, int new_color) {
@@ -40,8 +45,11 @@ inline void TabuSearch::shift(int vertex_id, int new_color) {
     enemy_table(victim_id, new_color)++;
   }
   // update total_cost
-  this->curr_cost +=
+  curr_cost +=
       enemy_table(vertex_id, new_color) - enemy_table(vertex_id, old_color);
+  hist_cost = std::min(curr_cost, hist_cost);
+  colors[vertex_id] = new_color;
+  assert(enemy_table.check(graph, colors, curr_cost));
 }
 
 std::tuple<int, int> TabuSearch::pick_move(int iter) const {

@@ -1,14 +1,15 @@
 #pragma once
+#include <cassert>
 #include "graph.h"
 
 class TabuTenure {
  public:
-  // TabuSearch() = default;
-  TabuTenure(const Graph& graph) { init(graph); }
+  static constexpr int color_count = 61;
+  TabuTenure() = default;
   void init(const Graph& graph) {
+    assert(graph.get_color_count() <= color_count);
     deadline_vec.clear();
-    deadline_vec.resize(graph.size() * graph.get_color_count(), 0);
-    this->color_count = 0;// WTF
+    deadline_vec.resize(graph.size() * color_count , 0);
   }
   void tabu(int vertex_id, int color, int deadline) {
     // deadline_vec()
@@ -28,5 +29,4 @@ class TabuTenure {
     return deadline_vec[vertex_id * color_count + color];
   }
   vector<int> deadline_vec;
-  int color_count;
 };

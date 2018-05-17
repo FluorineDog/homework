@@ -64,9 +64,9 @@ class Graph : public vector<Vertex> {
     }
     return g_tmp;
   }
-  void set_color_count(int count) { color_count = count; }
+  // void set_color_count(int count) { color_count = count; }
 
-  int get_color_count() const { return color_count; }
+  // int get_color_count() const { return color_count; }
 
  private:
   class Edges {
@@ -113,7 +113,7 @@ class Graph : public vector<Vertex> {
 
  private:
   vector<Edge> m_edges;
-  int color_count;
+  // int color_count;
 };
 
 // #include <set>

@@ -55,7 +55,6 @@ int main(int argc, char* argv[]) {
   }
 
   graph = graph.optimize();
-  graph.set_color_count(preset_color_count);
 
   std::default_random_engine e(67);
   for (auto& v : graph) {
