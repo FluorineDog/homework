@@ -151,7 +151,7 @@ inline vector<int> TabuSearch::GPX(  //
     const TabuSearch& ts2,           //
     std::default_random_engine& e    //
 ) {
-#define static
+// #define static
   std::reference_wrapper<const vector<int>>  //
       replica[] = {ts1.colors, ts2.colors};
   int vertex_count = replica[0].get().size();
@@ -252,4 +252,4 @@ inline vector<int> TabuSearch::GPX(  //
   }
   return result;
 }
-#undef static
+// #undef static

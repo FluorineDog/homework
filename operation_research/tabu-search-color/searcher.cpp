@@ -12,7 +12,7 @@
 #endif
 
 static std::default_random_engine e(67);
-int localSearch(TabuSearch& engine, int iterBase);
+std::pair<int, int> localSearch(TabuSearch& engine, int iterBase, int scale);
 int main(int argc, char* argv[]) {
   int preset_color_count;
   if (argc >= 3) {
@@ -72,31 +72,33 @@ int main(int argc, char* argv[]) {
     for (auto ctz_id : Range(POPULATION)) {
       auto& ctz = citizens[ctz_id];
       if(iter% STRIP_NOTIFY == 0)cout << ctz_id;
-      int cost = localSearch(ctz, iter);
-      if (cost < best[1]) {
-        best[1] = cost;
+      int scale = (worstID == ctz_id)? 3:1;
+      auto [cost, hist] = localSearch(ctz, iter, scale);
+      int best_finder = cost; // encourage blood
+      if (best_finder < best[1]) {
+        best[1] = best_finder;
         bestID[1] = ctz_id;
       }
       if (best[1] < best[0]) {
         std::swap(best[1], best[0]);
         std::swap(bestID[1], bestID[0]);
       }
-      if (cost >= worst) {
-        worst = cost;
+      int worst_finder = cost; 
+      if (worst_finder >= worst) {
+        worst = worst_finder;
         worstID = ctz_id;
       }
     }
     auto& ctz1 = citizens[bestID[0]];
     auto& ctz2 = citizens[bestID[1]];
     citizens[worstID].acceptConfig(std::move(TabuSearch::GPX(ctz1, ctz2, e)));
-    localSearch(citizens[worstID], iter); // 
   }
   return 0;
 }
 
-int localSearch(TabuSearch& engine, int iterBase) {
+std::pair<int, int> localSearch(TabuSearch& engine, int iterBase, int scale) {
   int best = INF;
-  for (int iterI = 0; iterI < STRIP; ++iterI) {
+  for (int iterI = 0; iterI < scale * STRIP; ++iterI) {
     auto iter = iterBase + iterI;
     auto [v, c] = engine.pick_move(iter);
     int old_color = engine.shift(v, c);
@@ -111,11 +113,12 @@ int localSearch(TabuSearch& engine, int iterBase) {
       exit(0);
     }
   }
+  int hist_best = engine.getHistoryCost();
   if (iterBase % STRIP_NOTIFY == 0) {
     cout                                     //
         << "<=>" << best                     //
-        << "<=>" << engine.getHistoryCost()  //
+        << "<=>" << hist_best  //
         << endl;
   }
-  return best;
+  return std::make_pair(best,  hist_best);
 }
