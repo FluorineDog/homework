@@ -25,7 +25,7 @@ class EnemyTable {
   static constexpr int MAX_VERTEX_COUNT = 509;
   EnemyTable() = default;
   EnemyTable(const EnemyTable&) = delete;
-  EnemyTable(EnemyTable&&) = delete;
+  EnemyTable(EnemyTable&&) = default;
   const int& operator()(int vertex_id, int color_id) const {
     return table(vertex_id, color_id);
   }

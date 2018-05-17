@@ -6,6 +6,8 @@ set(CMAKE_CXX_EXTENSIONS off)
 # no -pedantic since c++98 DOES NOT support long long 
 add_compile_options(-Werror -Wall -pedantic -Wno-unused)
 add_definitions(-DDOG_DEBUG)
+add_definitions(-DSTRIP=100000)
+add_definitions(-DPOPULATION=5)
 # add_definitions(-DDOG_USE_SYSTEM_IOSTREAM)
 add_definitions(-D_GLIBCXX_DEBUG)
 

@@ -17,6 +17,7 @@ class TabuSearch {
     }
     init();
   }
+
   TabuSearch(const Graph& graph, int color_count, vector<int>&& colors,
              uint_fast32_t seed)
       : graph(graph), color_count(color_count) {
@@ -36,6 +37,15 @@ class TabuSearch {
 
   int getHistoryCost() const { return hist_cost; }
 
+ public:
+  static vector<int> GPX(const TabuSearch& ts1, const TabuSearch& ts2,
+                         std::default_random_engine& e);
+  static TabuSearch newChild(const TabuSearch& ts1, const TabuSearch& ts2,
+                             std::default_random_engine& e) {
+    auto&& result = GPX(ts1, ts2, e);
+    return TabuSearch(ts1.graph, ts1.color_count, std::move(result), e());
+  }
+
  private:
   const Graph& graph;
   const int color_count;
@@ -44,15 +54,6 @@ class TabuSearch {
   TabuTenure tenure;
   int curr_cost;
   int hist_cost;
-
-  static vector<int> GPX(const TabuSearch& ts1, const TabuSearch& ts2,
-                         std::default_random_engine& e);
-
-  static TabuSearch newChild(const TabuSearch& ts1, const TabuSearch& ts2,
-                             std::default_random_engine& e) {
-    auto&& result = GPX(ts1, ts2, e);
-    return TabuSearch(ts1.graph, ts1.color_count, std::move(result), e());
-  }
 
  private:
   mutable std::default_random_engine e;
