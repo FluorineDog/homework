@@ -28,7 +28,9 @@ int main(int argc, char* argv[]) {
       cin >> tmp >> vertex_count >> edge_count;
       break;
     } else {
-      assert(false);
+      cout << "edge info not found" << endl;
+      exit(-1);
+      // assert(false);
     }
   }
 
