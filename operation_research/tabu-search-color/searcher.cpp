@@ -67,6 +67,7 @@ int main(int argc, char* argv[]) {
     int bestID[2] = {-1, -1}, worstID = -1;
     for (auto ctz_id : Range(POPULATION)) {
       auto& ctz = citizens[ctz_id];
+      cout << ctz_id;
       int cost = localSearch(ctz, iter);
       if (cost < best[1]) {
         best[1] = cost;
