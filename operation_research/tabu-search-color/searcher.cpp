@@ -1,6 +1,7 @@
 #include "TabuSearch.h"
 
 static std::default_random_engine e(67);
+int localSearch(TabuSearch& engine, int iterBase);
 int main(int argc, char* argv[]) {
   int preset_color_count;
   if (argc >= 3) {
@@ -51,34 +52,17 @@ int main(int argc, char* argv[]) {
 
   TabuSearch engine(graph, preset_color_count);
   int best = INF;
-  for (int iter = 0; iter < 100000000; ++iter) {
-    auto [v, c] = engine.pick_move(iter);
-    int old_color = engine.shift(v, c);
-    int cost = engine.getCurrentCost();
-    best = std::min(cost, best);
-    if (iter % 100000 == 0) {
-      cout                                     //
-          << "iter: " << iter                  //
-          << " " << cost                       //
-          << "<=>" << best                     //
-          << "<=>" << engine.getHistoryCost()  //
-          << endl;
-      best = INF;
-    }
-    engine.tabu(v, old_color, iter + e() % 10 + cost);
-    if (cost == 0) {
-      cout                             //
-          << "iter: " << iter << endl  //
-          << "success " << endl;
-      break;
-    }
+  for (int iter = 0; iter < 1000000000; iter+=100000) {
+    localSearch(engine, iter);
   }
   return 0;
 }
 
-int localSearch(TabuSearch& engine) {
+
+int localSearch(TabuSearch& engine, int iterBase) {
   int best = INF;
-  for (int iter = 0; iter < 100000; ++iter) {
+  for (int iterI = 0; iterI < 100000; ++iterI) {
+    auto iter = iterBase + iterI;
     auto [v, c] = engine.pick_move(iter);
     int old_color = engine.shift(v, c);
     int cost = engine.getCurrentCost();

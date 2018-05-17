@@ -8,9 +8,10 @@
 
 class TabuSearch {
  public:
-  TabuSearch(const Graph& graph, int color_count)
+  TabuSearch(const Graph& graph, int color_count, uint_fast32_t seed = 67)
       : graph(graph), color_count(color_count) {
-    e.seed(67);
+    e.seed(seed);
+    colors.resize(graph.size());
     for (auto& c : colors) {
       c = e() % color_count;
     }
