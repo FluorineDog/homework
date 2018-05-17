@@ -12,9 +12,16 @@ class TabuSearch {
     init();
   }
   void init();
-  void shift(int vertex_id, int color);
+  int shift(int vertex_id, int color);
+  void tabu(int vertex_id, int color, int ddl);
   std::tuple<int, int> pick_move(int iter) const;
+  int getCurrentCost() const{
+    return curr_cost;
+  }
 
+  int getHistoryCost() const{
+    return hist_cost;
+  }
  private:
   const Graph& graph;
   const int color_count;
@@ -27,10 +34,14 @@ class TabuSearch {
  private:
   mutable std::default_random_engine e;
 };
+void TabuSearch::tabu(int vertex_id, int color, int ddl){
+  tenure.tabu(vertex_id, color, ddl);
+}
 
 inline void TabuSearch::init() {
   // this->graph = graph;
   e.seed(67);
+  colors.resize(graph.size());
   for (auto& c : colors) {
     c = e() % color_count;
   }
@@ -38,7 +49,7 @@ inline void TabuSearch::init() {
   tenure.init(graph, color_count);
 }
 
-inline void TabuSearch::shift(int vertex_id, int new_color) {
+inline int TabuSearch::shift(int vertex_id, int new_color) {
   int old_color = colors[vertex_id];
   // update enemy_table
   for (auto victim_id : graph.edges(vertex_id)) {
@@ -50,7 +61,9 @@ inline void TabuSearch::shift(int vertex_id, int new_color) {
       enemy_table(vertex_id, new_color) - enemy_table(vertex_id, old_color);
   hist_cost = std::min(curr_cost, hist_cost);
   colors[vertex_id] = new_color;
-  assert(enemy_table.check(graph, colors, curr_cost));
+  // assert(enemy_table.check(graph, colors, curr_cost));
+  return old_color;
+  
 }
 
 std::tuple<int, int> TabuSearch::pick_move(int iter) const {

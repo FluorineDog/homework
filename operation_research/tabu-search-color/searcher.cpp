@@ -39,7 +39,27 @@ int main(int argc, char* argv[]) {
   }
   graph = graph.optimize();
   cout << "searching " << preset_color_count << endl;
+  std::default_random_engine e(67);
 
-
+  TabuSearch engine(graph, preset_color_count);
+  for (int iter = 0; iter < 100000000; ++iter) {
+    auto [v, c] = engine.pick_move(iter);
+    int old_color = engine.shift(v, c);
+    int cost = engine.getCurrentCost();
+    if (iter % 10000 == 0) {
+      cout                                     //
+          << "iter: " << iter                  //
+          << " " << cost                       //
+          << "<=>" << engine.getHistoryCost()  //
+          << endl;
+    }
+    engine.tabu(v, old_color, iter + e() % 10 + cost);
+    if (cost == 0) {
+      cout                             //
+          << "iter: " << iter << endl  //
+          << "success " << endl;
+      break;
+    }
+  }
   return 0;
 }
