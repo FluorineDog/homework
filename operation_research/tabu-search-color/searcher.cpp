@@ -2,11 +2,11 @@
 int main(int argc, char* argv[]) {
   int preset_color_count;
   if (argc >= 3) {
-    cin.redirect("data/DSJC500.5.col");
-    preset_color_count = 49;
-  } else {
     cin.redirect(argv[1]);
     preset_color_count = strtol(argv[2], nullptr, 10);
+  } else {
+    cin.redirect("data/DSJC500.5.col");
+    preset_color_count = 49;
   }
 
   std::default_random_engine e(67);
