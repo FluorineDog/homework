@@ -13,7 +13,7 @@ int main() {
   TabuSearch pp1(graph, 3, std::move(c1), 0);
   TabuSearch pp2(graph, 3, std::move(c2), 0);
   std::default_random_engine e;
-  auto child = TabuSearch::GPX(pp1, pp2, e);
+  auto child = TabuSearch::newChild(pp1, pp2, e);
   cout <<  "A  B  C  D  E  F  G  H  I  J" << endl;
   for(auto x : child.colors){
     cout << x << "  ";

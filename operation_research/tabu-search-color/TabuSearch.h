@@ -23,6 +23,10 @@ class TabuSearch {
     this->colors = std::move(colors);
     init();
   }
+  void acceptConfig(vector<int>&& colors) {
+    this->colors = std::move(colors);
+    init();
+  }
   void init();
   int shift(int vertex_id, int color);
   void tabu(int vertex_id, int color, int ddl);
@@ -40,8 +44,14 @@ class TabuSearch {
   int curr_cost;
   int hist_cost;
 
-  static TabuSearch GPX(const TabuSearch& ts1, const TabuSearch& ts2,
-                        std::default_random_engine& e);
+  static vector<int> GPX(const TabuSearch& ts1, const TabuSearch& ts2,
+                         std::default_random_engine& e);
+
+  static TabuSearch newChild(const TabuSearch& ts1, const TabuSearch& ts2,
+                             std::default_random_engine& e) {
+    auto&& result = GPX(ts1, ts2, e);
+    return TabuSearch(ts1.graph, ts1.color_count, std::move(result), e());
+  }
 
  private:
   mutable std::default_random_engine e;
@@ -134,10 +144,10 @@ std::tuple<int, int> TabuSearch::pick_move(int iter) const {
   }
 }
 
-inline TabuSearch TabuSearch::GPX(  //
-    const TabuSearch& ts1,          //
-    const TabuSearch& ts2,          //
-    std::default_random_engine& e   //
+inline vector<int> TabuSearch::GPX(  //
+    const TabuSearch& ts1,           //
+    const TabuSearch& ts2,           //
+    std::default_random_engine& e    //
 ) {
 #define static
   std::reference_wrapper<const vector<int>>  //
@@ -238,6 +248,6 @@ inline TabuSearch TabuSearch::GPX(  //
     }
     ++iter;
   }
-  return TabuSearch(ts1.graph, color_count, std::move(result), e());
+  return result;
 }
 #undef static
