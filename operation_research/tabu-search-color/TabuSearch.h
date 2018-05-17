@@ -9,6 +9,17 @@ class TabuSearch {
  public:
   TabuSearch(const Graph& graph, int color_count)
       : graph(graph), color_count(color_count) {
+    e.seed(67);
+    for (auto& c : colors) {
+      c = e() % color_count;
+    }
+    init();
+  }
+  TabuSearch(const Graph& graph, int color_count, vector<int>&& colors,
+             uint_fast32_t seed)
+      : graph(graph), color_count(color_count) {
+    e.seed(seed);
+    this->colors = std::move(colors);
     init();
   }
   void init();
@@ -28,20 +39,18 @@ class TabuSearch {
   int curr_cost;
   int hist_cost;
 
+  static TabuSearch GPX(const TabuSearch& ts1, const TabuSearch& ts2);
+
  private:
-  mutable std::default_random_engine e;
+  static std::default_random_engine e;
 };
+
 void TabuSearch::tabu(int vertex_id, int color, int ddl) {
   tenure.tabu(vertex_id, color, ddl);
 }
 
 inline void TabuSearch::init() {
   // this->graph = graph;
-  e.seed(67);
-  colors.resize(graph.size());
-  for (auto& c : colors) {
-    c = e() % color_count;
-  }
   hist_cost = curr_cost = enemy_table.initBy(graph, colors);
   tenure.init(graph, color_count);
 }
@@ -120,5 +129,31 @@ std::tuple<int, int> TabuSearch::pick_move(int iter) const {
     return tabuBest;
   } else {
     return legalBest;
+  }
+}
+
+inline TabuSearch TabuSearch::GPX(const TabuSearch& ts1, const TabuSearch& ts2,
+                                  std::default_random_engine& e) {
+  vector<int> replica[2] = {ts1.colors, ts2.colors};
+  int vertex_count = replica[0].size();
+  int color_count = ts1.color_count;
+  vector<pair<int, set<int>>> sheet[2];
+  sheet[0].resize(color_count, make_pair(0, set<int>()));
+  sheet[1].resize(color_count, make_pair(0, set<int>()));
+  for (auto set_id : Range(2)) {
+    for (auto v_id : Range(vertex_count)) {
+      int color = replica[set_id][v_id];
+      auto& [vertex_count, vertex_set] = sheet[set_id][color];
+      vertex_count++;
+      vertex_set.insert(v_id);
+    }
+  }
+
+  for (auto iter : Range(color_count)) {
+    int main_id = iter % 2;
+    int sub_id = 1 - main_id;
+    for (auto v_id : Range(vertex_count, e())) {
+      
+    }
   }
 }
