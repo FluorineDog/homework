@@ -3,6 +3,10 @@
 #define STRIP 100000
 #endif
 
+#ifndef STRIP_NOTIFY
+#define STRIP_NOTIFY 100000
+#endif
+
 #ifndef POPULATION
 #define POPULATION 5
 #endif
@@ -67,7 +71,7 @@ int main(int argc, char* argv[]) {
     int bestID[2] = {-1, -1}, worstID = -1;
     for (auto ctz_id : Range(POPULATION)) {
       auto& ctz = citizens[ctz_id];
-      cout << ctz_id;
+      if(iter% STRIP_NOTIFY == 0)cout << ctz_id;
       int cost = localSearch(ctz, iter);
       if (cost < best[1]) {
         best[1] = cost;
@@ -85,6 +89,7 @@ int main(int argc, char* argv[]) {
     auto& ctz1 = citizens[bestID[0]];
     auto& ctz2 = citizens[bestID[1]];
     citizens[worstID].acceptConfig(std::move(TabuSearch::GPX(ctz1, ctz2, e)));
+    localSearch(citizens[worstID], iter); // 
   }
   return 0;
 }
@@ -106,9 +111,11 @@ int localSearch(TabuSearch& engine, int iterBase) {
       exit(0);
     }
   }
-  cout                                     //
-      << "<=>" << best                     //
-      << "<=>" << engine.getHistoryCost()  //
-      << endl;
+  if (iterBase % STRIP_NOTIFY == 0) {
+    cout                                     //
+        << "<=>" << best                     //
+        << "<=>" << engine.getHistoryCost()  //
+        << endl;
+  }
   return best;
 }
