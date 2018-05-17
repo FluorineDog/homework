@@ -8,7 +8,7 @@
 class TabuSearch {
  public:
   TabuSearch(const Graph& graph, int color_count)
-      : graph(graph), color_count(color_count) {
+      : graph(graph), color_count(color_count){
     init();
   }
   void init();
@@ -25,11 +25,12 @@ class TabuSearch {
   int hist_cost;
 
  private:
-  static std::default_random_engine e;
+  mutable std::default_random_engine e;
 };
 
 inline void TabuSearch::init() {
   // this->graph = graph;
+  e.seed(67);
   for (auto& c : colors) {
     c = e() % color_count;
   }
