@@ -1,5 +1,6 @@
 #include "TabuSearch.h"
 int main(int argc, char* argv[]) {
+  int preset_color_count;
   if (argc != 3) {
     cin.redirect("data/DSJC500.5.col");
     preset_color_count = 49;
@@ -36,8 +37,9 @@ int main(int argc, char* argv[]) {
     graph.add_edge(from, to);
     graph.add_edge(to, from);
   }
-
   graph = graph.optimize();
+  cout << "searching " << preset_color_count << endl;
+
 
   return 0;
 }

@@ -51,8 +51,8 @@ class CostEngine {
                                            std::default_random_engine& e,
                                            int heat = 0) const {
     //    v_id, color, cost
-    Movement legal_best(-inf, 0, 0);
-    Movement overall_best(-inf, 0, 0);
+    Movement legal_best(-INF, 0, 0);
+    Movement overall_best(-INF, 0, 0);
     int valid_count = 0;
     int overall_count = 0;
     for (int v_id : graph.vertex_ids()) {

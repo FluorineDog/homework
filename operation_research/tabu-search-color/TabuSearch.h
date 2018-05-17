@@ -34,7 +34,7 @@ inline void TabuSearch::init() {
     c = e() % color_count;
   }
   hist_cost = curr_cost = enemy_table.initBy(graph, colors);
-  tenure.init(graph);
+  tenure.init(graph, color_count);
 }
 
 inline void TabuSearch::shift(int vertex_id, int new_color) {
@@ -54,9 +54,9 @@ inline void TabuSearch::shift(int vertex_id, int new_color) {
 
 std::tuple<int, int> TabuSearch::pick_move(int iter) const {
   tuple<int, int> tabuBest;
-  int tabuDiff = inf;
+  int tabuDiff = INF;
   tuple<int, int> legalBest;
-  int legalDiff = inf;
+  int legalDiff = INF;
   int rd = e();
   for (auto v_id : graph.vertex_ids(rd)) {
     int old_color = colors[v_id];

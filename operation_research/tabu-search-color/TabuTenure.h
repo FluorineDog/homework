@@ -4,12 +4,12 @@
 
 class TabuTenure {
  public:
-  static constexpr int color_count = 61;
+  static constexpr int MAX_COLOR_COUNT = 61;
   TabuTenure() = default;
-  void init(const Graph& graph) {
-    assert(graph.get_color_count() <= color_count);
+  void init(const Graph& graph, int color_count) {
+    assert(color_count<= MAX_COLOR_COUNT);
     deadline_vec.clear();
-    deadline_vec.resize(graph.size() * color_count , 0);
+    deadline_vec.resize(graph.size() * MAX_COLOR_COUNT , 0);
   }
   void tabu(int vertex_id, int color, int deadline) {
     // deadline_vec()
@@ -22,11 +22,11 @@ class TabuTenure {
 
  private:
   int& table(int vertex_id, int color) {
-    return deadline_vec[vertex_id * color_count + color];
+    return deadline_vec[vertex_id * MAX_COLOR_COUNT + color];
   }
 
   const int& table(int vertex_id, int color) const {
-    return deadline_vec[vertex_id * color_count + color];
+    return deadline_vec[vertex_id * MAX_COLOR_COUNT + color];
   }
   vector<int> deadline_vec;
 };

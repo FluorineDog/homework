@@ -12,7 +12,7 @@ using std::set;
 using std::tuple;
 using std::vector;
 #include "heap_del.h"
-constexpr int inf = std::numeric_limits<int> / 4;
+constexpr int INF = std::numeric_limits<int> / 4;
 
 template <typename T, T value>
 struct DefaultValue {
@@ -124,7 +124,7 @@ class CostEngine {
  private:
   // find the minimal cost, store to best_cost shift
   void update_best_shift(int vertex) {
-    int min = inf;
+    int min = INF;
     for (int color = 0; color < color_count; ++color) {
       // we shall trust compiler
       min = std::min(get_delta(vertex, color), min);

@@ -1,10 +1,10 @@
 #include <algorithm>
 // left_most destroyed, right_most destroyed
 #include <limits>
-int inf = std::numeric_limits<int>::max() / 4;
+int INF = std::numeric_limits<int>::max() / 4;
 #define T pair<int, int>
-#define INIT make_pair(inf, -inf)
-#define NIL make_pair(inf, -inf)
+#define INIT make_pair(INF, -INF)
+#define NIL make_pair(INF, -INF)
 #define FUNC(a, b)                                                             \
   make_pair(std::min(a.first, b.first), std::max(a.second, b.second)) 
 

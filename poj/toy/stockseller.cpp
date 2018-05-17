@@ -12,7 +12,7 @@ using std::priority_queue;
 using std::vector;
 // NIL should be identity of moniod
 // sum, max_depth
-constexpr auto inf = std::numeric_limits<int>::max() / 4;
+constexpr auto INF = std::numeric_limits<int>::max() / 4;
 using Data = std::pair<int, int>;
 Data dog_sum(Data data1, Data data2) {
 	auto[sum1, depth1] = data1;

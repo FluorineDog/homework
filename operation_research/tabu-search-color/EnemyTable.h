@@ -18,7 +18,7 @@ constexpr int get2shift(int N) {
   return 32 - zeros;
 }
 
-constexpr int inf = std::numeric_limits<int>::max() / 4;
+constexpr int INF = std::numeric_limits<int>::max() / 4;
 
 class EnemyTable {
  public:
