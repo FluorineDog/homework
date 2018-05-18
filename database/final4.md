@@ -1,5 +1,7 @@
 #Chapter 4
+
 ## 4.6
+
 ```sql
 -- 4.6.1
 grant all priviledges on table Student to U1;
@@ -14,6 +16,7 @@ grant update, select on table Student to R1;
 -- 4.6.5
 grant R1 to U1 with grant option;
 ```
+
 ## 4.7
 
 ```sql

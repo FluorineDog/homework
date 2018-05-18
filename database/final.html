@@ -1,0 +1,230 @@
+<table style="width:8%;">
+<colgroup>
+<col style="width: 8%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td>documentclass: -ctexart -fontenc</td>
+</tr>
+</tbody>
+</table>
+<h1 id="chapter-2">Chapter 2</h1>
+<h2 id="section">2.6</h2>
+<figure>
+<img src="pic/2.6-result.png" alt="2.6 result" /><figcaption>2.6 result</figcaption>
+</figure>
+<h2 id="section-1">2.7</h2>
+<p>自然连接是以共享的分量为等值条件的等值连接, 同时额外使用投影去除重复分量</p>
+<h2 id="section-2">2.8</h2>
+<p>基本的操作有<span class="math inline"><em>σ</em>, ×,<em>Π</em>, −</span> 其余操作有(注意, 为了方便书写, 我们可以使用已经实现的算子实现其后的操作)</p>
+<p><br /><span class="math display"><em>A</em> ∩ <em>B</em> = <em>A</em> − (<em>A</em> − <em>B</em>)</span><br /> <br /><span class="math display">¬<em>A</em> = <em>U</em> − <em>A</em></span><br /> <br /><span class="math display"><em>A</em> ∪ <em>B</em> = <em>U</em> − (¬<em>A</em>) ∩ (¬<em>B</em>)</span><br /> <br /><span class="math display"><em>A</em>⋈<sub><em>c</em><em>o</em><em>n</em><em>d</em></sub><em>B</em> = <em>σ</em><sub><em>c</em><em>o</em><em>n</em><em>d</em></sub>(<em>A</em> × <em>B</em>)</span><br /> <br /><span class="math display"><em>A</em> ⋈ <em>B</em> = <em>Π</em><sub><em>a</em><em>t</em><em>t</em><em>r</em>(<em>A</em>) ∪ <em>a</em><em>t</em><em>t</em><em>r</em>(<em>B</em>)</sub>(<em>σ</em><sub><em>A</em>[<em>a</em><em>t</em><em>t</em><em>r</em>(<em>A</em>) ∩ <em>a</em><em>t</em><em>t</em><em>r</em>(<em>B</em>)] = <em>B</em>[<em>a</em><em>t</em><em>t</em><em>r</em>(<em>A</em>) ∩ <em>a</em><em>t</em><em>t</em><em>r</em>(<em>B</em>)]</sub>(<em>A</em> × <em>B</em>))</span><br /></p>
+<h1 id="chapter-3">Chapter 3</h1>
+<h2 id="section-3">3.3</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sql"><code class="sourceCode sql"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">drop</span> <span class="kw">table</span> <span class="kw">if</span> <span class="kw">exists</span> S;</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">drop</span> <span class="kw">table</span> <span class="kw">if</span> <span class="kw">exists</span> T;</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw">create</span> <span class="kw">table</span> S(</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">  A <span class="dt">int</span>, </a>
+<a class="sourceLine" id="cb1-6" data-line-number="6">  B <span class="dt">int</span>, </a>
+<a class="sourceLine" id="cb1-7" data-line-number="7">  C <span class="dt">int</span>, </a>
+<a class="sourceLine" id="cb1-8" data-line-number="8">  D <span class="dt">int</span></a>
+<a class="sourceLine" id="cb1-9" data-line-number="9">);</a>
+<a class="sourceLine" id="cb1-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb1-11" data-line-number="11"><span class="kw">create</span> <span class="kw">table</span> T(</a>
+<a class="sourceLine" id="cb1-12" data-line-number="12">  C <span class="dt">int</span>,</a>
+<a class="sourceLine" id="cb1-13" data-line-number="13">  D <span class="dt">int</span>,</a>
+<a class="sourceLine" id="cb1-14" data-line-number="14">  E <span class="dt">int</span>,</a>
+<a class="sourceLine" id="cb1-15" data-line-number="15">  F <span class="dt">int</span></a>
+<a class="sourceLine" id="cb1-16" data-line-number="16">);</a>
+<a class="sourceLine" id="cb1-17" data-line-number="17"></a>
+<a class="sourceLine" id="cb1-18" data-line-number="18"><span class="kw">insert</span> <span class="kw">into</span> S <span class="kw">values</span></a>
+<a class="sourceLine" id="cb1-19" data-line-number="19">(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>),</a>
+<a class="sourceLine" id="cb1-20" data-line-number="20">(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>),</a>
+<a class="sourceLine" id="cb1-21" data-line-number="21">(<span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">4</span>),</a>
+<a class="sourceLine" id="cb1-22" data-line-number="22">(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">4</span>);</a>
+<a class="sourceLine" id="cb1-23" data-line-number="23"></a>
+<a class="sourceLine" id="cb1-24" data-line-number="24"><span class="kw">insert</span> <span class="kw">into</span> T <span class="kw">values</span></a>
+<a class="sourceLine" id="cb1-25" data-line-number="25">(<span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">3</span>, <span class="dv">4</span>),</a>
+<a class="sourceLine" id="cb1-26" data-line-number="26">(<span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">3</span>, <span class="dv">4</span>),</a>
+<a class="sourceLine" id="cb1-27" data-line-number="27">(<span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">4</span>),</a>
+<a class="sourceLine" id="cb1-28" data-line-number="28">(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">4</span>);</a>
+<a class="sourceLine" id="cb1-29" data-line-number="29"></a>
+<a class="sourceLine" id="cb1-30" data-line-number="30"><span class="co">-- 1</span></a>
+<a class="sourceLine" id="cb1-31" data-line-number="31"><span class="kw">select</span> * <span class="kw">from</span> S <span class="kw">where</span> A=<span class="dv">10</span>;</a>
+<a class="sourceLine" id="cb1-32" data-line-number="32"></a>
+<a class="sourceLine" id="cb1-33" data-line-number="33"><span class="co">-- 2</span></a>
+<a class="sourceLine" id="cb1-34" data-line-number="34"><span class="kw">select</span> A,B <span class="kw">from</span> S;</a>
+<a class="sourceLine" id="cb1-35" data-line-number="35"></a>
+<a class="sourceLine" id="cb1-36" data-line-number="36"><span class="co">-- 3</span></a>
+<a class="sourceLine" id="cb1-37" data-line-number="37"><span class="kw">select</span> * <span class="kw">from</span> S <span class="kw">inner</span> <span class="kw">join</span> T <span class="kw">on</span> (S.C=T.C <span class="kw">and</span> S.D=T.D);</a>
+<a class="sourceLine" id="cb1-38" data-line-number="38"></a>
+<a class="sourceLine" id="cb1-39" data-line-number="39"><span class="co">-- 4</span></a>
+<a class="sourceLine" id="cb1-40" data-line-number="40"><span class="kw">select</span> A, B, S.C <span class="kw">as</span> C1, S.D <span class="kw">as</span> D1, T.C <span class="kw">as</span> C2, T.D <span class="kw">as</span> D2, E, F </a>
+<a class="sourceLine" id="cb1-41" data-line-number="41">  <span class="kw">from</span> S <span class="kw">inner</span> <span class="kw">join</span> T <span class="kw">on</span> (S.C=T.C);</a>
+<a class="sourceLine" id="cb1-42" data-line-number="42"></a>
+<a class="sourceLine" id="cb1-43" data-line-number="43"><span class="co">-- 5</span></a>
+<a class="sourceLine" id="cb1-44" data-line-number="44"><span class="kw">select</span> A, B, S.C <span class="kw">as</span> C1, S.D <span class="kw">as</span> D1, T.C <span class="kw">as</span> C2, T.D <span class="kw">as</span> D2, E, F </a>
+<a class="sourceLine" id="cb1-45" data-line-number="45">  <span class="kw">from</span> S, T <span class="kw">where</span> (A&lt;E);</a>
+<a class="sourceLine" id="cb1-46" data-line-number="46"></a>
+<a class="sourceLine" id="cb1-47" data-line-number="47"><span class="co">-- 6</span></a>
+<a class="sourceLine" id="cb1-48" data-line-number="48"><span class="kw">select</span> TMP.C <span class="kw">as</span> C1, TMP.D <span class="kw">as</span> D1, T.C <span class="kw">as</span> C2, T.D <span class="kw">as</span> D2, E, F </a>
+<a class="sourceLine" id="cb1-49" data-line-number="49">  <span class="kw">from</span> (<span class="kw">select</span> <span class="kw">distinct</span> C, D <span class="kw">from</span> S) <span class="kw">as</span> TMP, T;</a></code></pre></div>
+<h2 id="section-4">3.4</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sql"><code class="sourceCode sql"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co">/* 1 */</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">select</span> sno</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw">from</span> SPJ</a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="kw">where</span> jno=`J1`;</a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="co">/* 2 */</span></a>
+<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="kw">select</span> sno</a>
+<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="kw">from</span> SPJ</a>
+<a class="sourceLine" id="cb2-8" data-line-number="8"><span class="kw">where</span> jno=`J1` <span class="kw">and</span> pno=`P1`;</a>
+<a class="sourceLine" id="cb2-9" data-line-number="9"><span class="co">/* 3 */</span></a>
+<a class="sourceLine" id="cb2-10" data-line-number="10"><span class="kw">select</span> sno</a>
+<a class="sourceLine" id="cb2-11" data-line-number="11"><span class="kw">from</span> SPJ</a>
+<a class="sourceLine" id="cb2-12" data-line-number="12"><span class="kw">where</span> </a>
+<a class="sourceLine" id="cb2-13" data-line-number="13">  jno = `J1` <span class="kw">and</span> pno <span class="kw">in</span> (<span class="kw">select</span> pno</a>
+<a class="sourceLine" id="cb2-14" data-line-number="14">  <span class="kw">from</span> P</a>
+<a class="sourceLine" id="cb2-15" data-line-number="15">  <span class="kw">where</span> color=`红`);</a>
+<a class="sourceLine" id="cb2-16" data-line-number="16"><span class="co">/* 4 */</span></a>
+<a class="sourceLine" id="cb2-17" data-line-number="17"><span class="co">-- tianjiSupplier &lt;- select sno from S where city=`天津`;</span></a>
+<a class="sourceLine" id="cb2-18" data-line-number="18"><span class="co">-- redPart &lt;- select pno from P where color=`红`;</span></a>
+<a class="sourceLine" id="cb2-19" data-line-number="19"><span class="kw">select</span> jno</a>
+<a class="sourceLine" id="cb2-20" data-line-number="20"><span class="kw">from</span> J</a>
+<a class="sourceLine" id="cb2-21" data-line-number="21"><span class="kw">where</span> <span class="kw">not</span> <span class="kw">exists</span>(</a>
+<a class="sourceLine" id="cb2-22" data-line-number="22">  <span class="kw">select</span> *</a>
+<a class="sourceLine" id="cb2-23" data-line-number="23"><span class="kw">from</span> SPJ</a>
+<a class="sourceLine" id="cb2-24" data-line-number="24"><span class="kw">where</span> </a>
+<a class="sourceLine" id="cb2-25" data-line-number="25">    sno <span class="kw">in</span> (<span class="kw">select</span> sno</a>
+<a class="sourceLine" id="cb2-26" data-line-number="26">  <span class="kw">from</span> S</a>
+<a class="sourceLine" id="cb2-27" data-line-number="27">  <span class="kw">where</span> city=`天津`) <span class="kw">and</span> pno <span class="kw">in</span> (<span class="kw">select</span> pno</a>
+<a class="sourceLine" id="cb2-28" data-line-number="28">  <span class="kw">from</span> P</a>
+<a class="sourceLine" id="cb2-29" data-line-number="29">  <span class="kw">where</span> color=`红`) <span class="kw">and</span> J.jno = SPJ.jno</a>
+<a class="sourceLine" id="cb2-30" data-line-number="30">);</a>
+<a class="sourceLine" id="cb2-31" data-line-number="31"><span class="co">/* 5 */</span></a>
+<a class="sourceLine" id="cb2-32" data-line-number="32"><span class="kw">select</span> <span class="kw">distinct</span> SPJ.jno</a>
+<a class="sourceLine" id="cb2-33" data-line-number="33"><span class="kw">from</span> SPJ <span class="kw">inner</span> <span class="kw">join</span> (</a>
+<a class="sourceLine" id="cb2-34" data-line-number="34">    <span class="kw">select</span> <span class="kw">distinct</span> TMP.pno</a>
+<a class="sourceLine" id="cb2-35" data-line-number="35">  <span class="kw">from</span> SPJ <span class="kw">as</span> TMP</a>
+<a class="sourceLine" id="cb2-36" data-line-number="36">  <span class="kw">where</span> TMP.sno=`S1`</a>
+<a class="sourceLine" id="cb2-37" data-line-number="37">  ) <span class="kw">as</span> <span class="fu">REF</span> <span class="kw">on</span> (SPJ.pno = REF.pno)</a>
+<a class="sourceLine" id="cb2-38" data-line-number="38"><span class="kw">group</span> <span class="kw">by</span> SPJ.jno</a>
+<a class="sourceLine" id="cb2-39" data-line-number="39"><span class="kw">having</span> <span class="fu">count</span>(SPJ.pno) <span class="kw">in</span> (</a>
+<a class="sourceLine" id="cb2-40" data-line-number="40">    <span class="kw">select</span> <span class="fu">count</span>(<span class="kw">distinct</span> TMP.pno)</a>
+<a class="sourceLine" id="cb2-41" data-line-number="41"><span class="kw">from</span> SPJ <span class="kw">as</span> TMP</a>
+<a class="sourceLine" id="cb2-42" data-line-number="42"><span class="kw">where</span> TMP.sno=`S1`</a>
+<a class="sourceLine" id="cb2-43" data-line-number="43">  )</a>
+<a class="sourceLine" id="cb2-44" data-line-number="44"><span class="co">-- go</span></a>
+<a class="sourceLine" id="cb2-45" data-line-number="45"><span class="co">-- select * from SPJ inner join S1Part on (S1Part.pno=SPJ.pno);</span></a></code></pre></div>
+<h2 id="section-5">3.5</h2>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sql"><code class="sourceCode sql"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co">-- 1</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw">select</span> sname, city <span class="kw">from</span> S;</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co">-- 2</span></a>
+<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="kw">select</span> pname, color, weight <span class="kw">from</span> P;</a>
+<a class="sourceLine" id="cb3-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="co">-- 3</span></a>
+<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="kw">select</span> <span class="kw">distinct</span> jno <span class="kw">from</span> SPJ <span class="kw">where</span> sno=`S1`;</a>
+<a class="sourceLine" id="cb3-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">-- 4</span></a>
+<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="kw">select</span> pname, <span class="fu">sum</span>(qty) <span class="kw">as</span> sum_qty <span class="kw">from</span> P, SPJ <span class="kw">where</span> </a>
+<a class="sourceLine" id="cb3-12" data-line-number="12">  P.pno = SPJ.pno <span class="kw">and</span> </a>
+<a class="sourceLine" id="cb3-13" data-line-number="13">  jno = `J2`</a>
+<a class="sourceLine" id="cb3-14" data-line-number="14">  <span class="kw">group</span> <span class="kw">by</span> pname;</a>
+<a class="sourceLine" id="cb3-15" data-line-number="15">  </a>
+<a class="sourceLine" id="cb3-16" data-line-number="16"><span class="co">-- 5</span></a>
+<a class="sourceLine" id="cb3-17" data-line-number="17"><span class="kw">select</span> <span class="kw">distinct</span> pno <span class="kw">from</span> S, SPJ <span class="kw">where</span> </a>
+<a class="sourceLine" id="cb3-18" data-line-number="18">  city=`上海` <span class="kw">and</span> </a>
+<a class="sourceLine" id="cb3-19" data-line-number="19">  S.sno = SPJ.sno;</a>
+<a class="sourceLine" id="cb3-20" data-line-number="20">  </a>
+<a class="sourceLine" id="cb3-21" data-line-number="21"><span class="co">-- 6 </span></a>
+<a class="sourceLine" id="cb3-22" data-line-number="22"><span class="kw">select</span> <span class="kw">distinct</span> jname <span class="kw">from</span> S, SPJ, J <span class="kw">where</span></a>
+<a class="sourceLine" id="cb3-23" data-line-number="23">  S.sno = SPJ.sno <span class="kw">and</span></a>
+<a class="sourceLine" id="cb3-24" data-line-number="24">  J.jno = SPJ.jno <span class="kw">and</span></a>
+<a class="sourceLine" id="cb3-25" data-line-number="25">  S.city = `上海`;</a>
+<a class="sourceLine" id="cb3-26" data-line-number="26"></a>
+<a class="sourceLine" id="cb3-27" data-line-number="27"><span class="co">-- 7</span></a>
+<a class="sourceLine" id="cb3-28" data-line-number="28"><span class="kw">select</span> J.jno <span class="kw">from</span> J <span class="kw">where</span> <span class="kw">not</span> <span class="kw">exists</span>(</a>
+<a class="sourceLine" id="cb3-29" data-line-number="29">  <span class="kw">select</span> * <span class="kw">from</span> SPJ, S <span class="kw">where</span> </a>
+<a class="sourceLine" id="cb3-30" data-line-number="30">    J.jno = SPJ.jno <span class="kw">and</span></a>
+<a class="sourceLine" id="cb3-31" data-line-number="31">    SPJ.sno = S.sno <span class="kw">and</span> </a>
+<a class="sourceLine" id="cb3-32" data-line-number="32">    S.city = `天津`</a>
+<a class="sourceLine" id="cb3-33" data-line-number="33">);</a>
+<a class="sourceLine" id="cb3-34" data-line-number="34"></a>
+<a class="sourceLine" id="cb3-35" data-line-number="35"><span class="co">-- 8</span></a>
+<a class="sourceLine" id="cb3-36" data-line-number="36"><span class="kw">update</span> P <span class="kw">set</span> color=`蓝` <span class="kw">where</span> color=`红`;</a>
+<a class="sourceLine" id="cb3-37" data-line-number="37"></a>
+<a class="sourceLine" id="cb3-38" data-line-number="38"><span class="co">-- 9</span></a>
+<a class="sourceLine" id="cb3-39" data-line-number="39"><span class="kw">update</span> SPJ <span class="kw">set</span> sno=`S3` <span class="kw">where</span> sno=`S5` <span class="kw">and</span> jno=`J4` <span class="kw">and</span> pno=`P6`;</a>
+<a class="sourceLine" id="cb3-40" data-line-number="40"></a>
+<a class="sourceLine" id="cb3-41" data-line-number="41"><span class="co">-- 10 /* on delete cascade */</span></a>
+<a class="sourceLine" id="cb3-42" data-line-number="42"><span class="kw">delete</span> <span class="kw">from</span> S <span class="kw">where</span> sno=`S2`;</a>
+<a class="sourceLine" id="cb3-43" data-line-number="43"></a>
+<a class="sourceLine" id="cb3-44" data-line-number="44"><span class="co">-- 11 </span></a>
+<a class="sourceLine" id="cb3-45" data-line-number="45"><span class="kw">insert</span> <span class="kw">into</span> SPJ <span class="fu">value</span>(`S2`, `P4`, `J6`, <span class="dv">200</span>);</a></code></pre></div>
+<p>#Chapter 4</p>
+<h2 id="section-6">4.6</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sql"><code class="sourceCode sql"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co">-- 4.6.1</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw">grant</span> <span class="kw">all</span> priviledges <span class="kw">on</span> <span class="kw">table</span> Student <span class="kw">to</span> U1;</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="kw">with</span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="kw">grant</span> <span class="kw">option</span>;</a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="co">-- 4.6.2 </span></a>
+<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="kw">grant</span> <span class="kw">select</span>, <span class="kw">update</span>(addr) <span class="kw">on</span> <span class="kw">table</span> Student <span class="kw">to</span> U2;</a>
+<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co">-- 4.6.3 </span></a>
+<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="kw">grant</span> <span class="kw">select</span> <span class="kw">on</span> <span class="kw">table</span> <span class="kw">Class</span> <span class="kw">to</span> <span class="kw">public</span>;</a>
+<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="co">-- 4.6.4</span></a>
+<a class="sourceLine" id="cb4-10" data-line-number="10"><span class="kw">grant</span> <span class="kw">update</span>, <span class="kw">select</span> <span class="kw">on</span> <span class="kw">table</span> Student <span class="kw">to</span> R1;</a>
+<a class="sourceLine" id="cb4-11" data-line-number="11"><span class="co">-- 4.6.5</span></a>
+<a class="sourceLine" id="cb4-12" data-line-number="12"><span class="kw">grant</span> R1 <span class="kw">to</span> U1 <span class="kw">with</span> <span class="kw">grant</span> <span class="kw">option</span>;</a></code></pre></div>
+<h2 id="section-7">4.7</h2>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sql"><code class="sourceCode sql"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co">-- 4.7.1</span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw">grant</span> <span class="kw">select</span> <span class="kw">on</span> <span class="kw">table</span> Staff, Department <span class="kw">to</span> WangMing;</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co">-- 4.7.2</span></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="kw">grant</span> <span class="kw">insert</span>, <span class="kw">delete</span> <span class="kw">on</span> <span class="kw">table</span> Staff, Department <span class="kw">to</span> LiYong;</a>
+<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">-- 4.7.3</span></a>
+<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">---- BUGGY</span></a>
+<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="kw">grant</span> <span class="kw">select</span> <span class="kw">on</span> Staff <span class="kw">when</span> <span class="fu">User</span>()=name <span class="kw">to</span> <span class="kw">public</span>;</a>
+<a class="sourceLine" id="cb5-8" data-line-number="8">go</a>
+<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">---- Worked</span></a>
+<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="kw">create</span> <span class="kw">view</span> hole</a>
+<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="kw">as</span></a>
+<a class="sourceLine" id="cb5-12" data-line-number="12">  <span class="kw">select</span> *</a>
+<a class="sourceLine" id="cb5-13" data-line-number="13">  <span class="kw">from</span> Staff</a>
+<a class="sourceLine" id="cb5-14" data-line-number="14">  <span class="kw">where</span> OWNER=user;</a>
+<a class="sourceLine" id="cb5-15" data-line-number="15">go</a>
+<a class="sourceLine" id="cb5-16" data-line-number="16"><span class="kw">grant</span> <span class="kw">select</span> <span class="kw">on</span> hole <span class="kw">to</span> <span class="kw">public</span>;</a>
+<a class="sourceLine" id="cb5-17" data-line-number="17"><span class="co">-- 4.7.4</span></a>
+<a class="sourceLine" id="cb5-18" data-line-number="18"><span class="kw">grant</span> <span class="kw">select</span>, <span class="kw">update</span>(Salary) <span class="kw">on</span> <span class="kw">table</span> Staff <span class="kw">to</span> LiuXing;</a>
+<a class="sourceLine" id="cb5-19" data-line-number="19"><span class="co">-- 4.7.5</span></a>
+<a class="sourceLine" id="cb5-20" data-line-number="20"><span class="kw">grant</span> <span class="kw">references</span> <span class="kw">on</span> <span class="kw">table</span> Staff, Department <span class="kw">to</span> ZhangXin;</a>
+<a class="sourceLine" id="cb5-21" data-line-number="21"><span class="co">-- 4.7.6</span></a>
+<a class="sourceLine" id="cb5-22" data-line-number="22"><span class="kw">grant</span> <span class="kw">all</span> priviledges <span class="kw">on</span> <span class="kw">table</span> Staff, Department <span class="kw">to</span> ZhouPing <span class="kw">with</span> <span class="kw">grant</span> <span class="kw">option</span>;</a>
+<a class="sourceLine" id="cb5-23" data-line-number="23">go</a>
+<a class="sourceLine" id="cb5-24" data-line-number="24"><span class="co">-- 4.7.7</span></a>
+<a class="sourceLine" id="cb5-25" data-line-number="25"><span class="kw">create</span> <span class="kw">view</span> stat <span class="kw">as</span></a>
+<a class="sourceLine" id="cb5-26" data-line-number="26">  <span class="kw">select</span> depart_id, <span class="fu">max</span>(Salary), <span class="fu">min</span>(Salary), average(Salary) </a>
+<a class="sourceLine" id="cb5-27" data-line-number="27">  <span class="kw">from</span> Staff </a>
+<a class="sourceLine" id="cb5-28" data-line-number="28">  <span class="kw">group</span> <span class="kw">by</span> depart_id;</a>
+<a class="sourceLine" id="cb5-29" data-line-number="29">go</a>
+<a class="sourceLine" id="cb5-30" data-line-number="30"><span class="kw">grant</span> <span class="kw">select</span> <span class="kw">on</span> stat <span class="kw">to</span> YangLan;</a>
+<a class="sourceLine" id="cb5-31" data-line-number="31">go</a></code></pre></div>
+<h1 id="chapter-5">Chapter 5</h1>
+<h2 id="section-8">5.6</h2>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sql"><code class="sourceCode sql"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co">-- </span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="kw">create</span> <span class="kw">table</span> Department(</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">  dpid <span class="dt">char</span>(<span class="dv">20</span>) <span class="kw">primary</span> <span class="kw">key</span>,</a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">  dname <span class="dt">char</span>(<span class="dv">20</span>),</a>
+<a class="sourceLine" id="cb6-5" data-line-number="5">  manager <span class="dt">char</span>(<span class="dv">20</span>),</a>
+<a class="sourceLine" id="cb6-6" data-line-number="6">  phone <span class="dt">char</span>(<span class="dv">20</span>)</a>
+<a class="sourceLine" id="cb6-7" data-line-number="7">);</a>
+<a class="sourceLine" id="cb6-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="kw">create</span> <span class="kw">table</span> Staff(</a>
+<a class="sourceLine" id="cb6-10" data-line-number="10">  sid <span class="dt">char</span>(<span class="dv">20</span>) <span class="kw">primary</span> <span class="kw">key</span>, </a>
+<a class="sourceLine" id="cb6-11" data-line-number="11">  sname <span class="dt">char</span>(<span class="dv">20</span>), </a>
+<a class="sourceLine" id="cb6-12" data-line-number="12">  age <span class="dt">char</span>(<span class="dv">20</span>), </a>
+<a class="sourceLine" id="cb6-13" data-line-number="13">  title <span class="dt">char</span>(<span class="dv">20</span>), </a>
+<a class="sourceLine" id="cb6-14" data-line-number="14">  salary <span class="dt">int</span>, </a>
+<a class="sourceLine" id="cb6-15" data-line-number="15">  dpid <span class="dt">char</span>(<span class="dv">20</span>) <span class="kw">REFERENCES</span> Department(dpid), </a>
+<a class="sourceLine" id="cb6-16" data-line-number="16">  <span class="kw">CONSTRAINT</span> CK_AGE_LE_60 <span class="kw">check</span>(age &lt;= <span class="dv">60</span>)</a>
+<a class="sourceLine" id="cb6-17" data-line-number="17">);</a></code></pre></div>
+<h2 id="section-9">5.7</h2>
+<p>违反实体完整性时, 一般直接拒绝操作 违反参照完整性时, 根据不同的constraint配置, 可能会拒绝操作或者级联更新删除 违反用户定义的完整性时, 可能拒绝操作, 或者使用触发器解决.</p>

@@ -59,21 +59,21 @@ select TMP.C as C1, TMP.D as D1, T.C as C2, T.D as D2, E, F
 /* 1 */
 select sno
 from SPJ
-where jno='J1';
+where jno=`J1`;
 /* 2 */
 select sno
 from SPJ
-where jno='J1' and pno='P1';
+where jno=`J1` and pno=`P1`;
 /* 3 */
 select sno
 from SPJ
 where 
-  jno = 'J1' and pno in (select pno
+  jno = `J1` and pno in (select pno
   from P
-  where color='红');
+  where color=`红`);
 /* 4 */
--- tianjiSupplier <- select sno from S where city='天津';
--- redPart <- select pno from P where color='红';
+-- tianjiSupplier <- select sno from S where city=`天津`;
+-- redPart <- select pno from P where color=`红`;
 select jno
 from J
 where not exists(
@@ -82,27 +82,29 @@ from SPJ
 where 
     sno in (select sno
   from S
-  where city='天津') and pno in (select pno
+  where city=`天津`) and pno in (select pno
   from P
-  where color='红') and J.jno = SPJ.jno
+  where color=`红`) and J.jno = SPJ.jno
 );
 /* 5 */
 select distinct SPJ.jno
 from SPJ inner join (
     select distinct TMP.pno
   from SPJ as TMP
-  where TMP.sno='S1'
+  where TMP.sno=`S1`
   ) as REF on (SPJ.pno = REF.pno)
 group by SPJ.jno
 having count(SPJ.pno) in (
     select count(distinct TMP.pno)
 from SPJ as TMP
-where TMP.sno='S1'
+where TMP.sno=`S1`
   )
 -- go
 -- select * from SPJ inner join S1Part on (S1Part.pno=SPJ.pno);
 ```
+
 ## 3.5
+
 ```sql 
 -- 1
 select sname, city from S;
@@ -111,43 +113,43 @@ select sname, city from S;
 select pname, color, weight from P;
 
 -- 3
-select distinct jno from SPJ where sno='S1';
+select distinct jno from SPJ where sno=`S1`;
 
 -- 4
 select pname, sum(qty) as sum_qty from P, SPJ where 
   P.pno = SPJ.pno and 
-  jno = 'J2'
+  jno = `J2`
   group by pname;
   
 -- 5
 select distinct pno from S, SPJ where 
-  city='上海' and 
+  city=`上海` and 
   S.sno = SPJ.sno;
   
 -- 6 
 select distinct jname from S, SPJ, J where
   S.sno = SPJ.sno and
   J.jno = SPJ.jno and
-  S.city = '上海';
+  S.city = `上海`;
 
 -- 7
 select J.jno from J where not exists(
   select * from SPJ, S where 
     J.jno = SPJ.jno and
     SPJ.sno = S.sno and 
-    S.city = '天津'
+    S.city = `天津`
 );
 
 -- 8
-update P set color='蓝' where color='红';
+update P set color=`蓝` where color=`红`;
 
 -- 9
-update SPJ set sno='S3' where sno='S5' and jno='J4' and pno='P6';
+update SPJ set sno=`S3` where sno=`S5` and jno=`J4` and pno=`P6`;
 
 -- 10 /* on delete cascade */
-delete from S where sno='S2';
+delete from S where sno=`S2`;
 
 -- 11 
-insert into SPJ value('S2', 'P4', 'J6', 200);
+insert into SPJ value(`S2`, `P4`, `J6`, 200);
 
 ```
