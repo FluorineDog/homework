@@ -4,5 +4,10 @@ bool fast)
 //@requires v == \length(vocab) && v == \length(freq);
 //@requires is_sorted(vocab, 0, v) && all_distinct(vocab, v);
 {
-  
+  string_bundle sb = read_words(tweetfile);
+  int sz = string_bundle_length(sb);
+  string[] A = string_bundle_array(sb);
+  for(int i = 0; i < sz; i=i+1){
+    
+  }
 }
