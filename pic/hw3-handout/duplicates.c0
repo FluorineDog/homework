@@ -1,4 +1,3 @@
-#use <lib/arrayutil.c0
 bool all_distinct(string[] A, int n)
 //@requires 0 <= n && n <= \length(A);
 //@requires is_sorted(A, 0, n);
@@ -28,12 +27,12 @@ int count_distinct(string[] A, int n)
 string[] remove_duplicates(string[] A, int n)
 //@requires 0 <= n && n <= \length(A);
 //@requires is_sorted(A, 0, n);
-//@ensures \length(\result) == count_distinct(\result)
+//@ensures \length(\result) == count_distinct(A, n);
 //@ensures all_distinct(\result, \length(\result));
 //@ensures is_sorted(\result, 0, \length(\result));
 {
   int dist_size = count_distinct(A, n);
-  string[] result = alloc_array(int, dist_size);
+  string[] result = alloc_array(string, dist_size);
   if(dist_size == 0){
     return result;
   }
@@ -48,6 +47,6 @@ string[] remove_duplicates(string[] A, int n)
       iter += 1;
     }
   }
-  //@assert iter == dist_size; 
+  //@assert iter == dist_size;
   return result;
 }
