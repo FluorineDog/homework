@@ -12,7 +12,7 @@ void dostester(string[] vocab, int[] freq, int v, string tweetfile, bool fast) {
       }
     }
   }
-  print("[un]=>");
+  print("[unknown]=>");
   printint(un);
   print("\n\n");
 }
@@ -32,7 +32,8 @@ bool doslingos_test() {
 
   int[] freq = alloc_array(int, v);
   dostester(vocab, freq, v, "texts/scotttweet.txt", false);
-  dostester(vocab, freq, v, "texts/twitter_1k.txt", false);
+  dostester(vocab, freq, v, "texts/scotttweet.txt", true);
+  dostester(vocab, freq, v, "texts/twitter_1k.txt", true);
   dostester(vocab, freq, v, "texts/twitter_200k.txt", true);
 
   return true;
