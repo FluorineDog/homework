@@ -1,0 +1,40 @@
+void dostester(string[] vocab, int[] freq, int v, string tweetfile, bool fast) {
+  int un;
+  un = count_vocab(vocab, freq, v, tweetfile, fast);
+  for (int i = 0; i < v; i += 1) {
+    if (freq[i] != 0) {
+      print(vocab[i]);
+      print("=>");
+      printint(freq[i]);
+      print(", ");
+      if (i % 5 == 4) {
+        print("\n");
+      }
+    }
+  }
+  print("[un]=>");
+  printint(un);
+  print("\n\n");
+}
+bool doslingos_test() {
+  string_bundle sb = read_words("texts/news_vocab_sorted.txt");
+  // string_bundle sb = read_words("texts/scotttweet.txt");
+  int v = string_bundle_length(sb);
+  string[] vocab = string_bundle_array(sb);
+
+  // int v = 5;
+  // string[] vocab = alloc_array(string, v);
+  // vocab[0] = "a";
+  // vocab[1] = "is";
+  // vocab[2] = "of";
+  // vocab[3] = "the";
+  // vocab[4] = "when";
+
+  int[] freq = alloc_array(int, v);
+  dostester(vocab, freq, v, "texts/scotttweet.txt", false);
+  dostester(vocab, freq, v, "texts/twitter_1k.txt", false);
+  dostester(vocab, freq, v, "texts/twitter_200k.txt", true);
+
+  return true;
+}
+int main() { return doslingos_test() ? 0 : -1; }

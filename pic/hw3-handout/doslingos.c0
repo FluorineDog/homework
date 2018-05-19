@@ -1,13 +1,46 @@
-int count_vocab(string[] vocab, int[] freq, int v,
-string tweetfile,
-bool fast)
+int sum_array(int[] A, int n)
+//@requires \length(A) == n;
+{
+  int sum = 0;
+  for (int i = 0; i < n; i += 1) {
+    sum += A[i];
+  }
+  return sum;
+}
+int count_vocab(string[] vocab, int[] freq, int v, string tweetfile, bool fast)
 //@requires v == \length(vocab) && v == \length(freq);
 //@requires is_sorted(vocab, 0, v) && all_distinct(vocab, v);
 {
+  for (int i = 0; i < v; i += 1) {
+    freq[i] = 0;
+  }
   string_bundle sb = read_words(tweetfile);
   int sz = string_bundle_length(sb);
   string[] A = string_bundle_array(sb);
-  for(int i = 0; i < sz; i=i+1){
-    
+  int unmatched = 0;
+  if (fast) {
+    for (int i = 0; i < sz; i += 1)
+    //@loop_invariant unmatched + sum_array(freq, v) == i;
+    {
+      int index = binsearch(A[i], vocab, v);
+      if (index != -1) {
+        freq[index]++;
+      } else {
+        unmatched++;
+      }
+    }
   }
+  else {
+    for (int i = 0; i < sz; i += 1)
+    //@loop_invariant unmatched + sum_array(freq, v) == i;
+    {
+      int index = linsearch(A[i], vocab, v);
+      if (index != -1) {
+        freq[index]++;
+      } else {
+        unmatched++;
+      }
+    }
+  }
+  return unmatched;
 }
