@@ -1,0 +1,15 @@
+bool duplicates_test(){
+  int n = 100;
+  string[] A = alloc_array(string, n);
+  for(int i = 0; i < n;i=i+1){
+    A[i] = string_fromint(i/3 + n);
+  }
+  int sz = count_distinct(A, n);
+  string[] B = remove_duplicates(A, n);
+  for(int i = 0; i < sz; i=i+1){
+    if(!string_equal(B[i], string_fromint(i+n))) {
+      return false;
+    }
+  }
+  return true; 
+}
