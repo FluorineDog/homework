@@ -51,6 +51,22 @@ bool next_permutation(string[] A, int beg, int end)
   return false;
 }
 
+int min_index(string[] A, int lower, int upper)
+//@requires 0 <= lower && lower < upper && upper <= \length(A);
+//@ensures lower <= \result && \result < upper;
+//@ensures le_seg(A[\result], A, lower, upper);
+{
+  int m = lower;
+  string min = A[lower];
+  for (int i = lower+1; i < upper; i++) {
+    if (string_compare(A[i], min) < 0) {
+      m = i;
+      min = A[i];
+    }
+  }
+  return m;
+}
+
 void sort_std(string[] A, int lower, int upper)
 //@requires 0 <= lower && lower <= upper && upper <= \length(A);
 //@ensures is_sorted(A, lower, upper);

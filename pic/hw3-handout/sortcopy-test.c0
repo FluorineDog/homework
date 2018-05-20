@@ -42,10 +42,10 @@ int main() {
     B[i] = tmp;
     C[i] = tmp;
   }
-  sort_std(B, 0, N);
-  sort(C, 0, N);
+  string[] tmpB = sortcopy_std(B, 0, N);
+  string[] tmpC = sortcopy(C, 0, N);
   for(int i = 0; i < N; i++){
-    //@assert(string_equal(B[i], C[i]));
+    //@assert(string_equal(tmpB[i], tmpC[i]));
   }
   return 0;
 }

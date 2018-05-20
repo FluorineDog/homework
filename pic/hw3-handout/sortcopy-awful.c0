@@ -1,6 +1,9 @@
+#use "permute.c0"
 string[] sortcopy(string[] A, int lower, int upper)
 //@requires 0 <= lower && lower <= upper && upper <= \length(A);
 //@ensures is_sorted(\result, 0, \length(\result));
 {
-  return alloc_array(string, upper-lower);
+  string[] tmp = sortcopy_std(A, lower, upper);
+  // tmp[0]-=1;
+  return tmp;
 }
