@@ -1,9 +1,11 @@
 #use "permute.c0"
+#use <parse>
 string[] sortcopy(string[] A, int lower, int upper)
 //@requires 0 <= lower && lower <= upper && upper <= \length(A);
 //@ensures is_sorted(\result, 0, \length(\result));
 {
   string[] tmp = sortcopy_std(A, lower, upper);
-  // tmp[0]-=1;
+  int* p = parse_int(tmp[lower], 10);
+  tmp[lower] = string_fromint(*p - 1);
   return tmp;
 }
