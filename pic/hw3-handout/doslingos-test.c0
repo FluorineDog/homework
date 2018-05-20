@@ -38,4 +38,4 @@ bool doslingos_test() {
 
   return true;
 }
-int main() { return doslingos_test() ? 0 : -1; }
+// int main() { return doslingos_test() ? 0 : -1; }
