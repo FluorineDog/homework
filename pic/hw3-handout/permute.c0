@@ -50,3 +50,34 @@ bool next_permutation(string[] A, int beg, int end)
 
   return false;
 }
+
+void sort_std(string[] A, int lower, int upper)
+//@requires 0 <= lower && lower <= upper && upper <= \length(A);
+//@ensures is_sorted(A, lower, upper);
+{
+  for (int i = lower; i < upper; i++)
+  //@loop_invariant lower <= i && i <= upper;
+  //@loop_invariant is_sorted(A, lower, i);
+  {
+    int m = min_index(A, i, upper);
+    //@assert le_seg(A[m], A, i, upper);
+    swap(A, i, m);
+  }
+  return;
+}
+
+string[] sortcopy_std(string[] A, int lower, int upper)
+//@requires 0 <= lower && lower <= upper && upper <= \length(A);
+//@ensures \length(\result) == upper - lower;
+//@ensures is_sorted(\result, 0, upper - lower);
+{
+  int resultsize = upper - lower;
+  string[] B = alloc_array(string, resultsize);
+  for (int i = 0; i < resultsize; i++)
+  //@loop_invariant 0 <= i && i <= resultsize;
+  {
+    B[i] = A[lower + i];
+  }
+  sort_std(B, 0, resultsize);
+  return B;
+}
