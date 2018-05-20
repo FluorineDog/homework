@@ -1,0 +1,10 @@
+#use <permute>
+bool range_checker(int beg, int end, int length){
+  // check if <beg, end> is valid
+  return 0 <= beg && beg <= end && end <= length;
+}
+
+
+int main() {
+  return 0;
+}
