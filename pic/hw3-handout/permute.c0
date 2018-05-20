@@ -1,0 +1,52 @@
+string token(int i) { return string_fromint(100000 + i); }
+bool range_checker(int beg, int end, int length) {
+  // check if <beg, end> is valid
+  return 0 <= beg && beg <= end && end <= length;
+}
+
+void linear_gen(int base, string[] A, int begin, int end)
+//@requires range_checker(begin, end, \length(A));
+{
+  for (int i = begin; i < end; i += 1) {
+    A[i] = token(i);
+    base++;
+  }
+}
+int copy_into(string[] src, int beg_src, int count, string[] dest, int beg_dest)
+//@requires range_checker(beg_src, beg_src+count, \length(src));
+//@requires range_checker(beg_dest, beg_dest+count, \length(dest));
+{
+  for (int i = 0; i < count; i += 1) {
+    dest[beg_dest + i] = src[beg_src + i];
+  }
+  return count + beg_dest;
+}
+
+bool next_permutation(string[] A, int beg, int end)
+//@requires range_checker(beg, end, \length(A));
+{
+  int sz = end - beg;
+  // little endiean
+  int bound;
+  for (bound = beg + 1; bound < end; bound += 1) {
+    if (string_compare(A[bound - 1], A[bound]) < 0) {
+      for (int iter = beg; iter < bound; iter++) {
+        if (string_compare(A[iter], A[bound]) < 0) {
+          swap(A, iter, bound);
+          for (int i = beg; i < beg + (bound - beg) / 2; i += 1) {
+            swap(A, i, bound - i + beg - 1);
+          }
+          // for (int i = beg; i < end; i++) {
+          //   print(A[i]);
+          //   print("$");
+          // }
+          // print("\n");
+          return true;
+        }
+      }
+      //@assert(false);
+    }
+  }
+
+  return false;
+}

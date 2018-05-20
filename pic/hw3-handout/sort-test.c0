@@ -1,10 +1,84 @@
-#use <permute>
-bool range_checker(int beg, int end, int length){
-  // check if <beg, end> is valid
-  return 0 <= beg && beg <= end && end <= length;
+#use "permute.c0"
+#use <rand>
+
+void sort_std(string[] A, int lower, int upper)
+//@requires 0 <= lower && lower <= upper && upper <= \length(A);
+//@ensures is_sorted(A, lower, upper);
+{
+  for (int i = lower; i < upper; i++)
+  //@loop_invariant lower <= i && i <= upper;
+  //@loop_invariant is_sorted(A, lower, i);
+  {
+    int m = min_index(A, i, upper);
+    //@assert le_seg(A[m], A, i, upper);
+    swap(A, i, m);
+  }
+  return;
 }
 
+string[] sortcopy_std(string[] A, int lower, int upper)
+//@requires 0 <= lower && lower <= upper && upper <= \length(A);
+//@ensures \length(\result) == upper - lower;
+//@ensures is_sorted(\result, 0, upper - lower);
+{
+  int resultsize = upper - lower;
+  string[] B = alloc_array(string, resultsize);
+  for (int i = 0; i < resultsize; i++)
+  //@loop_invariant 0 <= i && i <= resultsize;
+  {
+    B[i] = A[lower + i];
+  }
+  sort_std(B, 0, resultsize);
+  return B;
+}
+
+void perm_test(string[] A, int n)
+// requires \length(A) == n+2;
+{
+  string[] sorted = sortcopy_std(A, 1, n + 1);
+  //@assert \length(sorted) == n;
+  string[] tmp = alloc_array(string, n + 2);
+  bool flag = true;
+  while (flag) {
+    copy_into(A, 0, n + 2, tmp, 0);
+    sort(tmp, 1, n + 1);
+    //@assert(string_equal(tmp[0],A[0]));
+    //@assert(string_equal(tmp[n+1], A[n+1]));
+    for (int i = 0; i < n; i += 1) {
+      //@assert(string_equal(tmp[i + 1], sorted[i]));
+    }
+    flag = next_permutation(A, 1, n + 1);
+  }
+}
 
 int main() {
+  int n = 7;
+  string[] A = alloc_array(string, n + 2);
+  linear_gen(0, A, 0, n + 2);
+  A[0] = token(n * 2);
+  A[n + 1] = token(0);
+  perm_test(A, n);
+  for (int i = 1; i < n + 1; i += 1) {
+    if (i < n / 2) {
+      A[i] = token(3);
+    } else {
+      A[i] = token(4);
+    }
+  }
+  perm_test(A, n);
+  int N = 1000;
+  rand_t rd =  init_rand(67);
+  string[] B = alloc_array(string, 1000);
+  string[] C = alloc_array(string, 1000);
+  for(int i = 0; i < N; i+=1){
+    string tmp = token(rand(rd) % 500) ;
+    B[i] = tmp;
+    C[i] = tmp;
+  }
+  sort_std(B, 0, N);
+  sort(C, 0, N);
+  for(int i = 0; i < N; i++){
+    //@assert(string_equal(B[i], C[i]));
+  }
   return 0;
 }
