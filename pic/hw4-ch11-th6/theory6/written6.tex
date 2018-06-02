@@ -249,11 +249,7 @@ Write the queue function \texttt{queue\_empty} that returns true if both stacks 
 \begin{verbatim}
 bool queue_empty(queue Q)
 {
-
-
-
-
-
+  return stack_empty(Q->instack) && stack_empty(Q->outstack);
 }
 \end{verbatim}
 \end{solution}
@@ -263,11 +259,7 @@ Write the queue function \texttt{enqueue} based on the description of the data s
 \begin{verbatim}
 void enqueue(elem e, queue Q)
 {
-
-
-
-
-
+  push(e, Q->instack);
 }
 \end{verbatim}
 \end{solution}
@@ -278,17 +270,12 @@ Write the queue function \texttt{dequeue} based on the description of the data s
 elem dequeue(queue Q)
 \\@requires !queue_empty(Q);
 {
-
-
-
-
-
-
-
-
-
-
-
+  if(stack_empty(Q->outstack)){
+    while(stack_empty(Q->instack)){
+      push(pop(Q->instack), Q->outstack);
+    }
+  }
+  return pop(Q->outstack);
 }
 \end{verbatim}
 \end{solution}
@@ -301,11 +288,13 @@ What is the worst-case runtime complexity of each of the following queue operati
 
 \begin{solution}
 
-enqueue:   $O($
+enqueue:   $O(1)$
+
+Only a stack push, constant work
 
 \vspace{0.75in}
-dequeue:   $O($
-
+dequeue:   $O(n)$
+When outstack is empty, we have to 
 \vspace{0.75in}
 \end{solution}
 
