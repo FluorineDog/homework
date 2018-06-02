@@ -115,7 +115,6 @@ bool eval(queue Q, stack S)
       } else {
         skip(Q, 2);
       }
-    
 
     } else if (string_equal(tok, "else")) {
       skip(Q, 1);
