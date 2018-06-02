@@ -27,7 +27,7 @@ void skip(queue Q, int n) {
   if (n < 0) {
     error("illegal arguments");
   }
-  while (n > 0 && queue_empty(Q)) {
+  while (n > 0 && !queue_empty(Q)) {
     deq(Q);
     n--;
   }
