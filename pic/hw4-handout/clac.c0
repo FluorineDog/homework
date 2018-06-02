@@ -17,6 +17,24 @@ int pop_safe(stack S) {
   }
   return pop(S);
 }
+int top_safe(stack S) {
+  if (stack_empty(S)) {
+    error("stack is empty");
+  }
+  return top(S);
+}
+void skip(queue Q, int n) {
+  if (n < 0) {
+    error("illegal arguments");
+  }
+  while (n > 0 && queue_empty(Q)) {
+    deq(Q);
+    n--;
+  }
+  if (n != 0) {
+    error("queue is empty");
+  }
+}
 
 /* Return true: clac top-level interpreter will expect more input */
 /* Return false: clac top-level interpreter will exit */
@@ -50,6 +68,13 @@ bool eval(queue Q, stack S)
     } else if (string_equal(tok, "/")) {
       int y = pop_safe(S);
       int x = pop_safe(S);
+      if (y == 0) error("divided by 0");
+      push(S, x % y);
+
+    } else if (string_equal(tok, "%")) {
+      int y = pop_safe(S);
+      int x = pop_safe(S);
+      if (y == 0) error("divided by 0");
       push(S, x / y);
 
     } else if (string_equal(tok, "<")) {
@@ -79,21 +104,54 @@ bool eval(queue Q, stack S)
       push(S, z);
       push(S, x);
 
+    } else if (string_equal(tok, "skip")) {
+      int n = pop_safe(S);
+      skip(Q, n);
+
+    } else if (string_equal(tok, "if")) {
+      bool cond = pop_safe(S) != 0;
+      if (cond) {
+        // continue
+      } else {
+        skip(Q, 2);
+      }
+    
+
+    } else if (string_equal(tok, "else")) {
+      skip(Q, 1);
+
+    } else if (string_equal(tok, "pick")) {
+      int n = pop_safe(S);
+      stack tmpS = stack_new();
+      while (n > 0 && !stack_empty(S)) {
+        push(tmpS, pop(S));
+        n--;
+      }
+      int dup = top(tmpS);
+      if(n != 0){
+        error("queue is empty");
+      }
+      while (!stack_empty(tmpS)) {
+        int ele = pop(tmpS);
+        push(S, ele);
+      }
+      push(S, dup);
+      ////////////////////////////////////////////////
     } else if (string_equal(tok, "quit")) {
       return false; /* do not continue */
 
     } else if (string_equal(tok, "show")) {
       stack tmpS = stack_new();
-      while(!stack_empty(S)){
+      while (!stack_empty(S)) {
         push(tmpS, pop(S));
       }
       print("\n=>");
-      while(!stack_empty(tmpS)){
+      while (!stack_empty(tmpS)) {
         int ele = pop(tmpS);
         push(S, ele);
         printint(ele);
         print(", ");
-      }     
+      }
       print("\n");
 
     } else {

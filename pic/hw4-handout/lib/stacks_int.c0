@@ -13,6 +13,8 @@ stack stack_new();              /* O(1) */
 void push(stack S, int x);      /* O(1) */
 int pop(stack S)                /* O(1) */
 /*@requires !stack_empty(S); @*/ ;
+int top(stack S)                /* O(1) */
+/*@requires !stack_empty(S); @*/ ;
 
 
 /*** Implementation of stacks of integers ***/
@@ -82,5 +84,14 @@ int pop(stack S)
 {
   int e = S->top->data;
   S->top = S->top->next;
+  return e;
+}
+
+int top(stack S)
+//@requires is_stack(S);
+//@requires !stack_empty(S);
+//@ensures is_stack(S);
+{
+  int e = S->top->data;
   return e;
 }
