@@ -13,6 +13,9 @@
 \usepackage{fancyvrb}
 \usepackage[T1]{fontenc}
 \usepackage{listings}
+\usepackage{mathtools}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
 
 \newcommand{\fillinlistings}{
     \lstset{ %
@@ -138,7 +141,6 @@ $1 + 2 + 2^2 + 2^3 + \ldots + 2^{k-1}$
 Show that in the worst case, the total cost in tokens to increment the counter is $O(n)$.
 
 \begin{solution}
-
 In the worst case,  we have to filp all bits of $n=2^k-1$, 
 whose cost is $ 1 + 2 + 2^2 + 2^3 + \ldots + 2^{k-1} = 2^k - 1 = O(n)$ 
 \end{solution}
@@ -148,24 +150,38 @@ Now, we will use amortized analysis to show that although the worst case for an 
 \part[1]
 How many tokens are required to flip bit 0 through $n$ increments? (THINK: How often does bit 0 flip when we increment $n$ times?)
 \begin{solution}
-
+Since every increments will flip bit 0, with 1 tokens each flip, 
+we have total cost equals $n * 1 = n$ tokens
 
 \end{solution}
 How many tokens are required to flip bit 1 through $n$ increments? (THINK: How often does bit 1 flip when we increment $n$ times?)
 \begin{solution}
-
-
+Since every 2 increments will flip bit 1, with 2 tokens each flip, 
+we have total cost equals 
+$\floor*{\frac{x}{2}} * 2$
+ tokens
 % \vspace{1in}
 \end{solution}
 \part[1]
 Based on your answers to the previous questions, how many tokens are required to increment this counter through n increments using big O notation?
 \begin{solution}
-\vspace{0.25in}
+
+Total cost equals 
+$ n 
++ \floor*{\frac{n}{2}} * 2 
++ \floor*{\frac{n}{4}} * 4 
+% + \floor*{\frac{n}{8}} * 8 
++ \ldots 
++ \floor*{\frac{n}{2^k}} * 2^k 
+= O(n * k) = O(n \log n) 
+$
+
+where $2^{k-1}\le n < 2^k$
 \end{solution}
 
 Based on your answer above, what is the amortized cost of a single increment using big O notation?
 \begin{solution}
-
+For each increment, the amortized cost is $O(\log n)$
 \end{solution}
 \end{parts}
 \newpage
