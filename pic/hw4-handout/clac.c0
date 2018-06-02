@@ -82,6 +82,20 @@ bool eval(queue Q, stack S)
     } else if (string_equal(tok, "quit")) {
       return false; /* do not continue */
 
+    } else if (string_equal(tok, "show")) {
+      stack tmpS = stack_new();
+      while(!stack_empty(S)){
+        push(tmpS, pop(S));
+      }
+      print("\n=>");
+      while(!stack_empty(tmpS)){
+        int ele = pop(tmpS);
+        push(S, ele);
+        printint(ele);
+        print(", ");
+      }     
+      print("\n");
+
     } else {
       /* not defined as an operation name, should be an int */
       int* p = parse_int(tok, 10);
