@@ -18,20 +18,16 @@ elem pop(stack S)           /* O(1) */
 
 struct stack_header {
   list* top;
-  list* bottom;
 };
 
 bool is_stack(stack S) {
-  if (S == NULL) return false;
-  if (S->top == NULL || S->bottom == NULL) return false;
-  if (!is_segment(S->top, S->bottom)) return false;
   return true;
 }
 
 bool stack_empty(stack S)
 //@requires is_stack(S);
 {
-  return S->top == S->bottom;
+  return S->top == NULL;
 }
 
 stack stack_new()
@@ -39,9 +35,7 @@ stack stack_new()
 //@ensures stack_empty(\result);
 {
   stack S = alloc(struct stack_header);
-  list* l = alloc(struct list_node); /* does not need to be initialized! */
-  S->top = l;
-  S->bottom = l;
+  S->top = NULL;
   return S;
 }
 
@@ -71,6 +65,5 @@ stack stack_copy(stack S)
 {
   stack S2 = alloc(struct stack_header);
   S2->top = S->top;
-  S2->bottom = S->bottom;
   return S2;
 }
