@@ -3,12 +3,20 @@
  *
  * 15-122 Principles of Imperative Computation
  */
-
+// clang-format off
 #use <string>
 #use <parse>
 #use <conio>
 #use <args>
 #use <util>
+// clang-format on
+
+int pop_safe(stack S) {
+  if (stack_empty(S)) {
+    error("stack is empty");
+  }
+  return pop(S);
+}
 
 /* Return true: clac top-level interpreter will expect more input */
 /* Return false: clac top-level interpreter will exit */
@@ -19,12 +27,61 @@ bool eval(queue Q, stack S)
     string tok = deq(Q); /* is this dequeue safe? */
     // print("Read: "); print(tok); print("\n");
     if (string_equal(tok, "print")) {
-
       /* next line is unsafe and should be fixed */
-      int x = pop(S);
-      printint(x); print("\n");
+      int x = pop_safe(S);
+      printint(x);
+      print("\n");
+
+    } else if (string_equal(tok, "+")) {
+      int y = pop_safe(S);
+      int x = pop_safe(S);
+      push(S, x + y);
+
+    } else if (string_equal(tok, "-")) {
+      int y = pop_safe(S);
+      int x = pop_safe(S);
+      push(S, x - y);
+
+    } else if (string_equal(tok, "*")) {
+      int y = pop_safe(S);
+      int x = pop_safe(S);
+      push(S, x * y);
+
+    } else if (string_equal(tok, "/")) {
+      int y = pop_safe(S);
+      int x = pop_safe(S);
+      push(S, x / y);
+
+    } else if (string_equal(tok, "<")) {
+      int y = pop_safe(S);
+      int x = pop_safe(S);
+      push(S, (x < y) ? 1 : 0);
+
+    } else if (string_equal(tok, "drop")) {
+      int x = pop_safe(S);
+
+    } else if (string_equal(tok, "swap")) {
+      int y = pop_safe(S);
+      int x = pop_safe(S);
+      push(S, y);
+      push(S, x);
+
+    } else if (string_equal(tok, "dup")) {
+      int x = pop_safe(S);
+      push(S, x);
+      push(S, x);
+
+    } else if (string_equal(tok, "rot")) {
+      int z = pop_safe(S);
+      int y = pop_safe(S);
+      int x = pop_safe(S);
+      push(S, y);
+      push(S, z);
+      push(S, x);
+
     } else if (string_equal(tok, "quit")) {
-      return false;             /* do not continue */
+      return false; /* do not continue */
+
     } else {
       /* not defined as an operation name, should be an int */
       int* p = parse_int(tok, 10);
@@ -35,5 +92,5 @@ bool eval(queue Q, stack S)
       push(S, *p);
     }
   }
-  return true;                  /* continue */
+  return true; /* continue */
 }
