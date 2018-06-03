@@ -294,10 +294,9 @@ Only a stack push, constant work
 
 \vspace{0.75in}
 dequeue:   $O(n)$
-When outstack is empty, we have to 
+When outstack is empty, we have to transfer all elements from instack to outstack.
 \vspace{0.75in}
 \end{solution}
-
 \part[2]
 \vspace{0.5in}
 Using amortized analysis, we can show that the worst-case complexity of a valid sequence of $n$ queue operations, where each operation is either an enqueue or dequeue operation, is $O(n)$. This means that the amortized cost per operation is $O(1)$, even though a single operation might require more than constant time.
@@ -306,12 +305,21 @@ Assume that each push and each pop operation requires one token to pay for the o
 
 How many tokens in total are required to enqueue an element?  State for what purpose each token is used.
 \begin{solution} (Your answer for the number of tokens should be a constant integer since the amortized cost should be $O(1)$.)
+
+Each push should cost 4 tokens. A push operation itself will spend 1 token, while 2 tokens 
+will be left in potiential energy for future use. After the push operation, each element in instack
+will carry 3 tokens. The amortized cost will be $O(1)$.
 \vspace{2.5in}
 \end{solution}
 \newpage
 How many tokens are required to dequeue an element?  When the \texttt{outstack} is empty and we move elements from \texttt{instack} to \texttt{outstack}, why does this not require additional tokens?
 
 \begin{solution}(Your answer for the number of tokens should be a constant integer since the amortized cost should be $O(1)$.)
+
+Pop operations will not ask for any tokens. For any element processed by pop operations, it will cost
+2 token being transfered from instack to outstack, and other token will be spend on pop out from outstack. 
+No more operation is neeeded. Since each element at instack carries 3 tokens, no more tokens is required by
+pop operation. Then the amortized cost will be $O(1)$. 
 \vspace{2.5in}
 \end{solution}
 
