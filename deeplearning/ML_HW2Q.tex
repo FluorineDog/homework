@@ -1,0 +1,146 @@
+\documentclass{article}
+
+\usepackage{fancyhdr}
+\usepackage{booktabs}
+\usepackage{extramarks}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{enumerate}
+\usepackage{geometry}
+\usepackage{setspace}
+\newenvironment{solution}
+  {\renewcommand\qedsymbol{$\blacksquare$}\begin{proof}[Solution]}
+  {\end{proof}}
+
+\author{Gou Guilin}
+\title{Machine Learning HW2}
+\geometry{left = 2cm, right = 2.0cm, top = 2.5cm, right = 2.5cm}
+\DeclareMathOperator{\E}{\mathbb{E}}
+\DeclareMathOperator{\HH}{\mathbb{H}}
+\DeclareMathOperator{\Prob}{\mathbf{P}}
+
+\begin{document}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Corr}{\mathrm{Corr}}
+\maketitle
+\setlength{\baselineskip}{15pt}
+\begin{enumerate}
+\item Consider a random variable $X$ that follows the uniform distribution between $0$ and $a$. Please calculate the mean, variance and entropy of $X$. Please show the steps of the calculation.
+\begin{solution}
+
+$$\E[X] = \int_{0}^{a}\frac{x}{a}\dd x = \frac{a}{2}$$
+$$\Var[X] = \int_{0}^{a}\frac{(x - a/2)^2}{a}\dd x = \frac{1}{12}$$
+% $$ \h[X] = \int_{0}^{a}\frac{1}{a} \log \frac{1}{f(x)} \dd x = \log a $$
+\end{solution}
+ \bigskip
+\item 	Suppose we have observed $N$ independent random samples of $X$, $(x_1,x_2,\ldots,x_N)$. What is the maximum likelihood estimation of $a$? Please show the derivation steps. Is this estimate unbiased? Please justify your answer too.
+\begin{solution}
+\begin{equation}
+  p(X) = \left\{
+    \begin{aligned}
+    & 0 & &  a < x_{max} \\
+    & (\frac{1}{a})^n & & a \ge x_{max} \\
+  \end{aligned}
+\right .
+\end{equation}
+So $x_{max}$ is the MLE. 
+This estimate is biased, since
+$$ \E[x_{max}] = \frac{n}{n+1} a $$
+\end{solution}
+ \bigskip
+\item 	Given two independent Gaussian random variables $U\sim\mathcal{N}(-1,1)$ and $V\sim\mathcal{N}(1,1)$, are the following random variables also Gaussian? If so, what are their means and (co)-variances? Note that $T$ is a vector.
+$Y=U+V$,$Z=U\times V$,$T=\left(\begin{matrix}U+V\\U-2V\\\end{matrix}\right)$,
+$W=\left \{ \begin{matrix}U&with\; 50 \% \; chance\\ V&with\; 50\%\;chance\\ \end{matrix} \right.$
+
+\begin{solution} .
+
+$Y$ is Gaussian, and $\E[Y] = 0, \Var[Y]=2$.
+
+$Z$ is not Gaussian.
+
+$T$ is 2-dimensionally Gaussion, where $\E[T] = \left(\begin{matrix}0\\-1\\\end{matrix}\right) $
+and $\Var[T]=\left(\begin{matrix} 2 & 3  \\ 3 & 5\end{matrix}\right)$.
+
+$W$ is not Gaussian.
+
+\end{solution}
+\bigskip
+\item We have two coins: one is a fair coin -- observing either the head side or the tail side with 50\% probability. 
+The other coin is a fake coin which has head on both sides. Suppose we randomly pick one and toss it (the two coins are otherwise the same so either one would be picked up with a 50\% probability). (Hint: Use the rules of probability and Bayes's rule).
+\begin{enumerate}
+	\item What is the probability we observe head?
+	\item If we indeed observe head, what is the probability we had picked the fake coin?
+\end{enumerate}
+\begin{solution}
+\bigskip
+\bigskip
+
+\end{solution}
+\bigskip
+%% The questions below are optional. Delete the problems you didn't complete.
+\item 	Show that $f(x)=x^2$ and $g(x)=\ln x$ are convex and concave, respectively.
+\begin{proof}
+\bigskip
+\bigskip
+
+\end{proof}
+\bigskip
+\item Show that $h(x)=\frac{1}{1+e^{-x}}$ is neither convex or concave.
+\begin{proof}
+\bigskip
+\bigskip
+
+\end{proof}
+\bigskip
+\item Show that $-\ln h(x)$ is convex.
+\begin{proof}
+\bigskip
+\bigskip
+
+\end{proof}
+\bigskip
+\item Prove that $x-1\geq \ln x$ for $\forall x>0$.
+\begin{proof}
+\bigskip
+\bigskip
+
+\end{proof}
+\bigskip
+\item Use the above property to show that, for any probability vectors $p=(p_1,\ldots ,p_K)$ and $q=(q_1,\ldots q_K)$,
+$KL(p||q)=\sum_{k=1}^{K}p_k\ln\frac{p_k}{q_k}\geq0$.
+\begin{proof}
+\bigskip
+\bigskip
+
+\end{proof}
+\bigskip
+\item Use the above property to show that, for any probability vector $p=(p_1,\ldots p_k)$ ,
+$H(p)=-\sum_{k=1}^{K}p_k \ln p_k \le \ln K$
+\begin{proof}
+\bigskip
+\bigskip
+
+\end{proof}
+\bigskip
+\item Consider the following two functions
+\begin{align*}
+f_1(x,y)&=(x-1)^2+(y-1)^2\\
+f_2(x,y)&=(x-3)^2+(y-2)^2
+\end{align*}
+what are their minima if we constrain $x^2+y^2\leq 1$? Please show the derivation steps.
+\begin{solution}
+\bigskip
+
+\end{solution}
+\bigskip
+\item In a $\mathcal{R}^D$ (i.e., D-dimensional Euclidean space), what is the shortest distance from a point $x_0\in R^D$ to a hyperplane $H:w^Tx+b=0$? 
+You need to express this distance in terms of $w$,$b$ and $x_0$. (Hint: Please show the detailed derivation steps. Formulate this problem as a constrained optimization and then use the method of Lagrange multiplier.)
+\begin{solution}
+
+\end{solution}
+
+\end{enumerate}
+\end{document}
