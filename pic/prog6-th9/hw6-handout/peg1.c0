@@ -2,10 +2,13 @@
  * Peg solitaire solver
  *
  * 15-122 Principles of Imperative Computation */
+// clang-format off
+#use <args>
+#use <conio>
+#use <util>
+// clang-format in
 
-#use < args >
-#use < conio >
-#use < util >
+int min(int a, int b) { return a > b ? b : a; }
 
 typedef int move;
 
@@ -19,8 +22,8 @@ int col_end(move m) { return (m >> 12) & 0xF; }
 
 bool check_valid(int rc) { return 0 <= rc && rc < 8; }
 
-void discard(board B, move m) {
-  int row2 = row_start(m);
+void discard(board B, stack S) {
+  move m = pop(S) int row2 = row_start(m);
   int col2 = col_start(m);
   int row0 = row_end(m);
   int col0 = col_end(m);
@@ -31,7 +34,7 @@ void discard(board B, move m) {
   set_slot(B, row2, col2, 1);
 }
 
-move try_move(board B, stack S, int row0, int col0, int row_off, int col_off)
+bool check_shift(board B, stack S, int row0, int col0, int row_off, int col_off)
 //@requires check_valid(row0);
 //@requires check_valid(col0);
 //@requires row_off * row_off + col_off * col_off == 1;
@@ -47,26 +50,40 @@ move try_move(board B, stack S, int row0, int col0, int row_off, int col_off)
   int s1 = get_slot(B, row1, col1);
   int s2 = get_slot(B, row2, col2);
   if (s0 == 0 && s1 == 1 && s2 == 1) {
+    move m = 0 | row2 << 0 | col2 << 4 | row0 << 8 | col0 << 12;
+    push(S, m);
     set_slot(B, row0, col0, 1);
     set_slot(B, row1, col1, 0);
     set_slot(B, row2, col2, 0);
-    move m = 0 | row2 << 0 | col2 << 4 | row0 << 8 | col0 << 12;
-    if (m != 0) {
-      push(S, m);
-      int result = peg_solve(B, S);
-      if (result == 1) {
-        return 1;
-      } else {
-        set_slot(B, row0, col0, 0);
-        set_slot(B, row1, col1, 1);
-        set_slot(B, row2, col2, 1);
-      }
-    }
+    // if (m != 0) {
+    //   int result = peg_solve(B, S);
+    //   if (result == 1) {
+    //     return 1;
+    //   } else {
+    //     set_slot(B, row0, col0, 0);
+    //     set_slot(B, row1, col1, 1);
+    //     set_slot(B, row2, col2, 1);
+    //   }
+    // }
+    return true;
   }
-  return 0;
+  return false;
 }
 
-int peg_solve(board B, stack S)
+int handle(board B, stack S, int row, int col, int row_off, int col_off) {
+  if (check_shift(B, S, row, col, row_off, col_off)) {
+    int result = peg_solve_helper(B, S);
+    if (result == 1) {
+      return 1;
+    } else {
+      discard(B, S);
+      return result;
+    }
+  }
+  return last_result;
+}
+
+int peg_solve_helper(board B, stack S, int result)
 //@requires is_board(B);
 //@requires num_pegs(B) >= 1;
 //@requires stack_empty(S);
@@ -75,7 +92,8 @@ int peg_solve(board B, stack S)
 {
   for (int row = 0; row < 8; row++) {
     for (int col = 0; col < 8; col++) {
-      move = try_move(B, 1, 0);
-    }
+      if (handle(B, S, row, col, -1, 0, )) }
   }
 }
+
+int peg_solve(board B, stack S) {}
