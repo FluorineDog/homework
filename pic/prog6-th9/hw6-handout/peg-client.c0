@@ -10,7 +10,7 @@
 /* You can't say 'typedef move stackelem', because given the order in
  * which things are defined, we haven't defined what a move is yet */
 
-typedef int stackelem;
+// typedef int stackelem;
 
 
 /* Client side implementation for hashtables. (Optional) */

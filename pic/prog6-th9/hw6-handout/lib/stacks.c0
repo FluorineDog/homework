@@ -4,12 +4,13 @@
  */
 
 /* Client-side interface */
-// typedef ______ stackelem;
+typedef int stackelem;
 
 /* Interface to stacks of items */
 
 typedef struct stack_header* stack;
-
+void stack_clear(stack S);
+stack stack_clone(stack org);
 bool stack_empty(stack S);       /* O(1) */
 stack stack_new();               /* O(1) */
 void push(stack S, stackelem e); /* O(1) */
@@ -60,6 +61,14 @@ struct stack_header {
   int size;
 };
 
+stack stack_clone(stack org){
+  stack S = alloc(struct stack_header);
+  S->top = org->top;
+  S->bottom = org->bottom;
+  S->size = org->size;
+  return S;
+}
+
 bool is_stack(stack S) {
   if (S == NULL) return false;
   if (S->top == NULL || S->bottom == NULL) return false;
@@ -90,6 +99,15 @@ stack stack_new()
   S->bottom = p;
   S->size = 0;
   return S;
+}
+
+void stack_clear(stack S)
+{
+  S = alloc(struct stack_header);
+  slist* p = alloc(struct slist_node); /* does not need to be initialized! */
+  S->top = p;
+  S->bottom = p;
+  S->size = 0;
 }
 
 void push(stack S, stackelem e)

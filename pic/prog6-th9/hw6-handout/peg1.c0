@@ -8,9 +8,9 @@
 #use <util>
 // clang-format in
 
-int min(int a, int b) { return a > b ? b : a; }
+// int min(int a, int b) { return a > b ? b : a; }
 
-typedef int move;
+typedef int move; 
 
 int row_start(move m) { return m & 0xF; }
 
@@ -22,65 +22,118 @@ int col_end(move m) { return (m >> 12) & 0xF; }
 
 bool check_valid(int rc) { return 0 <= rc && rc < 8; }
 
-void discard(board B, stack S) {
-  move m = pop(S) int row2 = row_start(m);
-  int col2 = col_start(m);
-  int row0 = row_end(m);
-  int col0 = col_end(m);
-  int row1 = (row0 + row2) / 2;
-  int col1 = (col0 + col2) / 2;
-  set_slot(B, row0, col0, 0);
-  set_slot(B, row1, col1, 1);
-  set_slot(B, row2, col2, 1);
-}
+// bool check_shift(board B, stack S, int row0, int col0, int row_off, int col_off)
+// //@requires check_valid(row0);
+// //@requires check_valid(col0);
+// //@requires row_off * row_off + col_off * col_off == 1;
+// {
+//   int row1 = row0 + row_off * 1;
+//   int row2 = row0 + row_off * 2;
+//   int col1 = col0 + col_off * 1;
+//   int col2 = col0 + col_off * 2;
+//   if (!check_valid(row2) || !check_valid(col2)) {
+//     return false;
+//   }
+//   int s0 = get_slot(B, row0, col0);
+//   int s1 = get_slot(B, row1, col1);
+//   int s2 = get_slot(B, row2, col2);
+//   if (s0 == 0 && s1 == 1 && s2 == 1) {
+//     move m = 0 | row2 << 0 | col2 << 4 | row0 << 8 | col0 << 12;
+//     push(S, m);
+//     set_slot(B, row0, col0, 1);
+//     set_slot(B, row1, col1, 0);
+//     set_slot(B, row2, col2, 0);
+//     // if (m != 0) {
+//     //   int result = peg_solve(B, S);
+//     //   if (result == 1) {
+//     //     return 1;
+//     //   } else {
+//     //     set_slot(B, row0, col0, 0);
+//     //     set_slot(B, row1, col1, 1);
+//     //     set_slot(B, row2, col2, 1);
+//     //   }
+//     // }
+//     return true;
+//   }
+//   return false;
+// }
 
-bool check_shift(board B, stack S, int row0, int col0, int row_off, int col_off)
-//@requires check_valid(row0);
-//@requires check_valid(col0);
-//@requires row_off * row_off + col_off * col_off == 1;
-{
-  int row1 = row0 + row_off * 1;
-  int row2 = row0 + row_off * 2;
-  int col1 = col0 + col_off * 1;
-  int col2 = col0 + col_off * 2;
-  if (!check_valid(row2) || !check_valid(col2)) {
+// int handle(board B, stack S, int row, int col, int row_off, int col_off) {
+//   if (check_shift(B, S, row, col, row_off, col_off)) {
+//     int result = peg_solve_helper(B, S);
+//     if (result == 1) {
+//       return 1;
+//     } else {
+//       discard(B, S);
+//       return result;
+//     }
+//   }
+//   return last_result;
+// }
+
+bool bitMatch(board B, int r, int c, int value){
+  if(0 <= r && r < 8 && 0 <= c && c < 8) {
+    return B[r*8 + c] == value;
+  }
+  else {
     return false;
   }
-  int s0 = get_slot(B, row0, col0);
-  int s1 = get_slot(B, row1, col1);
-  int s2 = get_slot(B, row2, col2);
-  if (s0 == 0 && s1 == 1 && s2 == 1) {
-    move m = 0 | row2 << 0 | col2 << 4 | row0 << 8 | col0 << 12;
-    push(S, m);
-    set_slot(B, row0, col0, 1);
-    set_slot(B, row1, col1, 0);
-    set_slot(B, row2, col2, 0);
-    // if (m != 0) {
-    //   int result = peg_solve(B, S);
-    //   if (result == 1) {
-    //     return 1;
-    //   } else {
-    //     set_slot(B, row0, col0, 0);
-    //     set_slot(B, row1, col1, 1);
-    //     set_slot(B, row2, col2, 1);
-    //   }
-    // }
-    return true;
-  }
-  return false;
 }
 
-int handle(board B, stack S, int row, int col, int row_off, int col_off) {
-  if (check_shift(B, S, row, col, row_off, col_off)) {
-    int result = peg_solve_helper(B, S);
-    if (result == 1) {
-      return 1;
-    } else {
-      discard(B, S);
-      return result;
-    }
+
+move check(board B, int row, int col, int rd, int cd){
+  bool f0= bitMatch(B, row, col, 1);
+  bool f1= bitMatch(B, row + rd * 1, col + cd * 1, 1);
+  bool f2= bitMatch(B, row + rd * 2, col + cd * 2, 0);
+  if(f0 && f1 && f2){
+    // print("hh");
+    return row | (col << 4) | ((row + rd*2) << 8) | ((col + cd*2) << 12);
   }
-  return last_result;
+  else {
+    // print("ww");
+    return 0;
+  }
+}
+
+bool check_move(board B, move m){
+  int r0 = row_start(m);
+  int r2 = row_end(m);
+  int c0 = col_start(m);
+  int c2 = col_end(m);
+  int r1 = (r0 + r2) /2;
+  int c1 = (c0 + c2) /2;
+  bool f0= bitMatch(B, r0, c0, 1);
+  bool f1= bitMatch(B, r1, c1, 1);
+  bool f2= bitMatch(B, r2, c2, 0);
+  return f0 && f1 && f2;
+}
+
+void flip(board B, move m) {
+  int r0 = row_start(m);
+  int r2 = row_end(m);
+  int c0 = col_start(m);
+  int c2 = col_end(m);
+  int r1 = (r0 + r2) /2;
+  int c1 = (c0 + c2) /2;
+  B[r0*8 + c0] = 1 -  B[r0*8 + c0];  
+  B[r1*8 + c1] = 1 -  B[r1*8 + c1];  
+  B[r2*8 + c2] = 1 -  B[r2*8 + c2];  
+}
+
+void insert_try(board B, stack S, int i, int j){
+  move m; 
+  m = check(B, i, j, 0, 1); if(m!=0) push(S, m);
+  m = check(B, i, j, 0, -1); if(m!=0) push(S, m);
+  m = check(B, i, j, 1, 0); if(m!=0) push(S, m);
+  m = check(B, i, j, -1, 0); if(m!=0) push(S, m);
+}
+
+void insert_blank_try(board B, stack S, int i, int j){
+  move m; 
+  m = check(B, i, j-2, 0, 1); if(m!=0) push(S, m);
+  m = check(B, i, j+2, 0, -1); if(m!=0) push(S, m);
+  m = check(B, i-2, j, 1, 0); if(m!=0) push(S, m);
+  m = check(B, i+2, j, -1, 0); if(m!=0) push(S, m);
 }
 
 int peg_solve_helper(board B, stack S, int result)
@@ -90,10 +143,67 @@ int peg_solve_helper(board B, stack S, int result)
 //@ensures is_board(B);
 //@ensures result >= 1;
 {
-  for (int row = 0; row < 8; row++) {
-    for (int col = 0; col < 8; col++) {
-      if (handle(B, S, row, col, -1, 0, )) }
+  // for (int row = 0; row < 8; row++) {
+  //   for (int col = 0; col < 8; col++) {
+  //     if (handle(B, S, row, col, -1, 0, )) }
+  // }
+
+  // visit all S
+  // extend with candinates
+  // since we have associativity, never look backward
+  if(result == 1){
+    stack_clear(S);
+    return 1;
   }
+  int minR = 100;
+  while(!stack_empty(S)){
+    move m = pop(S);
+    // print("ck");
+    if(check_move(B, m)){
+      // print("cking");
+      flip(B, m);
+      int r0 = row_start(m);
+      int r2 = row_end(m);
+      int c0 = col_start(m);
+      int c2 = col_end(m);
+      int r1 = (r0 + r2) /2;
+      int c1 = (c0 + c2) /2;   
+
+      stack Snew = stack_clone(S);
+      insert_blank_try(B, Snew, r0, c0);
+      insert_blank_try(B, Snew, r1, c1);
+      insert_try(B, Snew, r2, c2);
+
+      int res = peg_solve_helper(B, Snew, result - 1);
+      if(res == 1){
+        // done
+        push(S, m);
+        return 1;
+      }
+      else {
+        minR = res < minR? res : minR; 
+        flip(B, m);
+      }
+    }
+  }    
+
+  return minR;
 }
 
-int peg_solve(board B, stack S) {}
+int peg_solve(board B, stack S) {
+  // init S
+  // solve with helper
+  move m;
+  int count = 0;
+  for(int i = 0; i < 8; i++){
+    for(int j = 0; j < 8; j++){
+      if(bitMatch(B, i, j, 1)) count++;
+      m = check(B, i, j, 0, 1); if(m!=0) push(S, m);
+      m = check(B, i, j, 0, -1); if(m!=0) push(S, m);
+      m = check(B, i, j, 1, 0); if(m!=0) push(S, m);
+      m = check(B, i, j, -1, 0); if(m!=0) push(S, m);
+    }
+  }  
+  int res = peg_solve_helper(B, S, count);
+  return res;
+}
