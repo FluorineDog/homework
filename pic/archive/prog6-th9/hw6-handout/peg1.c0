@@ -136,76 +136,115 @@ void insert_blank_try(board B, stack S, int i, int j){
   m = check(B, i+2, j, -1, 0); if(m!=0) push(S, m);
 }
 
-int peg_solve_helper(board B, stack R, stack cad,  int result)
+// int peg_solve_helper(board B, stack R, stack cad,  int result)
+// //@requires is_board(B);
+// //@requires num_pegs(B) >= 1;
+// //@ensures is_board(B);
+// //@ensures result >= 1;
+// {
+//   // for (int row = 0; row < 8; row++) {
+//   //   for (int col = 0; col < 8; col++) {
+//   //     if (handle(B, S, row, col, -1, 0, )) }
+//   // }
+
+//   // visit all S
+//   // extend with candinates
+//   // since we have associativity, never look backward
+//   if(result == 1){
+//   //   stack_clear(S);
+//     return 1;
+//   }
+//   int minR = 100;
+//   while(!stack_empty(cad)){
+//     move m = pop(cad);
+//     // print("ck");
+//     if(check_move(B, m)){
+//       // print("cking");
+//       flip(B, m);
+//       int r0 = row_start(m);
+//       int r2 = row_end(m);
+//       int c0 = col_start(m);
+//       int c2 = col_end(m);
+//       int r1 = (r0 + r2) /2;
+//       int c1 = (c0 + c2) /2;   
+
+//       stack Snew = stack_clone(cad);
+//       insert_blank_try(B, Snew, r0, c0);
+//       insert_blank_try(B, Snew, r1, c1);
+//       insert_try(B, Snew, r2, c2);
+
+//       int res = peg_solve_helper(B, R, Snew, result - 1);
+//       if(res == 1){
+//         // done
+//         printint(m);
+//         print("&&");
+//         push(R, m);
+//         return 1;
+//       }
+//       else {
+//         minR = res < minR? res : minR; 
+//         flip(B, m);
+//       }
+//     }
+//   }    
+
+//   return minR;
+// }
+
+// int peg_solve(board B, stack res) {
+//   // init S
+//   // solve with helper
+//   stack S = stack_new();
+//   move m;
+//   int count = 0;
+//   for(int i = 0; i < 8; i++){
+//     for(int j = 0; j < 8; j++){
+//       m = check(B, i, j, 0, 1); if(m!=0) push(S, m);
+//       m = check(B, i, j, 0, -1); if(m!=0) push(S, m);
+//       m = check(B, i, j, 1, 0); if(m!=0) push(S, m);
+//       m = check(B, i, j, -1, 0); if(m!=0) push(S, m);
+//     }
+//   }  
+//   int result = peg_solve_helper(B, res, S, count);
+//   return result;
+// }
+
+int peg_solve_helper(board B, stack S, int par) {
+  // printint(par);
+  // print("R");
+  if(par == 1){
+    return 1;
+  }
+  int min_value = par;
+  for(int i = 0; i < 8; i++){
+    for(int j = 0; j < 8; j++){
+      for(int rd = -1; rd < 2; rd += 1){
+        for(int cd = -1; cd < 2; cd += 1){
+          if(rd*rd + cd*cd == 1){
+            move m = check(B, i, j, rd, cd); 
+            if(m != 0){
+              flip(B, m);
+              int curr = peg_solve_helper(B, S, par - 1);
+              if(curr == 1){
+                push(S, m);
+                return 1;
+              }
+              flip(B, m);
+              min_value = min(curr, min_value);
+            }
+          }
+        }
+      }
+    }
+  }  
+  return min_value;
+}
+
+int peg_solve(board B, stack S)
 //@requires is_board(B);
 //@requires num_pegs(B) >= 1;
 //@ensures is_board(B);
-//@ensures result >= 1;
+//@ensures \result >= 1;
 {
-  // for (int row = 0; row < 8; row++) {
-  //   for (int col = 0; col < 8; col++) {
-  //     if (handle(B, S, row, col, -1, 0, )) }
-  // }
-
-  // visit all S
-  // extend with candinates
-  // since we have associativity, never look backward
-  if(result == 1){
-  //   stack_clear(S);
-    return 1;
-  }
-  int minR = 100;
-  while(!stack_empty(cad)){
-    move m = pop(cad);
-    // print("ck");
-    if(check_move(B, m)){
-      // print("cking");
-      flip(B, m);
-      int r0 = row_start(m);
-      int r2 = row_end(m);
-      int c0 = col_start(m);
-      int c2 = col_end(m);
-      int r1 = (r0 + r2) /2;
-      int c1 = (c0 + c2) /2;   
-
-      stack Snew = stack_clone(cad);
-      insert_blank_try(B, Snew, r0, c0);
-      insert_blank_try(B, Snew, r1, c1);
-      insert_try(B, Snew, r2, c2);
-
-      int res = peg_solve_helper(B, R, Snew, result - 1);
-      if(res == 1){
-        // done
-        printint(m);
-        print("&&");
-        push(R, m);
-        return 1;
-      }
-      else {
-        minR = res < minR? res : minR; 
-        flip(B, m);
-      }
-    }
-  }    
-
-  return minR;
-}
-
-int peg_solve(board B, stack res) {
-  // init S
-  // solve with helper
-  stack S = stack_new();
-  move m;
-  int count = 0;
-  for(int i = 0; i < 8; i++){
-    for(int j = 0; j < 8; j++){
-      if(bitMatch(B, i, j, 1)) count++;
-      m = check(B, i, j, 0, 1); if(m!=0) push(S, m);
-      m = check(B, i, j, 0, -1); if(m!=0) push(S, m);
-      m = check(B, i, j, 1, 0); if(m!=0) push(S, m);
-      m = check(B, i, j, -1, 0); if(m!=0) push(S, m);
-    }
-  }  
-  int result = peg_solve_helper(B, res, S, count);
-  return result;
+  return peg_solve_helper(B, S, num_pegs(B));
 }

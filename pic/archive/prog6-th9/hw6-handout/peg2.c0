@@ -1,0 +1,112 @@
+/*
+ * Peg solitaire solver
+ *
+ * 15-122 Principles of Imperative Computation */
+
+#use <args>
+#use <conio>
+#use <util>
+
+typedef int move; 
+
+int row_start(move m) { return m & 0xF; }
+
+int col_start(move m) { return (m >> 4) & 0xF; }
+
+int row_end(move m) { return (m >> 8) & 0xF; }
+
+int col_end(move m) { return (m >> 12) & 0xF; }
+
+bool check_valid(int rc) { return 0 <= rc && rc < 8; }
+
+bool bitMatch(board B, int r, int c, int value){
+  if(0 <= r && r < 8 && 0 <= c && c < 8) {
+    return B[r*8 + c] == value;
+  }
+  else {
+    return false;
+  }
+}
+
+move check(board B, int row, int col, int rd, int cd){
+  bool f0= bitMatch(B, row, col, 1);
+  bool f1= bitMatch(B, row + rd * 1, col + cd * 1, 1);
+  bool f2= bitMatch(B, row + rd * 2, col + cd * 2, 0);
+  if(f0 && f1 && f2){
+    // print("hh");
+    return row | (col << 4) | ((row + rd*2) << 8) | ((col + cd*2) << 12);
+  }
+  else {
+    // print("ww");
+    return 0;
+  }
+}
+
+bool check_move(board B, move m){
+  int r0 = row_start(m);
+  int r2 = row_end(m);
+  int c0 = col_start(m);
+  int c2 = col_end(m);
+  int r1 = (r0 + r2) /2;
+  int c1 = (c0 + c2) /2;
+  bool f0= bitMatch(B, r0, c0, 1);
+  bool f1= bitMatch(B, r1, c1, 1);
+  bool f2= bitMatch(B, r2, c2, 0);
+  return f0 && f1 && f2;
+}
+
+void flip(board B, move m) {
+  int r0 = row_start(m);
+  int r2 = row_end(m);
+  int c0 = col_start(m);
+  int c2 = col_end(m);
+  int r1 = (r0 + r2) /2;
+  int c1 = (c0 + c2) /2;
+  B[r0*8 + c0] = 1 -  B[r0*8 + c0];  
+  B[r1*8 + c1] = 1 -  B[r1*8 + c1];  
+  B[r2*8 + c2] = 1 -  B[r2*8 + c2];  
+}
+
+/*
+ * Copy here your code from peg1.c0 to start
+ */
+int peg_solve_helper(board B, stack S, int par) {
+  // printint(par);
+  // print("R");
+  if(par == 1){
+    return 1;
+  }
+  int min_value = par;
+  for(int i = 0; i < 8; i++){
+    for(int j = 0; j < 8; j++){
+      for(int rd = -1; rd < 2; rd += 1){
+        for(int cd = -1; cd < 2; cd += 1){
+          if(rd*rd + cd*cd == 1){
+            move m = check(B, i, j, rd, cd); 
+            if(m != 0){
+              flip(B, m);
+              int curr = peg_solve_helper(B, S, par - 1);
+              if(curr == 1){
+                push(S, m);
+                return 1;
+              }
+              flip(B, m);
+              min_value = min(curr, min_value);
+            }
+          }
+        }
+      }
+    }
+  }  
+  return min_value;
+}
+
+int peg_solve(board B, stack S)
+//@requires is_board(B);
+//@requires num_pegs(B) >= 1;
+//@ensures is_board(B);
+//@ensures \result >= 1;
+{
+  return peg_solve_helper(B, S, num_pegs(B));
+}
+

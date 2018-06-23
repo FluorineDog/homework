@@ -1,5 +1,5 @@
-CMU 15122
+Author Info
 --------------
-A freshman course written by a junior salty fish
-
-license: WTFPL
+name: 苟桂霖
+ID: U201514613
+class: ACM1501
