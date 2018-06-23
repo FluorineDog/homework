@@ -136,10 +136,9 @@ void insert_blank_try(board B, stack S, int i, int j){
   m = check(B, i+2, j, -1, 0); if(m!=0) push(S, m);
 }
 
-int peg_solve_helper(board B, stack S, int result)
+int peg_solve_helper(board B, stack R, stack cad,  int result)
 //@requires is_board(B);
 //@requires num_pegs(B) >= 1;
-//@requires stack_empty(S);
 //@ensures is_board(B);
 //@ensures result >= 1;
 {
@@ -152,12 +151,12 @@ int peg_solve_helper(board B, stack S, int result)
   // extend with candinates
   // since we have associativity, never look backward
   if(result == 1){
-    stack_clear(S);
+  //   stack_clear(S);
     return 1;
   }
   int minR = 100;
-  while(!stack_empty(S)){
-    move m = pop(S);
+  while(!stack_empty(cad)){
+    move m = pop(cad);
     // print("ck");
     if(check_move(B, m)){
       // print("cking");
@@ -169,15 +168,17 @@ int peg_solve_helper(board B, stack S, int result)
       int r1 = (r0 + r2) /2;
       int c1 = (c0 + c2) /2;   
 
-      stack Snew = stack_clone(S);
+      stack Snew = stack_clone(cad);
       insert_blank_try(B, Snew, r0, c0);
       insert_blank_try(B, Snew, r1, c1);
       insert_try(B, Snew, r2, c2);
 
-      int res = peg_solve_helper(B, Snew, result - 1);
+      int res = peg_solve_helper(B, R, Snew, result - 1);
       if(res == 1){
         // done
-        push(S, m);
+        printint(m);
+        print("&&");
+        push(R, m);
         return 1;
       }
       else {
@@ -190,9 +191,10 @@ int peg_solve_helper(board B, stack S, int result)
   return minR;
 }
 
-int peg_solve(board B, stack S) {
+int peg_solve(board B, stack res) {
   // init S
   // solve with helper
+  stack S = stack_new();
   move m;
   int count = 0;
   for(int i = 0; i < 8; i++){
@@ -204,6 +206,6 @@ int peg_solve(board B, stack S) {
       m = check(B, i, j, -1, 0); if(m!=0) push(S, m);
     }
   }  
-  int res = peg_solve_helper(B, S, count);
-  return res;
+  int result = peg_solve_helper(B, res, S, count);
+  return result;
 }
